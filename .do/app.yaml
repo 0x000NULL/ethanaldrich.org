@@ -1,0 +1,29 @@
+name: aldrich-portfolio
+region: sfo
+services:
+  - name: web
+    github:
+      repo: 0x000NULL/ethanaldrich.org
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    build_command: npm run build
+    run_command: npm run start
+    environment_slug: node-js
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /
+    envs:
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+domains:
+  - domain: ethanaldrich.org
+    type: PRIMARY
+  - domain: www.ethanaldrich.org
+    type: ALIAS

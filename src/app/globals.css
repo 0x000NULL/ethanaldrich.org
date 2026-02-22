@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* BIOS Color Palette */
+:root {
+  /* BIOS Screen Colors */
+  --bios-bg: #0000AA;
+  --bios-text: #AAAAAA;
+  --bios-highlight: #FFFFFF;
+  --bios-accent: #000000;
+  --bios-error: #FF5555;
+  --bios-success: #228B22;
+
+  /* Window Chrome Colors (Win 3.1 style) */
+  --chrome-base: #C0C0C0;
+  --chrome-shadow: #808080;
+  --chrome-highlight: #FFFFFF;
+  --chrome-dark: #000000;
+
+  /* Desktop Colors */
+  --desktop-bg: #000040;
+
+  /* Theme settings */
+  --background: var(--bios-bg);
+  --foreground: var(--bios-text);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-bios-bg: var(--bios-bg);
+  --color-bios-text: var(--bios-text);
+  --color-bios-highlight: var(--bios-highlight);
+  --color-bios-accent: var(--bios-accent);
+  --color-bios-error: var(--bios-error);
+  --color-bios-success: var(--bios-success);
+  --color-chrome-base: var(--chrome-base);
+  --color-chrome-shadow: var(--chrome-shadow);
+  --color-chrome-highlight: var(--chrome-highlight);
+  --color-chrome-dark: var(--chrome-dark);
+  --color-desktop-bg: var(--desktop-bg);
+}
+
+/* DOS/V re. JPN19 font - loaded from local files */
+@font-face {
+  font-family: 'DOS VGA';
+  src: url('/fonts/Web437_DOS-V_re_JPN19.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fallback bitmap-style font stack */
+@font-face {
+  font-family: 'DOS';
+  src: local('Perfect DOS VGA 437'),
+       local('Fixedsys'),
+       local('Fixedsys Excelsior 3.01'),
+       local('Terminal'),
+       local('Lucida Console');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  background: var(--bios-bg);
+  color: var(--bios-text);
+  font-family: 'DOS VGA', 'DOS', 'Courier New', 'Lucida Console', monospace;
+  font-size: 16px;
+  line-height: 1.2;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+}
+
+/* Disable text anti-aliasing for authentic retro look */
+.bios-text {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-rendering: optimizeSpeed;
+  font-variant-ligatures: none;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* CRT scanline effect (optional, can be toggled) */
+.crt-scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Window chrome 3D effect classes */
+.chrome-raised {
+  border: 2px solid;
+  border-color: var(--chrome-highlight) var(--chrome-shadow) var(--chrome-shadow) var(--chrome-highlight);
+  background: var(--chrome-base);
+}
+
+.chrome-sunken {
+  border: 2px solid;
+  border-color: var(--chrome-shadow) var(--chrome-highlight) var(--chrome-highlight) var(--chrome-shadow);
+  background: var(--chrome-base);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--bios-highlight);
+  color: var(--bios-bg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--chrome-base);
+  border: 1px solid var(--chrome-shadow);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--chrome-base);
+  border: 2px solid;
+  border-color: var(--chrome-highlight) var(--chrome-shadow) var(--chrome-shadow) var(--chrome-highlight);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d0d0d0;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--chrome-base);
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px dashed var(--bios-accent);
+  outline-offset: 2px;
+}
+
+/* Text progress bar styles */
+.progress-bar {
+  font-family: inherit;
+  white-space: pre;
+}
