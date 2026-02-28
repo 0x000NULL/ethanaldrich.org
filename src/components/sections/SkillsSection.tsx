@@ -121,6 +121,25 @@ const skillCategories: SkillCategory[] = [
     ],
   },
   {
+    name: "Maritime & Marine Systems",
+    skills: [
+      { name: "Starlink Maritime", level: 8 },
+      { name: "Marine WiFi Systems", level: 8 },
+      { name: "Vessel Network Infrastructure", level: 8 },
+      { name: "Marine VSAT", level: 6 },
+      { name: "Control4 Marine Integration", level: 8 },
+      { name: "Marine Audio Systems", level: 8 },
+      { name: "Marine Video Distribution", level: 7 },
+      { name: "NMEA 2000/0183", level: 7 },
+      { name: "Chart Plotters/MFD", level: 7 },
+      { name: "Marine Radar Integration", level: 6 },
+      { name: "AIS Systems", level: 7 },
+      { name: "12V/24V DC Systems", level: 8 },
+      { name: "Shore Power/Inverters", level: 7 },
+      { name: "Marine Battery Systems", level: 7 },
+    ],
+  },
+  {
     name: "Professional",
     skills: [
       { name: "Technical Documentation", level: 8 },
