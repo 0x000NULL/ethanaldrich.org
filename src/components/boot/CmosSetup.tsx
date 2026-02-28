@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDesktopStore, ThemeVariant } from "@/store/desktop-store";
+import FdiskStats from "@/components/fdisk/FdiskStats";
 
 interface CmosSetupProps {
   onExit: () => void;
@@ -12,6 +13,7 @@ type MenuSection =
   | "standard"
   | "advanced"
   | "boot"
+  | "fdisk"
   | "load-defaults"
   | "save-exit";
 
@@ -39,20 +41,89 @@ const personalStats = [
   { label: "Stack Overflow Visits", value: "Daily" },
 ];
 
-const themeOptions: { id: ThemeVariant; label: string; preview: string }[] = [
+const baseThemeOptions: { id: ThemeVariant; label: string; preview: string }[] = [
   { id: "blue", label: "Classic Blue", preview: "#0000AA" },
   { id: "green", label: "Green Phosphor", preview: "#003300" },
   { id: "amber", label: "Amber CRT", preview: "#331100" },
 ];
 
+const turboThemeOption = {
+  id: "turbo" as ThemeVariant,
+  label: "TURBO MODE",
+  preview: "linear-gradient(90deg, #6B0F9E, #FF00FF)",
+};
+
+interface BootItem {
+  id: string;
+  label: string;
+  description: string;
+}
+
+const defaultBootOrder: BootItem[] = [
+  { id: "about", label: "ABOUT.EXE", description: "Personal Information" },
+  { id: "career", label: "CAREER.EXE", description: "Work Experience" },
+  { id: "projects", label: "PROJECTS.EXE", description: "Project Portfolio" },
+  { id: "skills", label: "SKILLS.DAT", description: "Technical Skills" },
+  { id: "contact", label: "CONTACT.COM", description: "Contact Information" },
+  { id: "blog", label: "BLOG.TXT", description: "Technical Blog" },
+];
+
 export default function CmosSetup({ onExit }: CmosSetupProps) {
   const [currentSection, setCurrentSection] = useState<MenuSection>("main");
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { theme, setTheme } = useDesktopStore();
+  const [bootOrder, setBootOrder] = useState<BootItem[]>(defaultBootOrder);
+  const [bootSelectedIndex, setBootSelectedIndex] = useState(0);
+  const { theme, setTheme, turboUnlocked } = useDesktopStore();
+
+  // Build theme options based on unlock state
+  const themeOptions = useMemo(() => {
+    if (turboUnlocked) {
+      return [...baseThemeOptions, turboThemeOption];
+    }
+    return baseThemeOptions;
+  }, [turboUnlocked]);
+
+  // Helper to move boot item up or down
+  const moveBootItem = (direction: "up" | "down") => {
+    const newIndex = direction === "up" ? bootSelectedIndex - 1 : bootSelectedIndex + 1;
+    if (newIndex < 0 || newIndex >= bootOrder.length) return;
+
+    const newOrder = [...bootOrder];
+    [newOrder[bootSelectedIndex], newOrder[newIndex]] = [newOrder[newIndex], newOrder[bootSelectedIndex]];
+    setBootOrder(newOrder);
+    setBootSelectedIndex(newIndex);
+  };
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Handle boot priority section separately
+      if (currentSection === "boot") {
+        switch (e.key) {
+          case "ArrowUp":
+            setBootSelectedIndex((prev) => Math.max(0, prev - 1));
+            break;
+          case "ArrowDown":
+            setBootSelectedIndex((prev) => Math.min(bootOrder.length - 1, prev + 1));
+            break;
+          case "+":
+          case "PageUp":
+            e.preventDefault();
+            moveBootItem("up");
+            break;
+          case "-":
+          case "PageDown":
+            e.preventDefault();
+            moveBootItem("down");
+            break;
+          case "Escape":
+            setCurrentSection("main");
+            setSelectedIndex(0);
+            break;
+        }
+        return;
+      }
+
       switch (e.key) {
         case "ArrowUp":
           setSelectedIndex((prev) => Math.max(0, prev - 1));
@@ -75,6 +146,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
               onExit();
             } else if (item.id === "load-defaults") {
               setTheme("blue");
+              setBootOrder(defaultBootOrder);
               setSelectedIndex(0);
             } else {
               setCurrentSection(item.id);
@@ -97,7 +169,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentSection, selectedIndex, onExit, setTheme]);
+  }, [currentSection, selectedIndex, bootSelectedIndex, bootOrder, onExit, setTheme]);
 
   const renderMainMenu = () => (
     <div className="flex">
@@ -146,7 +218,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
 
   const renderStandardCmos = () => (
     <div>
-      <div className="text-[#228B22] mb-4">► System Specifications</div>
+      <div className="text-bios-success mb-4">► System Specifications</div>
       <table className="w-full text-sm">
         <tbody>
           {personalStats.map((stat, index) => (
@@ -163,7 +235,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
 
   const renderAdvanced = () => (
     <div>
-      <div className="text-[#228B22] mb-4">► Theme Configuration</div>
+      <div className="text-bios-success mb-4">► Theme Configuration</div>
       <div className="space-y-2">
         {themeOptions.map((option, index) => (
           <div
@@ -182,13 +254,27 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
               className="w-6 h-4 border border-[#AAAAAA]"
               style={{ background: option.preview }}
             />
-            <span>{option.label}</span>
+            <span className={option.id === "turbo" ? "animate-pulse" : ""}>
+              {option.label}
+            </span>
             {theme === option.id && (
-              <span className="text-[#228B22] ml-auto">[ACTIVE]</span>
+              <span className="text-bios-success ml-auto">[ACTIVE]</span>
             )}
           </div>
         ))}
       </div>
+
+      {/* FDISK Option */}
+      <div className="mt-6 border-t border-[#606060] pt-4">
+        <div className="text-bios-success mb-2">► Disk Utilities</div>
+        <button
+          onClick={() => setCurrentSection("fdisk")}
+          className="text-[#AAAAAA] hover:text-white hover:underline cursor-pointer"
+        >
+          FDISK - View Partition Information →
+        </button>
+      </div>
+
       <div className="mt-4 text-[#606060] text-xs">
         Press Enter to select | ESC to return
       </div>
@@ -197,23 +283,51 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
 
   const renderBootPriority = () => (
     <div>
-      <div className="text-[#228B22] mb-4">► Boot Priority Order</div>
+      <div className="text-bios-success mb-4">► Boot Priority Order</div>
       <div className="text-sm space-y-1">
-        <div>1. [ABOUT.EXE] — Personal Information</div>
-        <div>2. [CAREER.EXE] — Work Experience</div>
-        <div>3. [PROJECTS.EXE] — Project Portfolio</div>
-        <div>4. [SKILLS.DAT] — Technical Skills</div>
-        <div>5. [CONTACT.COM] — Contact Information</div>
-        <div>6. [BLOG.TXT] — Technical Blog</div>
+        {bootOrder.map((item, index) => (
+          <div
+            key={item.id}
+            onClick={() => setBootSelectedIndex(index)}
+            className={`py-1 px-2 cursor-pointer flex items-center gap-2 ${
+              bootSelectedIndex === index
+                ? "bg-[#AAAAAA] text-[#0000AA]"
+                : "hover:bg-[#000080]"
+            }`}
+          >
+            <span className="w-4">{index + 1}.</span>
+            <span className="w-32">[{item.label}]</span>
+            <span className="text-[#AAAAAA]">—</span>
+            <span>{item.description}</span>
+            {bootSelectedIndex === index && (
+              <span className="ml-auto flex gap-2">
+                <button
+                  onClick={(e) => { e.stopPropagation(); moveBootItem("up"); }}
+                  disabled={index === 0}
+                  className={`px-2 ${index === 0 ? "text-[#606060]" : "hover:bg-[#000080] hover:text-white"}`}
+                >
+                  ▲
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); moveBootItem("down"); }}
+                  disabled={index === bootOrder.length - 1}
+                  className={`px-2 ${index === bootOrder.length - 1 ? "text-[#606060]" : "hover:bg-[#000080] hover:text-white"}`}
+                >
+                  ▼
+                </button>
+              </span>
+            )}
+          </div>
+        ))}
       </div>
       <div className="mt-4 text-[#606060] text-xs">
-        Feature coming soon! Press ESC to return
+        ↑↓ Select | +/- or PgUp/PgDn Reorder | ESC Return
       </div>
     </div>
   );
 
   return (
-    <div className="fixed inset-0 bg-[#0000AA] text-[#AAAAAA] p-4 font-mono overflow-auto">
+    <div className="fixed inset-0 bg-bios text-bios p-4 font-mono overflow-auto">
       {/* Header */}
       <div className="text-center mb-4">
         <div className="text-[#000000] text-lg">
@@ -232,7 +346,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
       {currentSection !== "main" && (
         <div className="mb-4 text-sm">
           <span
-            className="text-[#228B22] cursor-pointer hover:underline"
+            className="text-bios-success cursor-pointer hover:underline"
             onClick={() => {
               setCurrentSection("main");
               setSelectedIndex(0);
@@ -254,6 +368,14 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
         {currentSection === "standard" && renderStandardCmos()}
         {currentSection === "advanced" && renderAdvanced()}
         {currentSection === "boot" && renderBootPriority()}
+        {currentSection === "fdisk" && (
+          <FdiskStats
+            onBack={() => {
+              setCurrentSection("advanced");
+              setSelectedIndex(0);
+            }}
+          />
+        )}
       </div>
 
       {/* Footer */}

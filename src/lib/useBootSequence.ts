@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
-  bootSequence,
+  bootSequence as baseBootSequence,
   MEMORY_TARGET,
   MEMORY_STEP,
   MEMORY_INTERVAL,
   AUTO_BOOT_DELAY,
+  getTimeBasedMessages,
   type BootLine,
 } from "@/data/boot-sequence";
 import { useDesktopStore } from "@/store/desktop-store";
@@ -38,6 +39,34 @@ export function useBootSequence(): UseBootSequenceReturn {
   const autoBootTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lineTimerRef = useRef<NodeJS.Timeout | null>(null);
   const memoryTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Build boot sequence with time-based messages injected
+  const bootSequence = useMemo(() => {
+    const timeMessages = getTimeBasedMessages();
+
+    // Insert time-based messages before "All systems nominal"
+    const insertIndex = baseBootSequence.findIndex(
+      (line) => line.text === "All systems nominal."
+    );
+
+    if (insertIndex === -1 || timeMessages.length === 0) {
+      return baseBootSequence;
+    }
+
+    // Convert time messages to BootLine format
+    const timeBootLines: BootLine[] = timeMessages.map((msg) => ({
+      text: msg.text,
+      delay: 200,
+      type: "status" as const,
+      highlightText: msg.highlightText,
+    }));
+
+    return [
+      ...baseBootSequence.slice(0, insertIndex),
+      ...timeBootLines,
+      ...baseBootSequence.slice(insertIndex),
+    ];
+  }, []);
 
   const currentLines = bootSequence.slice(0, currentLineIndex + 1);
 

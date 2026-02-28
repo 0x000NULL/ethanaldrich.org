@@ -49,6 +49,33 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Ethan Aldrich",
+  jobTitle: "Chief Technology Officer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Malco Enterprises of Nevada, LLC",
+  },
+  url: "https://ethanaldrich.org",
+  knowsAbout: [
+    "IT Infrastructure",
+    "SQL Server",
+    "Power BI",
+    "Network Administration",
+    "Homelab Engineering",
+    "Linux Systems",
+    "Virtualization",
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Las Vegas",
+    addressRegion: "NV",
+    addressCountry: "US",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,6 +86,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#0000AA" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className="bios-text">{children}</body>
     </html>
