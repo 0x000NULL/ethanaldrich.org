@@ -60,7 +60,7 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
 
   return (
     <div
-      className="fixed inset-0 bg-[#0000AA] text-[#AAAAAA] p-4 font-mono overflow-hidden cursor-pointer"
+      className="fixed inset-0 bg-bios text-bios p-4 font-mono overflow-hidden cursor-pointer"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -74,7 +74,18 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
             e.stopPropagation();
             skipBoot();
           }}
-          className="absolute top-4 right-4 px-3 py-1 text-sm border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors"
+          className="absolute top-4 right-4 px-3 py-1 text-sm border border-bios hover:bg-bios-highlight hover:text-bios transition-colors"
+          style={{
+            borderColor: "var(--bios-text)",
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--bios-text)";
+            e.currentTarget.style.color = "var(--bios-bg)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+            e.currentTarget.style.color = "var(--bios-text)";
+          }}
         >
           Skip (ESC)
         </button>
@@ -85,7 +96,7 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
         {currentLines.map((line, index) => (
           <div key={index} className="leading-6">
             {line.type === "header" && (
-              <span className="text-white font-bold">{line.text}</span>
+              <span className="text-bios-highlight font-bold">{line.text}</span>
             )}
 
             {line.type === "normal" && <span>{line.text}</span>}
@@ -93,7 +104,7 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
             {line.type === "memory" && (
               <span>
                 {line.text}
-                <span className="text-white">
+                <span className="text-bios-highlight">
                   {memoryComplete
                     ? formatMemory(MEMORY_TARGET)
                     : formatMemory(memoryValue)}
@@ -105,7 +116,7 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
               <span>
                 {line.text}
                 {line.highlightText && (
-                  <span className="text-[#000000]">{line.highlightText}</span>
+                  <span style={{ color: "var(--bios-accent)" }}>{line.highlightText}</span>
                 )}
               </span>
             )}
@@ -114,7 +125,7 @@ export default function PostScreen({ onComplete, onEnterSetup }: PostScreenProps
               <span>
                 {line.text}
                 {line.highlightText && (
-                  <span className="text-[#228B22]">{line.highlightText}</span>
+                  <span className="text-bios-success">{line.highlightText}</span>
                 )}
               </span>
             )}

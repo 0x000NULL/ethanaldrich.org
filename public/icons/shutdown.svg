@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- Power button icon -->
+  <!-- Outer circle -->
+  <rect fill="#AAAAAA" x="8" y="8" width="16" height="16"/>
+  <rect fill="#FF5555" x="9" y="9" width="14" height="14"/>
+  <rect fill="#AA0000" x="10" y="10" width="12" height="12"/>
+  <!-- Inner circle (darker) -->
+  <rect fill="#FF5555" x="12" y="12" width="8" height="8"/>
+  <!-- Power line (vertical bar) -->
+  <rect fill="#FFFFFF" x="15" y="6" width="2" height="10"/>
+  <!-- Highlight -->
+  <rect fill="#FFAAAA" x="11" y="11" width="3" height="1"/>
+  <rect fill="#FFAAAA" x="11" y="12" width="1" height="2"/>
+</svg>

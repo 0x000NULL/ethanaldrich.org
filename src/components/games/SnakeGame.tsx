@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 const GRID_SIZE = 20;
 const CELL_SIZE = 15;
 const INITIAL_SPEED = 150;
+const SWIPE_THRESHOLD = 30;
 
 type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 type Position = { x: number; y: number };
@@ -18,15 +19,24 @@ export default function SnakeGame() {
   const [highScore, setHighScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const directionRef = useRef(direction);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
-  // Load high score from localStorage - valid initialization pattern
+  // Load high score from localStorage and check mobile - valid initialization pattern
   useEffect(() => {
     const saved = localStorage.getItem("snake-high-score");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setHighScore(parseInt(saved, 10));
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Generate new food position
@@ -182,6 +192,73 @@ export default function SnakeGame() {
     setIsPlaying(true);
   };
 
+  // Change direction helper (used by keyboard and touch controls)
+  const changeDirection = (newDir: Direction) => {
+    if (!isPlaying) return;
+
+    const opposites: Record<Direction, Direction> = {
+      UP: "DOWN",
+      DOWN: "UP",
+      LEFT: "RIGHT",
+      RIGHT: "LEFT",
+    };
+
+    if (directionRef.current !== opposites[newDir]) {
+      directionRef.current = newDir;
+      setDirection(newDir);
+    }
+  };
+
+  // Touch handlers for swipe detection
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current || !isPlaying) return;
+
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+
+    // Check if swipe was significant enough
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD && Math.abs(deltaY) < SWIPE_THRESHOLD) {
+      touchStartRef.current = null;
+      return;
+    }
+
+    // Determine swipe direction
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      changeDirection(deltaX > 0 ? "RIGHT" : "LEFT");
+    } else {
+      // Vertical swipe
+      changeDirection(deltaY > 0 ? "DOWN" : "UP");
+    }
+
+    touchStartRef.current = null;
+  };
+
+  // D-pad button component
+  const DPadButton = ({
+    dir,
+    label,
+    className,
+  }: {
+    dir: Direction;
+    label: string;
+    className?: string;
+  }) => (
+    <button
+      onClick={() => changeDirection(dir)}
+      className={`w-14 h-14 chrome-raised flex items-center justify-center text-black font-bold text-xl active:chrome-sunken touch-manipulation select-none ${className || ""}`}
+      aria-label={`Move ${dir.toLowerCase()}`}
+    >
+      {label}
+    </button>
+  );
+
   return (
     <div className="space-y-4">
       <div className="text-[#000000] text-lg mb-4 text-center">
@@ -206,12 +283,14 @@ export default function SnakeGame() {
 
       {/* Game grid */}
       <div
-        className="border-2 border-[#AAAAAA] mx-auto"
+        className="border-2 border-[#AAAAAA] mx-auto touch-none"
         style={{
           width: GRID_SIZE * CELL_SIZE + 4,
           height: GRID_SIZE * CELL_SIZE + 4,
           background: "#000020",
         }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <div className="relative" style={{ width: GRID_SIZE * CELL_SIZE, height: GRID_SIZE * CELL_SIZE }}>
           {/* Snake */}
@@ -284,11 +363,49 @@ export default function SnakeGame() {
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="text-[#606060] text-xs text-center space-y-1">
-        <div>Arrow Keys or WASD to move</div>
-        <div>P or Space to pause</div>
-      </div>
+      {/* Desktop Controls */}
+      {!isMobile && (
+        <div className="text-[#606060] text-xs text-center space-y-1">
+          <div>Arrow Keys or WASD to move</div>
+          <div>P or Space to pause</div>
+        </div>
+      )}
+
+      {/* Mobile D-Pad Controls */}
+      {isMobile && isPlaying && !gameOver && (
+        <div className="flex flex-col items-center gap-1 mt-4">
+          <div className="text-[#606060] text-xs mb-2">Swipe on grid or use D-pad</div>
+          <div className="grid grid-cols-3 gap-1">
+            {/* Top row - Up */}
+            <div />
+            <DPadButton dir="UP" label="▲" />
+            <div />
+
+            {/* Middle row - Left, Pause, Right */}
+            <DPadButton dir="LEFT" label="◀" />
+            <button
+              onClick={() => setIsPaused((p) => !p)}
+              className="w-14 h-14 chrome-raised flex items-center justify-center text-black font-bold text-xs active:chrome-sunken touch-manipulation select-none"
+              aria-label={isPaused ? "Resume" : "Pause"}
+            >
+              {isPaused ? "▶" : "❚❚"}
+            </button>
+            <DPadButton dir="RIGHT" label="▶" />
+
+            {/* Bottom row - Down */}
+            <div />
+            <DPadButton dir="DOWN" label="▼" />
+            <div />
+          </div>
+        </div>
+      )}
+
+      {/* Mobile hint when not playing */}
+      {isMobile && (!isPlaying || gameOver) && (
+        <div className="text-[#606060] text-xs text-center mt-2">
+          Swipe on grid or use D-pad to control
+        </div>
+      )}
     </div>
   );
 }

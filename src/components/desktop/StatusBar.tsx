@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useDesktopStore } from "@/store/desktop-store";
 
 export default function StatusBar() {
+  const { windows, restoreWindow } = useDesktopStore();
   const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [showCursor, setShowCursor] = useState(true);
+
+  // Get minimized windows
+  const minimizedWindows = windows.filter((w) => w.isOpen && w.isMinimized);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -55,11 +60,30 @@ export default function StatusBar() {
           <span>Ready</span>
         </span>
         <span className="text-[#808080]">|</span>
-        <span>640K conventional memory free</span>
+        <span className="hidden sm:inline">640K conventional memory free</span>
+
+        {/* Minimized windows */}
+        {minimizedWindows.length > 0 && (
+          <>
+            <span className="text-[#808080]">|</span>
+            <div className="flex items-center gap-1">
+              {minimizedWindows.map((win) => (
+                <button
+                  key={win.id}
+                  onClick={() => restoreWindow(win.id)}
+                  className="chrome-sunken px-2 py-0.5 text-xs hover:bg-[#d0d0d0] active:chrome-raised truncate max-w-[100px]"
+                  title={`Restore ${win.title}`}
+                >
+                  {win.title.split(" - ")[0]}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <div className="flex items-center gap-4">
-        <span>{date}</span>
-        <span className="text-[#808080]">|</span>
+        <span className="hidden sm:inline">{date}</span>
+        <span className="hidden sm:inline text-[#808080]">|</span>
         <span className="font-mono">{time}</span>
       </div>
     </div>

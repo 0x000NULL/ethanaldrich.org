@@ -20,14 +20,15 @@ export default function DesktopIcon({
       onClick={onClick}
       onDoubleClick={onClick}
       className={`
-        flex flex-col items-center justify-center gap-1 p-2 w-20
+        flex flex-col items-center justify-center gap-1 p-2
+        w-20 md:w-20 min-h-[70px] md:min-h-0
         hover:bg-[#000080]/50 focus:bg-[#000080]/50
         ${isActive ? "bg-[#000080]/50" : ""}
-        transition-colors cursor-pointer
+        transition-colors cursor-pointer touch-manipulation
       `}
       aria-label={`Open ${label}`}
     >
-      <div className="w-12 h-12 flex items-center justify-center">
+      <div className="w-12 h-12 md:w-12 md:h-12 flex items-center justify-center">
         <Image
           src={iconSrc}
           alt={label}

@@ -19,6 +19,10 @@
   /* Desktop Colors */
   --desktop-bg: #000040;
 
+  /* Titlebar gradient */
+  --titlebar-start: #000080;
+  --titlebar-end: #1084d0;
+
   /* Theme settings */
   --background: var(--bios-bg);
   --foreground: var(--bios-text);
@@ -38,6 +42,8 @@
   --color-chrome-highlight: var(--chrome-highlight);
   --color-chrome-dark: var(--chrome-dark);
   --color-desktop-bg: var(--desktop-bg);
+  --color-titlebar-start: var(--titlebar-start);
+  --color-titlebar-end: var(--titlebar-end);
 }
 
 /* DOS/V re. JPN19 font - loaded from local files */
@@ -177,4 +183,54 @@ body {
 .progress-bar {
   font-family: inherit;
   white-space: pre;
+}
+
+/* Theme-aware utility classes */
+.bg-bios {
+  background-color: var(--bios-bg);
+}
+
+.text-bios {
+  color: var(--bios-text);
+}
+
+.text-bios-highlight {
+  color: var(--bios-highlight);
+}
+
+.text-bios-success {
+  color: var(--bios-success);
+}
+
+.text-bios-error {
+  color: var(--bios-error);
+}
+
+.bg-desktop {
+  background-color: var(--desktop-bg);
+}
+
+.border-bios {
+  border-color: var(--bios-text);
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  button,
+  [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Prevent pull-to-refresh on the main app */
+html,
+body {
+  overscroll-behavior: none;
 }
