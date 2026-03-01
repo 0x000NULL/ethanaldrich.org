@@ -3,6 +3,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ethanaldrich.org"),
+  alternates: {
+    canonical: "https://ethanaldrich.org",
+  },
   title: "Ethan Aldrich | CTO & IT Infrastructure Specialist",
   description:
     "Personal portfolio of Ethan Aldrich - CTO specializing in IT infrastructure, homelab engineering, and automotive projects. Experience the web like it's 1995.",

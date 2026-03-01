@@ -16,8 +16,11 @@ function getStats(): Stats {
       const data = fs.readFileSync(STATS_FILE, "utf8");
       return JSON.parse(data);
     }
-  } catch {
+  } catch (error: unknown) {
     // Return default if file doesn't exist or is invalid
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to read stats file:", error);
+    }
   }
   return {
     visitors: 0,

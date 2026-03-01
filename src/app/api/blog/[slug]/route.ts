@@ -7,6 +7,13 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+
+  // Validate slug to prevent path traversal attacks
+  const SLUG_REGEX = /^[a-z0-9-]+$/;
+  if (!SLUG_REGEX.test(slug)) {
+    return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
+  }
+
   const post = getBlogPost(slug);
 
   if (!post) {

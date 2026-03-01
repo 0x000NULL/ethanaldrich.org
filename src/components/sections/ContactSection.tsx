@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 
-export default function ContactSection() {
+function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -92,7 +92,7 @@ export default function ContactSection() {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[#228B22] outline-none font-mono"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
               placeholder="Enter your name..."
             />
           </div>
@@ -104,7 +104,7 @@ export default function ContactSection() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[#228B22] outline-none font-mono"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
               placeholder="Enter your email..."
             />
           </div>
@@ -116,7 +116,7 @@ export default function ContactSection() {
                 setFormData({ ...formData, message: e.target.value })
               }
               rows={4}
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[#228B22] outline-none font-mono resize-none"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono resize-none"
               placeholder="Enter your message..."
             />
           </div>
@@ -124,13 +124,13 @@ export default function ContactSection() {
             <button
               type="button"
               onClick={() => setFormData({ name: "", email: "", message: "" })}
-              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors"
+              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ CLEAR ]
             </button>
             <button
               type="submit"
-              className="px-4 py-1 border border-[#228B22] text-[#228B22] hover:bg-[#228B22] hover:text-[#0000AA] transition-colors"
+              className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ SEND ]
             </button>
@@ -144,3 +144,5 @@ export default function ContactSection() {
     </div>
   );
 }
+
+export default memo(ContactSection);
