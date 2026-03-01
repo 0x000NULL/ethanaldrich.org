@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+
+const POSTS_PER_PAGE = 5;
 
 interface BlogPostMeta {
   id: string;
@@ -68,43 +70,85 @@ export default function BlogSection() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingPost, setLoadingPost] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
-  // Fetch posts list on mount
+  // Fetch posts list
+  const fetchPosts = useCallback(async (signal?: AbortSignal) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/blog", { signal });
+      if (!res.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+      const data = await res.json();
+      setPosts(data);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") {
+        return;
+      }
+      setError("Failed to load blog posts. Please try again.");
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to fetch blog posts:", err);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Fetch posts on mount
   useEffect(() => {
     const controller = new AbortController();
-
-    fetch("/api/blog", { signal: controller.signal })
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data);
-        setLoading(false);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof Error && error.name === "AbortError") {
-          return; // Ignore abort errors
-        }
-        if (process.env.NODE_ENV === "development") {
-          console.error("Failed to fetch blog posts:", error);
-        }
-        setLoading(false);
-      });
-
+    fetchPosts(controller.signal);
     return () => controller.abort();
-  }, []);
+  }, [fetchPosts]);
+
+  // Pagination
+  const paginatedPosts = useMemo(() => {
+    const start = (page - 1) * POSTS_PER_PAGE;
+    return posts.slice(start, start + POSTS_PER_PAGE);
+  }, [posts, page]);
+
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
   const handleSelectPost = async (slug: string) => {
     setLoadingPost(true);
     try {
       const res = await fetch(`/api/blog/${slug}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch post");
+      }
       const post = await res.json();
       setSelectedPost(post);
-    } catch (error: unknown) {
+    } catch (err: unknown) {
+      setError("Failed to load blog post. Please try again.");
       if (process.env.NODE_ENV === "development") {
-        console.error("Failed to fetch blog post:", error);
+        console.error("Failed to fetch blog post:", err);
       }
     }
     setLoadingPost(false);
   };
+
+  const handleRetry = () => {
+    setError(null);
+    fetchPosts();
+  };
+
+  if (error && !selectedPost) {
+    return (
+      <div className="flex flex-col items-center justify-center h-48 gap-4">
+        <div className="text-[var(--bios-error)]">{error}</div>
+        <button
+          onClick={handleRetry}
+          className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-black"
+        >
+          [ RETRY ]
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -182,7 +226,7 @@ export default function BlogSection() {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post) => (
+            {paginatedPosts.map((post) => (
               <tr
                 key={post.id}
                 onClick={() => handleSelectPost(post.slug)}
@@ -204,9 +248,45 @@ export default function BlogSection() {
       </div>
 
       <div className="text-sm">
-        <span className="text-black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{posts.length} file(s)</span>
-        <span className="text-[#444444]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{posts.reduce((acc, p) => acc + p.size, 0).toLocaleString()} bytes</span>
+        <span className="text-black">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{posts.length} file(s)
+        </span>
+        <span className="text-[#444444]">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {posts.reduce((acc, p) => acc + p.size, 0).toLocaleString()} bytes
+        </span>
       </div>
+
+      {/* Pagination controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-4">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className={`px-2 py-1 ${
+              page === 1
+                ? "text-[#606060] cursor-not-allowed"
+                : "text-bios-success hover:underline"
+            }`}
+          >
+            &lt; Prev
+          </button>
+          <span className="text-[#AAAAAA]">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className={`px-2 py-1 ${
+              page === totalPages
+                ? "text-[#606060] cursor-not-allowed"
+                : "text-bios-success hover:underline"
+            }`}
+          >
+            Next &gt;
+          </button>
+        </div>
+      )}
 
       <div className="text-[#606060] text-xs text-center mt-4">
         Click on a file to read | Press ESC to exit

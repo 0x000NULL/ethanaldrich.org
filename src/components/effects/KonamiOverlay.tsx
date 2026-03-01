@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 interface KonamiOverlayProps {
   show: boolean;
@@ -8,16 +8,37 @@ interface KonamiOverlayProps {
 }
 
 export default function KonamiOverlay({ show, onClose }: KonamiOverlayProps) {
-  const [visible, setVisible] = useState(false);
+  // Track visibility with a ref to avoid setState in effect
+  const visibleRef = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Use useSyncExternalStore for visibility state without effect setState
+  const visible = useSyncExternalStore(
+    (callback) => {
+      // Check and update visibility based on show prop
+      if (show && !visibleRef.current) {
+        visibleRef.current = true;
+        callback();
+      } else if (!show && visibleRef.current) {
+        timeoutRef.current = setTimeout(() => {
+          visibleRef.current = false;
+          callback();
+        }, 500);
+      }
+      return () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      };
+    },
+    () => visibleRef.current,
+    () => false
+  );
+
+  // Cleanup timeout on unmount
   useEffect(() => {
-    if (show) {
-      setVisible(true);
-    } else {
-      const timer = setTimeout(() => setVisible(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [show]);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   if (!visible) return null;
 

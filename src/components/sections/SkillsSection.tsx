@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import { ProgressBar, SectionHeader, BorderedSection, SectionHelpFooter } from "@/components/ui";
 
 interface Skill {
   name: string;
@@ -152,36 +153,14 @@ const skillCategories: SkillCategory[] = [
   },
 ];
 
-function ProgressBar({ level }: { level: number }) {
-  const filled = Math.round(level);
-  const empty = 10 - filled;
-  const filledChars = "█".repeat(filled);
-  const emptyChars = "░".repeat(empty);
-
-  return (
-    <span className="font-mono">
-      <span className="text-[#228B22]">[{filledChars}</span>
-      <span className="text-[#606060]">{emptyChars}</span>
-      <span className="text-[#228B22]">]</span>
-      <span className="text-[#000000] ml-2">{level * 10}%</span>
-    </span>
-  );
-}
-
 function SkillsSection() {
   return (
     <div className="space-y-4">
-      <div className="text-[#000000] text-lg mb-4">
-        ╔══════════════════════════════════════════════════════════╗
-        <br />
-        ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADVANCED CHIPSET FEATURES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
-        <br />
-        ╚══════════════════════════════════════════════════════════╝
-      </div>
+      <SectionHeader title="ADVANCED CHIPSET FEATURES" />
 
       {skillCategories.map((category) => (
-        <div key={category.name} className="border border-[#AAAAAA] p-3">
-          <div className="text-[#228B22] mb-2">► {category.name}</div>
+        <BorderedSection key={category.name}>
+          <div className="text-bios-success mb-2">► {category.name}</div>
           <table className="w-full text-sm">
             <tbody>
               {category.skills.map((skill) => (
@@ -190,18 +169,16 @@ function SkillsSection() {
                     {skill.name}:
                   </td>
                   <td className="py-1">
-                    <ProgressBar level={skill.level} />
+                    <ProgressBar value={skill.level} scale="level" width={10} />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </BorderedSection>
       ))}
 
-      <div className="text-[#606060] text-xs text-center mt-4">
-        Press F1 for Help | PgUp/PgDn to scroll | ESC to exit
-      </div>
+      <SectionHelpFooter />
     </div>
   );
 }
