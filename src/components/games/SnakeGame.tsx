@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 15;
@@ -19,24 +20,17 @@ export default function SnakeGame() {
   const [highScore, setHighScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile({ checkTouch: true });
 
   const directionRef = useRef(direction);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
-  // Load high score from localStorage and check mobile - valid initialization pattern
+  // Load high score from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("snake-high-score");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setHighScore(parseInt(saved, 10));
-
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Generate new food position
@@ -273,7 +267,7 @@ export default function SnakeGame() {
       <div className="flex justify-between text-sm mb-2">
         <span>
           <span className="text-[#000000]">Score: </span>
-          <span className="text-[#228B22]">{score}</span>
+          <span className="text-[var(--bios-success)]">{score}</span>
         </span>
         <span>
           <span className="text-[#000000]">High Score: </span>
@@ -297,7 +291,7 @@ export default function SnakeGame() {
           {snake.map((segment, index) => (
             <div
               key={index}
-              className={index === 0 ? "bg-[#228B22]" : "bg-[#00AA00]"}
+              className={index === 0 ? "bg-[var(--bios-success)]" : "bg-[var(--bios-success)] opacity-80"}
               style={{
                 position: "absolute",
                 left: segment.x * CELL_SIZE,
@@ -310,7 +304,7 @@ export default function SnakeGame() {
 
           {/* Food */}
           <div
-            className="bg-[#FF5555]"
+            className="bg-[var(--bios-error)]"
             style={{
               position: "absolute",
               left: food.x * CELL_SIZE,
@@ -324,11 +318,11 @@ export default function SnakeGame() {
           {gameOver && (
             <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-[#FF5555] text-lg mb-2">GAME OVER</div>
+                <div className="text-[var(--bios-error)] text-lg mb-2">GAME OVER</div>
                 <div className="text-sm mb-4">Score: {score}</div>
                 <button
                   onClick={startGame}
-                  className="px-4 py-1 border border-[#228B22] text-[#228B22] hover:bg-[#228B22] hover:text-black"
+                  className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-black"
                 >
                   [ PLAY AGAIN ]
                 </button>
@@ -340,10 +334,10 @@ export default function SnakeGame() {
           {!isPlaying && !gameOver && (
             <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-[#228B22] text-lg mb-4">SNAKE</div>
+                <div className="text-[var(--bios-success)] text-lg mb-4">SNAKE</div>
                 <button
                   onClick={startGame}
-                  className="px-4 py-1 border border-[#228B22] text-[#228B22] hover:bg-[#228B22] hover:text-black"
+                  className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-black"
                 >
                   [ START ]
                 </button>

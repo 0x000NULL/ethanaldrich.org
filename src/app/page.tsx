@@ -28,8 +28,10 @@ export default function Home() {
     // Track visitor stats (once per session)
     const hasTracked = sessionStorage.getItem("aldrich-stats-tracked");
     if (!hasTracked) {
-      fetch("/api/stats", { method: "POST" }).catch(() => {
-        // Silently fail
+      fetch("/api/stats", { method: "POST" }).catch((error: unknown) => {
+        if (process.env.NODE_ENV === "development") {
+          console.error("Failed to track stats:", error);
+        }
       });
       sessionStorage.setItem("aldrich-stats-tracked", "true");
     }

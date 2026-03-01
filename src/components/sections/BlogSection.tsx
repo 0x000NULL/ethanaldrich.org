@@ -71,15 +71,25 @@ export default function BlogSection() {
 
   // Fetch posts list on mount
   useEffect(() => {
-    fetch("/api/blog")
+    const controller = new AbortController();
+
+    fetch("/api/blog", { signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        if (error instanceof Error && error.name === "AbortError") {
+          return; // Ignore abort errors
+        }
+        if (process.env.NODE_ENV === "development") {
+          console.error("Failed to fetch blog posts:", error);
+        }
         setLoading(false);
       });
+
+    return () => controller.abort();
   }, []);
 
   const handleSelectPost = async (slug: string) => {
@@ -88,8 +98,10 @@ export default function BlogSection() {
       const res = await fetch(`/api/blog/${slug}`);
       const post = await res.json();
       setSelectedPost(post);
-    } catch {
-      // Handle error silently
+    } catch (error: unknown) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to fetch blog post:", error);
+      }
     }
     setLoadingPost(false);
   };

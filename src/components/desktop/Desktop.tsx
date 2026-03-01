@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDesktopStore, WindowId } from "@/store/desktop-store";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useKonamiCode } from "@/lib/useKonamiCode";
 import DesktopIcon from "./DesktopIcon";
 import StatusBar from "./StatusBar";
@@ -68,7 +69,7 @@ export default function Desktop() {
     initializeEasterEggs,
     setAppState,
   } = useDesktopStore();
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [screensaverActive, setScreensaverActive] = useState(false);
   const lastActivityRef = useRef(Date.now());
   const screensaverTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -90,16 +91,6 @@ export default function Desktop() {
   const { showOverlay, hideOverlay } = useKonamiCode(() => {
     setTurboUnlocked(true);
   });
-
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // Screensaver timer
   useEffect(() => {
@@ -146,9 +137,9 @@ export default function Desktop() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [terminalOpen, setTerminalOpen]);
 
-  const handleIconClick = (id: WindowId) => {
+  const handleIconClick = useCallback((id: WindowId) => {
     openWindow(id);
-  };
+  }, [openWindow]);
 
   const hasOpenWindows = windows.some((w) => w.isOpen);
 
