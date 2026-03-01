@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 
 type ProjectCategory = "homelab" | "levin" | "beat" | "racecar" | "other";
 
@@ -96,7 +96,7 @@ const projects: Project[] = [
   },
 ];
 
-export default function ProjectsSection() {
+function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<ProjectCategory>("homelab");
 
   const currentProject = projects.find((p) => p.id === selectedProject);
@@ -174,3 +174,5 @@ export default function ProjectsSection() {
     </div>
   );
 }
+
+export default memo(ProjectsSection);

@@ -299,7 +299,10 @@ export default function Terminal({ onClose }: TerminalProps) {
           } else {
             throw new Error("Invalid result");
           }
-        } catch {
+        } catch (error: unknown) {
+          if (process.env.NODE_ENV === "development") {
+            console.error("CALC error:", error);
+          }
           newHistory.push("");
           newHistory.push("Syntax error in expression");
           newHistory.push("");
@@ -344,11 +347,11 @@ export default function Terminal({ onClose }: TerminalProps) {
       onClick={() => inputRef.current?.focus()}
     >
       {/* Terminal header */}
-      <div className="bg-[#0000AA] text-white px-4 py-1 flex justify-between items-center">
+      <div className="bg-[var(--bios-bg)] text-white px-4 py-1 flex justify-between items-center">
         <span>ALDRICH DOS Terminal</span>
         <button
           onClick={onClose}
-          className="px-2 hover:bg-white hover:text-[#0000AA] text-sm"
+          className="px-2 hover:bg-white hover:text-[var(--bios-bg)] text-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
         >
           [X]
         </button>
@@ -357,7 +360,7 @@ export default function Terminal({ onClose }: TerminalProps) {
       {/* Terminal output */}
       <div
         ref={outputRef}
-        className="flex-1 bg-black text-[#AAAAAA] p-4 overflow-auto text-sm leading-relaxed"
+        className="flex-1 bg-black text-[var(--bios-text)] p-4 overflow-auto text-sm leading-relaxed"
       >
         {history.map((line, i) => (
           <div key={i} className="whitespace-pre-wrap">
@@ -367,23 +370,23 @@ export default function Terminal({ onClose }: TerminalProps) {
 
         {/* Input line */}
         <form onSubmit={handleSubmit} className="flex">
-          <span className="text-[#AAAAAA]">C:\ALDRICH&gt;</span>
+          <span className="text-[var(--bios-text)]">C:\ALDRICH&gt;</span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent text-[#AAAAAA] outline-none ml-1 caret-[#AAAAAA]"
+            className="flex-1 bg-transparent text-[var(--bios-text)] outline-none ml-1 caret-[var(--bios-text)] focus-visible:ring-1 focus-visible:ring-[var(--bios-text)]"
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
           />
-          <span className="animate-pulse text-[#AAAAAA]">_</span>
+          <span className="animate-pulse text-[var(--bios-text)]">_</span>
         </form>
       </div>
 
       {/* Footer hint */}
-      <div className="bg-[#0000AA] text-[#AAAAAA] px-4 py-1 text-xs">
+      <div className="bg-[var(--bios-bg)] text-[var(--bios-text)] px-4 py-1 text-xs">
         Press ESC to close | Type HELP for commands
       </div>
     </div>

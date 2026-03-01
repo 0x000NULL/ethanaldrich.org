@@ -1,6 +1,8 @@
 "use client";
 
-export default function CareerSection() {
+import { memo } from "react";
+
+function CareerSection() {
   return (
     <div className="space-y-4">
       <div className="text-[#000000] text-lg mb-4">
@@ -96,7 +98,7 @@ export default function CareerSection() {
         <a
           href="/resume.pdf"
           download
-          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-black hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors"
+          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-black hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
         >
           [ DOWNLOAD CV.PDF ]
         </a>
@@ -108,3 +110,5 @@ export default function CareerSection() {
     </div>
   );
 }
+
+export default memo(CareerSection);

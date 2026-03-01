@@ -1,6 +1,8 @@
 "use client";
 
-export default function AboutSection() {
+import { memo } from "react";
+
+function AboutSection() {
   return (
     <div className="space-y-4">
       <div className="text-[#000000] text-lg mb-4">
@@ -95,3 +97,5 @@ export default function AboutSection() {
     </div>
   );
 }
+
+export default memo(AboutSection);

@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { WindowId, useDesktopStore } from "@/store/desktop-store";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface WindowProps {
   id: WindowId;
@@ -22,16 +23,7 @@ export default function Window({
   const { windows, closeWindow, focusWindow, moveWindow, minimizeWindow, maximizeWindow } = useDesktopStore();
   const windowState = windows.find((w) => w.id === id);
   const constraintsRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useIsMobile();
 
   // Don't render if not open or if minimized
   if (!windowState?.isOpen || windowState?.isMinimized) return null;

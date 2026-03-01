@@ -1,5 +1,7 @@
 "use client";
 
+import { memo } from "react";
+
 interface Skill {
   name: string;
   level: number; // 0-10
@@ -166,7 +168,7 @@ function ProgressBar({ level }: { level: number }) {
   );
 }
 
-export default function SkillsSection() {
+function SkillsSection() {
   return (
     <div className="space-y-4">
       <div className="text-[#000000] text-lg mb-4">
@@ -203,3 +205,5 @@ export default function SkillsSection() {
     </div>
   );
 }
+
+export default memo(SkillsSection);
