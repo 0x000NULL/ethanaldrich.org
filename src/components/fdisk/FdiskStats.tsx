@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ProgressBar } from "@/components/ui";
 
 interface FdiskStatsProps {
   onBack: () => void;
@@ -76,16 +77,6 @@ const partitions: Partition[] = [
   },
 ];
 
-function ProgressBar({ percent }: { percent: number }) {
-  const filled = Math.round(percent / 5);
-  const empty = 20 - filled;
-
-  return (
-    <span className="text-bios-success">
-      [{"█".repeat(filled)}{"░".repeat(empty)}] {percent}%
-    </span>
-  );
-}
 
 export default function FdiskStats({ onBack }: FdiskStatsProps) {
   const [stats, setStats] = useState<VisitorStats | null>(null);
@@ -146,7 +137,7 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
                 <td className="text-right">{p.size}</td>
                 <td className="text-right">{p.used}</td>
                 <td className="pl-4">
-                  <ProgressBar percent={p.percent} />
+                  <ProgressBar value={p.percent} width={20} />
                 </td>
               </tr>
             ))}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -17,8 +18,10 @@ const ERROR_CODES = [
 ];
 
 export default function Error({ error, reset }: ErrorProps) {
-  const errorCode =
-    ERROR_CODES[Math.floor(Math.random() * ERROR_CODES.length)];
+  // Use lazy initialization to pick error code only once per mount
+  const [errorCode] = useState(
+    () => ERROR_CODES[Math.floor(Math.random() * ERROR_CODES.length)]
+  );
 
   useEffect(() => {
     console.error("Application error:", error);
@@ -68,12 +71,12 @@ export default function Error({ error, reset }: ErrorProps) {
             >
               [ RETRY ]
             </button>
-            <a
+            <Link
               href="/"
               className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#0000AA] transition-colors min-w-[120px] min-h-[44px] inline-flex items-center justify-center font-bold"
             >
               [ HOME ]
-            </a>
+            </Link>
           </div>
 
           <p className="mt-8">

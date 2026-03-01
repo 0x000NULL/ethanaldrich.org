@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useDesktopStore, WindowId } from "@/store/desktop-store";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useKonamiCode } from "@/lib/useKonamiCode";
+import { throttle } from "@/lib/throttle";
 import DesktopIcon from "./DesktopIcon";
 import StatusBar from "./StatusBar";
 import Window from "./Window";
@@ -21,42 +22,82 @@ import GameSelector from "@/components/games/GameSelector";
 
 const SCREENSAVER_TIMEOUT = 60000; // 60 seconds
 
-interface IconConfig {
+interface WindowConfig {
   id: WindowId;
   label: string;
   filename: string;
   iconSrc: string;
+  title: string;
+  component: React.ReactNode;
 }
 
-const icons: IconConfig[] = [
-  { id: "about", label: "ABOUT.EXE", filename: "About Me", iconSrc: "/icons/about.svg" },
-  { id: "career", label: "CAREER.EXE", filename: "Experience", iconSrc: "/icons/career.svg" },
-  { id: "projects", label: "PROJECTS.EXE", filename: "Projects", iconSrc: "/icons/projects.svg" },
-  { id: "skills", label: "SKILLS.DAT", filename: "Skills", iconSrc: "/icons/skills.svg" },
-  { id: "contact", label: "CONTACT.COM", filename: "Contact", iconSrc: "/icons/contact.svg" },
-  { id: "blog", label: "BLOG.TXT", filename: "Blog", iconSrc: "/icons/blog.svg" },
-  { id: "games", label: "GAMES.EXE", filename: "Games", iconSrc: "/icons/games.svg" },
+const windowConfigs: WindowConfig[] = [
+  {
+    id: "about",
+    label: "ABOUT.EXE",
+    filename: "About Me",
+    iconSrc: "/icons/about.svg",
+    title: "ABOUT.EXE - Ethan Aldrich",
+    component: <AboutSection />,
+  },
+  {
+    id: "career",
+    label: "CAREER.EXE",
+    filename: "Experience",
+    iconSrc: "/icons/career.svg",
+    title: "CAREER.EXE - Work Experience",
+    component: <CareerSection />,
+  },
+  {
+    id: "projects",
+    label: "PROJECTS.EXE",
+    filename: "Projects",
+    iconSrc: "/icons/projects.svg",
+    title: "PROJECTS.EXE - My Projects",
+    component: <ProjectsSection />,
+  },
+  {
+    id: "skills",
+    label: "SKILLS.DAT",
+    filename: "Skills",
+    iconSrc: "/icons/skills.svg",
+    title: "SKILLS.DAT - Technical Skills",
+    component: <SkillsSection />,
+  },
+  {
+    id: "contact",
+    label: "CONTACT.COM",
+    filename: "Contact",
+    iconSrc: "/icons/contact.svg",
+    title: "CONTACT.COM - Get In Touch",
+    component: <ContactSection />,
+  },
+  {
+    id: "blog",
+    label: "BLOG.TXT",
+    filename: "Blog",
+    iconSrc: "/icons/blog.svg",
+    title: "BLOG.TXT - Technical Write-ups",
+    component: <BlogSection />,
+  },
+  {
+    id: "games",
+    label: "GAMES.EXE",
+    filename: "Games",
+    iconSrc: "/icons/games.svg",
+    title: "GAMES.EXE - Games Collection",
+    component: <GameSelector />,
+  },
 ];
 
-const windowContents: Record<WindowId, React.ReactNode> = {
-  about: <AboutSection />,
-  career: <CareerSection />,
-  projects: <ProjectsSection />,
-  skills: <SkillsSection />,
-  contact: <ContactSection />,
-  blog: <BlogSection />,
-  games: <GameSelector />,
-};
+// Build lookup maps from unified config
+const windowTitles = Object.fromEntries(
+  windowConfigs.map((w) => [w.id, w.title])
+) as Record<WindowId, string>;
 
-const windowTitles: Record<WindowId, string> = {
-  about: "ABOUT.EXE - Ethan Aldrich",
-  career: "CAREER.EXE - Work Experience",
-  projects: "PROJECTS.EXE - My Projects",
-  skills: "SKILLS.DAT - Technical Skills",
-  contact: "CONTACT.COM - Get In Touch",
-  blog: "BLOG.TXT - Technical Write-ups",
-  games: "GAMES.EXE - Games Collection",
-};
+const windowContents = Object.fromEntries(
+  windowConfigs.map((w) => [w.id, w.component])
+) as Record<WindowId, React.ReactNode>;
 
 export default function Desktop() {
   const {
@@ -71,6 +112,7 @@ export default function Desktop() {
   } = useDesktopStore();
   const isMobile = useIsMobile();
   const [screensaverActive, setScreensaverActive] = useState(false);
+  // eslint-disable-next-line react-hooks/purity -- useRef initial value is only computed once
   const lastActivityRef = useRef(Date.now());
   const screensaverTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -92,11 +134,30 @@ export default function Desktop() {
     setTurboUnlocked(true);
   });
 
+  // Throttled activity handler for mousemove (100ms throttle)
+  const throttledHandleActivity = useMemo(
+    () =>
+      throttle(() => {
+        // eslint-disable-next-line react-hooks/purity -- event callback, not called during render
+        lastActivityRef.current = Date.now();
+      }, 100),
+    []
+  );
+
+  // Non-throttled activity handler for discrete events
+  const handleActivity = useCallback(() => {
+    lastActivityRef.current = Date.now();
+  }, []);
+
   // Screensaver timer
   useEffect(() => {
     const checkInactivity = () => {
       const now = Date.now();
-      if (now - lastActivityRef.current >= SCREENSAVER_TIMEOUT && !screensaverActive && !terminalOpen) {
+      if (
+        now - lastActivityRef.current >= SCREENSAVER_TIMEOUT &&
+        !screensaverActive &&
+        !terminalOpen
+      ) {
         setScreensaverActive(true);
       }
     };
@@ -104,12 +165,8 @@ export default function Desktop() {
     // Check every 5 seconds
     screensaverTimerRef.current = setInterval(checkInactivity, 5000);
 
-    // Listen for activity
-    const handleActivity = () => {
-      lastActivityRef.current = Date.now();
-    };
-
-    window.addEventListener("mousemove", handleActivity);
+    // Listen for activity - throttle mousemove, immediate for others
+    window.addEventListener("mousemove", throttledHandleActivity);
     window.addEventListener("keydown", handleActivity);
     window.addEventListener("mousedown", handleActivity);
     window.addEventListener("touchstart", handleActivity);
@@ -118,12 +175,12 @@ export default function Desktop() {
       if (screensaverTimerRef.current) {
         clearInterval(screensaverTimerRef.current);
       }
-      window.removeEventListener("mousemove", handleActivity);
+      window.removeEventListener("mousemove", throttledHandleActivity);
       window.removeEventListener("keydown", handleActivity);
       window.removeEventListener("mousedown", handleActivity);
       window.removeEventListener("touchstart", handleActivity);
     };
-  }, [screensaverActive, terminalOpen]);
+  }, [screensaverActive, terminalOpen, throttledHandleActivity, handleActivity]);
 
   // Terminal shortcut (backtick key)
   useEffect(() => {
@@ -156,13 +213,13 @@ export default function Desktop() {
       <div className="flex-1 relative overflow-hidden">
         {/* Icon grid */}
         <div className="absolute inset-4 flex flex-wrap content-start gap-2">
-          {icons.map((icon) => (
+          {windowConfigs.map((config) => (
             <DesktopIcon
-              key={icon.id}
-              label={icon.label}
-              iconSrc={icon.iconSrc}
-              onClick={() => handleIconClick(icon.id)}
-              isActive={activeWindowId === icon.id}
+              key={config.id}
+              label={config.label}
+              iconSrc={config.iconSrc}
+              onClick={() => handleIconClick(config.id)}
+              isActive={activeWindowId === config.id}
             />
           ))}
           {/* Shutdown icon - special handling */}
