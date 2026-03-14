@@ -57,7 +57,10 @@ export function getBlogPosts(): BlogPostMeta[] {
 
 export function getBlogPost(slug: string): BlogPost | null {
   const mdxPath = path.join(BLOG_DIR, `${slug}.mdx`);
-  const mdPath = path.join(BLOG_DIR, `${slug}.md`);
+  // Sanitize slug to prevent path traversal
+  const sanitizedSlug = slug.replace(/[^a-zA-Z0-9_-]/g, '');
+  const mdxPath = path.join(BLOG_DIR, `${sanitizedSlug}.mdx`);
+  const mdPath = path.join(BLOG_DIR, `${sanitizedSlug}.md`);
 
   let filePath: string | null = null;
   if (fs.existsSync(mdxPath)) {
