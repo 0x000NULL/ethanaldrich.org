@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+const path = require('path');
 
 export interface BlogPostMeta {
   id: string;
@@ -30,6 +31,10 @@ export function getBlogPosts(): BlogPostMeta[] {
   const posts = files
     .filter((file) => file.endsWith(".mdx") || file.endsWith(".md"))
     .map((file) => {
+      const _resolved = path.resolve(path.join(BLOG_DIR, file));
+      if (!_resolved.startsWith(path.resolve(BLOG_DIR))) {
+        throw new Error('Path traversal detected');
+      }
       const filePath = path.join(BLOG_DIR, file);
       const fileContents = fs.readFileSync(filePath, "utf8");
       const { data } = matter(fileContents);
