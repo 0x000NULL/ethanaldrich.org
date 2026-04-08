@@ -18,7 +18,7 @@ export interface ThemeColors {
 
 export const themes: Record<ThemeVariant, ThemeColors> = {
   blue: {
-    "bios-bg": "#0000AA",
+    "bios-bg": "#2222CC",
     "bios-text": "#AAAAAA",
     "bios-highlight": "#FFFFFF",
     "bios-accent": "#000000",
