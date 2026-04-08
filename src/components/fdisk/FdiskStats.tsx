@@ -109,7 +109,7 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
       <div className="text-bios-success mb-4">► FDISK - Fixed Disk Partition Info</div>
 
       <div className="border border-[#AAAAAA] p-4 mb-4">
-        <div className="text-[#000000] text-lg mb-4 text-center">
+        <div className="text-bios text-lg mb-4 text-center">
           ╔══════════════════════════════════════════════════════════╗
           <br />
           ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DISK PARTITION INFORMATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
@@ -132,7 +132,7 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
             {partitions.map((p) => (
               <tr key={p.drive} className="text-[#AAAAAA]">
                 <td className="text-white">{p.drive}</td>
-                <td className="text-[#000000]">{p.label}</td>
+                <td className="text-bios">{p.label}</td>
                 <td>{p.type}</td>
                 <td className="text-right">{p.size}</td>
                 <td className="text-right">{p.used}</td>
@@ -150,7 +150,7 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
             {partitions.map((p) => (
               <div key={p.drive} className="flex">
                 <span className="text-white w-8">{p.drive}</span>
-                <span className="text-[#606060]">{p.description}</span>
+                <span className="text-bios-dim">{p.description}</span>
               </div>
             ))}
           </div>
@@ -158,16 +158,16 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
 
         <div className="border-t border-[#606060] pt-4 mt-4 text-sm">
           <div className="flex justify-between">
-            <span className="text-[#000000]">Total Disk Space:</span>
+            <span className="text-bios">Total Disk Space:</span>
             <span className="text-white">3.85 GB</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[#000000]">Total Used:</span>
+            <span className="text-bios">Total Used:</span>
             <span className="text-bios-success">2.17 GB (56%)</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[#000000]">Total Free:</span>
-            <span className="text-[#606060]">1.68 GB</span>
+            <span className="text-bios">Total Free:</span>
+            <span className="text-bios-dim">1.68 GB</span>
           </div>
         </div>
 
@@ -175,16 +175,16 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
           <div className="border-t border-[#606060] pt-4 mt-4 text-sm">
             <div className="text-bios-success mb-2">► System Statistics</div>
             <div className="flex justify-between">
-              <span className="text-[#000000]">Total Visitors:</span>
+              <span className="text-bios">Total Visitors:</span>
               <span className="text-white">{stats.visitors.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#000000]">Page Views:</span>
+              <span className="text-bios">Page Views:</span>
               <span className="text-bios-success">{stats.pageViews.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#000000]">Last Access:</span>
-              <span className="text-[#606060]">{formatDate(stats.lastVisit)}</span>
+              <span className="text-bios">Last Access:</span>
+              <span className="text-bios-dim">{formatDate(stats.lastVisit)}</span>
             </div>
           </div>
         )}
@@ -197,7 +197,7 @@ export default function FdiskStats({ onBack }: FdiskStatsProps) {
         >
           ← Back to Advanced Settings
         </button>
-        <span className="text-[#606060] text-xs">
+        <span className="text-bios-dim text-xs">
           FDISK v4.20 - (C) Aldrich Systems
         </span>
       </div>

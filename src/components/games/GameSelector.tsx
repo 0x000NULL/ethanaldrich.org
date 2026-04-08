@@ -106,7 +106,7 @@ export default function GameSelector() {
         ))}
       </div>
 
-      <div className="mt-6 text-xs text-[#606060] text-center">
+      <div className="mt-6 text-xs text-bios-dim text-center">
         Select a game to play
       </div>
     </div>

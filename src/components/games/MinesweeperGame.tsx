@@ -316,7 +316,7 @@ export default function MinesweeperGame() {
       )}
 
       {/* Instructions */}
-      <div className="mt-4 text-xs text-[#606060] text-center">
+      <div className="mt-4 text-xs text-bios-dim text-center">
         <div>Left click: Reveal | Right click: Flag</div>
         <div>Mobile: Use flag mode toggle</div>
       </div>

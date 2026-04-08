@@ -35,7 +35,7 @@ export function GameOverlay({ type, score, onAction }: GameOverlayProps) {
         )}
         {type === "paused" && (
           <>
-            <div className="text-[#000000] text-lg mb-2">PAUSED</div>
+            <div className="text-bios-highlight text-lg mb-2">PAUSED</div>
             <div className="text-sm">Press P or Space to continue</div>
           </>
         )}
