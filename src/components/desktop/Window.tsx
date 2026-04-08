@@ -67,7 +67,7 @@ export default function Window({
         </div>
 
         {/* Content area */}
-        <div className="flex-1 chrome-sunken m-1 overflow-auto bg-bios text-black p-4">
+        <div className="flex-1 chrome-sunken m-1 overflow-auto bg-bios text-bios p-4">
           {children}
         </div>
       </div>
@@ -152,7 +152,7 @@ export default function Window({
 
         {/* Content area */}
         <div
-          className="flex-1 chrome-sunken m-1 overflow-auto bg-bios text-black p-4"
+          className="flex-1 chrome-sunken m-1 overflow-auto bg-bios text-bios p-4"
           style={windowState.isMaximized
             ? { maxHeight: "calc(100vh - 100px)", maxWidth: "100%" }
             : { maxHeight: "calc(100vh - 200px)", maxWidth: "calc(100vw - 100px)" }

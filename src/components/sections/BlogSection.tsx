@@ -54,14 +54,14 @@ const mdxComponents = {
     <pre className="bg-black text-bios-success p-3 overflow-x-auto mb-3 border border-[#444] text-sm font-mono" {...props} />
   ),
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote className="border-l-4 border-bios-success pl-4 italic mb-3 text-[#AAAAAA]" {...props} />
+    <blockquote className="border-l-4 border-bios-success pl-4 italic mb-3 text-bios" {...props} />
   ),
   hr: () => <hr className="border-[#444] my-4" />,
   strong: (props: React.HTMLAttributes<HTMLElement>) => (
     <strong className="text-bios-success font-bold" {...props} />
   ),
   em: (props: React.HTMLAttributes<HTMLElement>) => (
-    <em className="text-[#AAAAAA] italic" {...props} />
+    <em className="text-bios italic" {...props} />
   ),
 };
 
@@ -142,7 +142,7 @@ export default function BlogSection() {
         <div className="text-[var(--bios-error)]">{error}</div>
         <button
           onClick={handleRetry}
-          className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-black"
+          className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-bios-highlight"
         >
           [ RETRY ]
         </button>
@@ -164,21 +164,21 @@ export default function BlogSection() {
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => setSelectedPost(null)}
-            className="text-[#000000] hover:text-bios-success"
+            className="text-bios hover:text-bios-success"
           >
             ← Back to Directory
           </button>
-          <span className="text-[#606060]">
+          <span className="text-bios-dim">
             {selectedPost.filename}.{selectedPost.extension}
           </span>
         </div>
 
         <div className="border border-[#444444] p-4">
           <div className="text-bios-success text-lg mb-2">{selectedPost.title}</div>
-          <div className="text-[#606060] text-xs mb-4">
+          <div className="text-bios-dim text-xs mb-4">
             Last modified: {selectedPost.date} | Size: {selectedPost.size.toLocaleString()} bytes
           </div>
-          <div className="prose-dos text-sm">
+          <div className="prose-dos bios-prose text-base">
             {selectedPost.mdxSource ? (
               <MDXRemote {...selectedPost.mdxSource} components={mdxComponents} />
             ) : (
@@ -189,7 +189,7 @@ export default function BlogSection() {
           </div>
         </div>
 
-        <div className="text-[#606060] text-xs text-center">
+        <div className="text-bios-dim text-xs text-center">
           Press ESC to return to directory | PgUp/PgDn to scroll
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function BlogSection() {
 
   return (
     <div className="space-y-4">
-      <div className="text-[#000000] text-lg mb-4">
+      <div className="text-bios text-lg mb-4">
         ╔══════════════════════════════════════════════════════════╗
         <br />
         ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIRECTORY OF C:\BLOG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
@@ -207,11 +207,11 @@ export default function BlogSection() {
       </div>
 
       <div className="text-sm mb-2">
-        <span className="text-black">Volume in drive C is </span>
-        <span className="text-[#000000]">ALDRICH_BLOG</span>
+        <span className="text-bios-highlight">Volume in drive C is </span>
+        <span className="text-bios">ALDRICH_BLOG</span>
       </div>
       <div className="text-sm mb-4">
-        <span className="text-black">Directory of C:\BLOG</span>
+        <span className="text-bios-highlight">Directory of C:\BLOG</span>
       </div>
 
       <div className="border border-[#444444] p-2 font-mono text-sm overflow-x-auto">
@@ -234,13 +234,13 @@ export default function BlogSection() {
                   loadingPost ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
-                <td className="text-[#000000] whitespace-nowrap">{post.filename}</td>
-                <td className="text-black">{post.extension}</td>
-                <td className="text-black text-right whitespace-nowrap">
+                <td className="text-bios whitespace-nowrap">{post.filename}</td>
+                <td className="text-bios-highlight">{post.extension}</td>
+                <td className="text-bios-highlight text-right whitespace-nowrap">
                   {post.size.toLocaleString()}
                 </td>
-                <td className="text-black whitespace-nowrap">{post.date}</td>
-                <td className="text-[#444444]">{post.description}</td>
+                <td className="text-bios-highlight whitespace-nowrap">{post.date}</td>
+                <td className="text-bios-dim">{post.description}</td>
               </tr>
             ))}
           </tbody>
@@ -248,10 +248,10 @@ export default function BlogSection() {
       </div>
 
       <div className="text-sm">
-        <span className="text-black">
+        <span className="text-bios-highlight">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{posts.length} file(s)
         </span>
-        <span className="text-[#444444]">
+        <span className="text-bios-dim">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {posts.reduce((acc, p) => acc + p.size, 0).toLocaleString()} bytes
         </span>
@@ -265,13 +265,13 @@ export default function BlogSection() {
             disabled={page === 1}
             className={`px-2 py-1 ${
               page === 1
-                ? "text-[#606060] cursor-not-allowed"
+                ? "text-bios-dim cursor-not-allowed"
                 : "text-bios-success hover:underline"
             }`}
           >
             &lt; Prev
           </button>
-          <span className="text-[#AAAAAA]">
+          <span className="text-bios">
             Page {page} of {totalPages}
           </span>
           <button
@@ -279,7 +279,7 @@ export default function BlogSection() {
             disabled={page === totalPages}
             className={`px-2 py-1 ${
               page === totalPages
-                ? "text-[#606060] cursor-not-allowed"
+                ? "text-bios-dim cursor-not-allowed"
                 : "text-bios-success hover:underline"
             }`}
           >
@@ -288,7 +288,7 @@ export default function BlogSection() {
         </div>
       )}
 
-      <div className="text-[#606060] text-xs text-center mt-4">
+      <div className="text-bios-dim text-xs text-center mt-4">
         Click on a file to read | Press ESC to exit
       </div>
     </div>

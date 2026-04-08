@@ -165,7 +165,7 @@ function SkillsSection() {
             <tbody>
               {category.skills.map((skill) => (
                 <tr key={skill.name}>
-                  <td className="text-[#000000] pr-4 py-1 w-56 align-middle">
+                  <td className="text-bios pr-4 py-1 w-56 align-middle">
                     {skill.name}:
                   </td>
                   <td className="py-1">

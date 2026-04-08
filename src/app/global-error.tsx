@@ -10,13 +10,13 @@ export default function GlobalError({
   return (
     <html>
       <body
-        className="bg-[#2222CC] text-white font-mono p-8"
+        className="bg-[#0000AA] text-white font-mono p-8"
         style={{ fontFamily: "monospace" }}
       >
         <div className="max-w-2xl mx-auto">
           <div
             className="px-2 py-1 inline-block mb-8 font-bold"
-            style={{ background: "#AAAAAA", color: "#2222CC" }}
+            style={{ background: "#AAAAAA", color: "#0000AA" }}
           >
             ALDRICH OS - FATAL ERROR
           </div>
@@ -51,7 +51,7 @@ export default function GlobalError({
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.background = "white";
-                e.currentTarget.style.color = "#2222CC";
+                e.currentTarget.style.color = "#0000AA";
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.background = "transparent";

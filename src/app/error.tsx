@@ -29,12 +29,12 @@ export default function Error({ error, reset }: ErrorProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-[#2222CC] text-white p-8 font-mono flex flex-col"
+      className="fixed inset-0 bg-[#0000AA] text-white p-8 font-mono flex flex-col"
       role="alert"
       aria-live="assertive"
     >
       <div className="max-w-2xl mx-auto w-full">
-        <div className="bg-[#AAAAAA] text-[#2222CC] px-2 py-1 inline-block mb-8 font-bold">
+        <div className="bg-[#AAAAAA] text-[#0000AA] px-2 py-1 inline-block mb-8 font-bold">
           ALDRICH OS
         </div>
 
@@ -67,13 +67,13 @@ export default function Error({ error, reset }: ErrorProps) {
           <div className="flex gap-4 flex-wrap">
             <button
               onClick={reset}
-              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#2222CC] transition-colors min-w-[120px] min-h-[44px] font-bold cursor-pointer"
+              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#0000AA] transition-colors min-w-[120px] min-h-[44px] font-bold cursor-pointer"
             >
               [ RETRY ]
             </button>
             <Link
               href="/"
-              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#2222CC] transition-colors min-w-[120px] min-h-[44px] inline-flex items-center justify-center font-bold"
+              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#0000AA] transition-colors min-w-[120px] min-h-[44px] inline-flex items-center justify-center font-bold"
             >
               [ HOME ]
             </Link>

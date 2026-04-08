@@ -33,7 +33,7 @@ export function DPadControls({
 }: DPadControlsProps) {
   return (
     <div className="flex flex-col items-center gap-1 mt-4">
-      <div className="text-[#606060] text-xs mb-2">
+      <div className="text-bios-dim text-xs mb-2">
         Swipe on grid or use D-pad
       </div>
       <div className="grid grid-cols-3 gap-1">

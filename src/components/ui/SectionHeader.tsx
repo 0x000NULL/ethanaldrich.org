@@ -10,7 +10,7 @@ export function SectionHeader({ title, width = 60 }: SectionHeaderProps) {
   const rightPad = padding - leftPad;
 
   return (
-    <div className="text-[#000000] text-lg mb-4 whitespace-pre font-mono">
+    <div className="text-bios text-lg mb-4 whitespace-pre font-mono">
       {"\u2554"}
       {"\u2550".repeat(innerWidth)}
       {"\u2557"}

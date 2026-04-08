@@ -3,8 +3,9 @@
 /* BIOS Color Palette */
 :root {
   /* BIOS Screen Colors */
-  --bios-bg: #2222CC;
-  --bios-text: #AAAAAA;
+  --bios-bg: #0000AA;
+  --bios-text: #DDDDDD;
+  --bios-text-dim: #8888BB;
   --bios-highlight: #FFFFFF;
   --bios-accent: #000000;
   --bios-error: #FF5555;
@@ -33,6 +34,7 @@
   --color-foreground: var(--foreground);
   --color-bios-bg: var(--bios-bg);
   --color-bios-text: var(--bios-text);
+  --color-bios-text-dim: var(--bios-text-dim);
   --color-bios-highlight: var(--bios-highlight);
   --color-bios-accent: var(--bios-accent);
   --color-bios-error: var(--bios-error);
@@ -86,7 +88,7 @@ body {
   color: var(--bios-text);
   font-family: 'DOS VGA', 'DOS', 'Courier New', 'Lucida Console', monospace;
   font-size: 16px;
-  line-height: 1.2;
+  line-height: 1.4;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: unset;
   text-rendering: optimizeSpeed;
@@ -194,6 +196,10 @@ body {
   color: var(--bios-text);
 }
 
+.text-bios-dim {
+  color: var(--bios-text-dim);
+}
+
 .text-bios-highlight {
   color: var(--bios-highlight);
 }
@@ -212,6 +218,12 @@ body {
 
 .border-bios {
   border-color: var(--bios-text);
+}
+
+/* Long-form prose container — comfortable reading column for blog posts */
+.bios-prose {
+  max-width: 72ch;
+  line-height: 1.5;
 }
 
 /* Mobile touch improvements */

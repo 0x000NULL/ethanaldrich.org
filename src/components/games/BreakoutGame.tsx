@@ -322,7 +322,7 @@ export default function BreakoutGame() {
       )}
 
       {/* Instructions */}
-      <div className="mt-4 text-xs text-[#606060] text-center">
+      <div className="mt-4 text-xs text-bios-dim text-center">
         <div>Arrow keys or mouse to move paddle</div>
         <div>Break all bricks to win!</div>
       </div>

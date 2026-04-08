@@ -103,7 +103,7 @@ function ProjectsSection() {
 
   return (
     <div className="space-y-4">
-      <div className="text-[#000000] text-lg mb-4">
+      <div className="text-bios text-lg mb-4">
         ╔══════════════════════════════════════════════════════════╗
         <br />
         ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BOOT DEVICE PRIORITY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
@@ -121,11 +121,11 @@ function ProjectsSection() {
               onClick={() => setSelectedProject(project.id)}
               className={`w-full text-left px-2 py-1 ${
                 selectedProject === project.id
-                  ? "bg-[#AAAAAA] text-[#2222CC]"
+                  ? "bg-[#AAAAAA] text-[var(--bios-bg)]"
                   : "hover:bg-[#000080]"
               }`}
             >
-              <span className="text-[#000000] mr-2">{index + 1}.</span>
+              <span className="text-bios mr-2">{index + 1}.</span>
               [{project.shortName}]
             </button>
           ))}
@@ -138,12 +138,12 @@ function ProjectsSection() {
           <div className="text-[#228B22] text-lg">{currentProject.name}</div>
 
           <div>
-            <span className="text-[#000000]">Status: </span>
+            <span className="text-bios">Status: </span>
             <span
               className={
                 currentProject.status.includes("ACTIVE")
                   ? "text-[#228B22]"
-                  : "text-[#000000]"
+                  : "text-bios"
               }
             >
               {currentProject.status}
@@ -151,12 +151,12 @@ function ProjectsSection() {
           </div>
 
           <div>
-            <span className="text-[#000000]">Description:</span>
-            <p className="mt-1 text-sm">{currentProject.description}</p>
+            <span className="text-bios">Description:</span>
+            <p className="mt-1 text-base">{currentProject.description}</p>
           </div>
 
           <div>
-            <span className="text-[#000000]">Specifications:</span>
+            <span className="text-bios">Specifications:</span>
             <ul className="mt-1 text-sm space-y-1">
               {currentProject.specs.map((spec, index) => (
                 <li key={index}>
@@ -168,7 +168,7 @@ function ProjectsSection() {
         </div>
       )}
 
-      <div className="text-[#606060] text-xs text-center">
+      <div className="text-bios-dim text-xs text-center">
         Use ↑↓ to navigate | Enter to select | ESC to exit
       </div>
     </div>

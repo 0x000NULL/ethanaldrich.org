@@ -33,10 +33,10 @@ export function ProgressBar({
       <span className="text-bios-success">
         [{filledChar.repeat(filledCount)}
       </span>
-      <span className="text-[#606060]">{emptyChar.repeat(emptyCount)}</span>
+      <span className="text-bios-dim">{emptyChar.repeat(emptyCount)}</span>
       <span className="text-bios-success">]</span>
       {showLabel && (
-        <span className="text-[#000000] ml-2">{clampedValue}%</span>
+        <span className="text-bios ml-2">{clampedValue}%</span>
       )}
     </span>
   );
