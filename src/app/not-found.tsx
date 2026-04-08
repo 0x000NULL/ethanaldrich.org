@@ -3,11 +3,11 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div
-      className="fixed inset-0 bg-[#0000AA] text-white p-8 font-mono flex flex-col"
+      className="fixed inset-0 bg-[#2222CC] text-white p-8 font-mono flex flex-col"
       role="main"
     >
       <div className="max-w-2xl mx-auto w-full">
-        <div className="bg-[#AAAAAA] text-[#0000AA] px-2 py-1 inline-block mb-8 font-bold">
+        <div className="bg-[#AAAAAA] text-[#2222CC] px-2 py-1 inline-block mb-8 font-bold">
           ALDRICH OS
         </div>
 
@@ -47,7 +47,7 @@ GAMES    EXE     4,096  02-22-26   4:20a
           <div className="flex gap-4 flex-wrap mt-8">
             <Link
               href="/"
-              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#0000AA] transition-colors min-w-[180px] min-h-[44px] inline-flex items-center justify-center font-bold"
+              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#2222CC] transition-colors min-w-[180px] min-h-[44px] inline-flex items-center justify-center font-bold"
             >
               [ RETURN TO DESKTOP ]
             </Link>

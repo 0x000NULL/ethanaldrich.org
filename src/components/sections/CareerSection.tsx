@@ -98,7 +98,7 @@ function CareerSection() {
         <a
           href="/resume.pdf"
           download
-          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-black hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-black hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
         >
           [ DOWNLOAD CV.PDF ]
         </a>

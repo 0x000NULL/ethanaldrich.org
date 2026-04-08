@@ -84,7 +84,7 @@ describe("themes", () => {
     it("should set CSS variables on document root", () => {
       applyTheme("blue");
 
-      expect(mockSetProperty).toHaveBeenCalledWith("--bios-bg", "#0000AA");
+      expect(mockSetProperty).toHaveBeenCalledWith("--bios-bg", "#2222CC");
       expect(mockSetProperty).toHaveBeenCalledWith("--bios-text", "#AAAAAA");
       expect(mockSetProperty).toHaveBeenCalledWith(
         "--bios-highlight",
