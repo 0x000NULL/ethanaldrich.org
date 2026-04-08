@@ -5,7 +5,7 @@ import { memo } from "react";
 function CareerSection() {
   return (
     <div className="space-y-4">
-      <div className="text-[#000000] text-lg mb-4">
+      <div className="text-bios text-lg mb-4">
         ╔══════════════════════════════════════════════════════════╗
         <br />
         ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAREER CONFIGURATION UTILITY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
@@ -19,31 +19,31 @@ function CareerSection() {
         <table className="w-full text-sm">
           <tbody>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 w-40 align-top">Title:</td>
-              <td className="text-black py-1">Chief Technology Officer</td>
+              <td className="text-bios pr-4 py-1 w-40 align-top">Title:</td>
+              <td className="text-bios-highlight py-1">Chief Technology Officer</td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">Company:</td>
-              <td className="text-black py-1">
+              <td className="text-bios pr-4 py-1 align-top">Company:</td>
+              <td className="text-bios-highlight py-1">
                 Malco Enterprises of Nevada, LLC
               </td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">DBA:</td>
-              <td className="text-black py-1">Budget Rent a Car Las Vegas</td>
+              <td className="text-bios pr-4 py-1 align-top">DBA:</td>
+              <td className="text-bios-highlight py-1">Budget Rent a Car Las Vegas</td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">Duration:</td>
-              <td className="text-black py-1">2020 - Present</td>
+              <td className="text-bios pr-4 py-1 align-top">Duration:</td>
+              <td className="text-bios-highlight py-1">2020 - Present</td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">Scope:</td>
-              <td className="text-black py-1">8 Locations, Las Vegas Metro</td>
+              <td className="text-bios pr-4 py-1 align-top">Scope:</td>
+              <td className="text-bios-highlight py-1">8 Locations, Las Vegas Metro</td>
             </tr>
           </tbody>
         </table>
 
-        <div className="mt-3 text-[#000000]">Responsibilities:</div>
+        <div className="mt-3 text-bios">Responsibilities:</div>
         <ul className="text-sm mt-1 space-y-1">
           <li>
             <span className="text-[#228B22]">•</span> SQL Server administration
@@ -78,16 +78,16 @@ function CareerSection() {
         <table className="w-full text-sm">
           <tbody>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 w-40 align-top">School:</td>
-              <td className="text-black py-1">West Career and Technical Academy</td>
+              <td className="text-bios pr-4 py-1 w-40 align-top">School:</td>
+              <td className="text-bios-highlight py-1">West Career and Technical Academy</td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">Duration:</td>
-              <td className="text-black py-1">2016 - 2020</td>
+              <td className="text-bios pr-4 py-1 align-top">Duration:</td>
+              <td className="text-bios-highlight py-1">2016 - 2020</td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 align-top">Level:</td>
-              <td className="text-black py-1">High School</td>
+              <td className="text-bios pr-4 py-1 align-top">Level:</td>
+              <td className="text-bios-highlight py-1">High School</td>
             </tr>
           </tbody>
         </table>
@@ -98,13 +98,13 @@ function CareerSection() {
         <a
           href="/resume.pdf"
           download
-          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-black hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+          className="inline-block px-6 py-2 border-2 border-[#AAAAAA] text-bios-highlight hover:bg-[#AAAAAA] hover:text-[var(--bios-bg)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
         >
           [ DOWNLOAD CV.PDF ]
         </a>
       </div>
 
-      <div className="text-[#606060] text-xs mt-4 text-center">
+      <div className="text-bios-dim text-xs mt-4 text-center">
         Press F1 for Help | ESC to Exit
       </div>
     </div>

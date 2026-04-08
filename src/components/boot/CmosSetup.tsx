@@ -42,7 +42,7 @@ const personalStats = [
 ];
 
 const baseThemeOptions: { id: ThemeVariant; label: string; preview: string }[] = [
-  { id: "blue", label: "Classic Blue", preview: "#2222CC" },
+  { id: "blue", label: "Classic Blue", preview: "#0000AA" },
   { id: "green", label: "Green Phosphor", preview: "#003300" },
   { id: "amber", label: "Amber CRT", preview: "#331100" },
 ];
@@ -190,7 +190,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             }}
             className={`py-1 px-2 cursor-pointer ${
               selectedIndex === index
-                ? "bg-[#AAAAAA] text-[#2222CC]"
+                ? "bg-[#AAAAAA] text-[var(--bios-bg)]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -201,7 +201,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
 
       {/* Help */}
       <div className="w-1/2 pl-4 text-sm">
-        <div className="text-[#000000] mb-2">Item Help</div>
+        <div className="text-bios mb-2">Item Help</div>
         <p className="text-[#AAAAAA]">
           {selectedIndex === 0 &&
             "View system specifications and personal stats."}
@@ -223,13 +223,13 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
         <tbody>
           {personalStats.map((stat, index) => (
             <tr key={index}>
-              <td className="text-[#000000] pr-4 py-1">{stat.label}:</td>
+              <td className="text-bios pr-4 py-1">{stat.label}:</td>
               <td className="text-white py-1">{stat.value}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="mt-4 text-[#606060] text-xs">Press ESC to return</div>
+      <div className="mt-4 text-bios-dim text-xs">Press ESC to return</div>
     </div>
   );
 
@@ -246,7 +246,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             }}
             className={`flex items-center gap-4 py-1 px-2 cursor-pointer ${
               selectedIndex === index
-                ? "bg-[#AAAAAA] text-[#2222CC]"
+                ? "bg-[#AAAAAA] text-[var(--bios-bg)]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -275,7 +275,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
         </button>
       </div>
 
-      <div className="mt-4 text-[#606060] text-xs">
+      <div className="mt-4 text-bios-dim text-xs">
         Press Enter to select | ESC to return
       </div>
     </div>
@@ -291,7 +291,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             onClick={() => setBootSelectedIndex(index)}
             className={`py-1 px-2 cursor-pointer flex items-center gap-2 ${
               bootSelectedIndex === index
-                ? "bg-[#AAAAAA] text-[#2222CC]"
+                ? "bg-[#AAAAAA] text-[var(--bios-bg)]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -304,14 +304,14 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
                 <button
                   onClick={(e) => { e.stopPropagation(); moveBootItem("up"); }}
                   disabled={index === 0}
-                  className={`px-2 ${index === 0 ? "text-[#606060]" : "hover:bg-[#000080] hover:text-white"}`}
+                  className={`px-2 ${index === 0 ? "text-bios-dim" : "hover:bg-[#000080] hover:text-white"}`}
                 >
                   ▲
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); moveBootItem("down"); }}
                   disabled={index === bootOrder.length - 1}
-                  className={`px-2 ${index === bootOrder.length - 1 ? "text-[#606060]" : "hover:bg-[#000080] hover:text-white"}`}
+                  className={`px-2 ${index === bootOrder.length - 1 ? "text-bios-dim" : "hover:bg-[#000080] hover:text-white"}`}
                 >
                   ▼
                 </button>
@@ -320,7 +320,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
           </div>
         ))}
       </div>
-      <div className="mt-4 text-[#606060] text-xs">
+      <div className="mt-4 text-bios-dim text-xs">
         ↑↓ Select | +/- or PgUp/PgDn Reorder | ESC Return
       </div>
     </div>
@@ -330,14 +330,14 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
     <div className="fixed inset-0 bg-bios text-bios p-4 font-mono overflow-auto">
       {/* Header */}
       <div className="text-center mb-4">
-        <div className="text-[#000000] text-lg">
+        <div className="text-bios text-lg">
           ╔══════════════════════════════════════════════════════════╗
         </div>
-        <div className="text-[#000000] text-lg">
+        <div className="text-bios text-lg">
           ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALDRICH
           BIOS SETUP UTILITY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
         </div>
-        <div className="text-[#000000] text-lg">
+        <div className="text-bios text-lg">
           ╚══════════════════════════════════════════════════════════╝
         </div>
       </div>
@@ -354,7 +354,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
           >
             Main Menu
           </span>
-          <span className="text-[#606060]"> → </span>
+          <span className="text-bios-dim"> → </span>
           <span className="text-white">
             {mainMenuItems.find((m) => m.id === currentSection)?.label ||
               currentSection}
@@ -379,7 +379,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 flex justify-between text-sm text-[#606060]">
+      <div className="mt-4 flex justify-between text-sm text-bios-dim">
         <div>↑↓ Navigate | Enter Select | ESC Exit</div>
         <div>ALDRICH BIOS v4.20</div>
       </div>
@@ -387,7 +387,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
       {/* Exit button for mouse users */}
       <button
         onClick={onExit}
-        className="absolute top-4 right-4 px-3 py-1 text-sm border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors"
+        className="absolute top-4 right-4 px-3 py-1 text-sm border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[var(--bios-bg)] transition-colors"
       >
         Exit to Desktop
       </button>

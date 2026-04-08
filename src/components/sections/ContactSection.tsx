@@ -20,7 +20,7 @@ function ContactSection() {
 
   return (
     <div className="space-y-4">
-      <div className="text-[#000000] text-lg mb-4">
+      <div className="text-bios text-lg mb-4">
         ╔══════════════════════════════════════════════════════════╗
         <br />
         ║&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTACT SUBSYSTEM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;║
@@ -34,8 +34,8 @@ function ContactSection() {
         <table className="w-full text-sm">
           <tbody>
             <tr>
-              <td className="text-[#000000] pr-4 py-1 w-32">Email:</td>
-              <td className="text-black py-1">
+              <td className="text-bios pr-4 py-1 w-32">Email:</td>
+              <td className="text-bios-highlight py-1">
                 <span
                   className="cursor-pointer hover:text-[#228B22]"
                   onClick={() => {
@@ -47,8 +47,8 @@ function ContactSection() {
               </td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1">GitHub:</td>
-              <td className="text-black py-1">
+              <td className="text-bios pr-4 py-1">GitHub:</td>
+              <td className="text-bios-highlight py-1">
                 <a
                   href="https://github.com/0x000NULL"
                   target="_blank"
@@ -60,8 +60,8 @@ function ContactSection() {
               </td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1">LinkedIn:</td>
-              <td className="text-black py-1">
+              <td className="text-bios pr-4 py-1">LinkedIn:</td>
+              <td className="text-bios-highlight py-1">
                 <a
                   href="https://linkedin.com/in/ethanaldrich"
                   target="_blank"
@@ -73,8 +73,8 @@ function ContactSection() {
               </td>
             </tr>
             <tr>
-              <td className="text-[#000000] pr-4 py-1">Location:</td>
-              <td className="text-black py-1">Las Vegas, NV</td>
+              <td className="text-bios pr-4 py-1">Location:</td>
+              <td className="text-bios-highlight py-1">Las Vegas, NV</td>
             </tr>
           </tbody>
         </table>
@@ -85,38 +85,38 @@ function ContactSection() {
         <div className="text-[#228B22] mb-2">► MESSAGE INPUT</div>
         <form onSubmit={handleSubmit} className="space-y-3 text-sm">
           <div className="flex items-center">
-            <label className="text-[#000000] w-24">Name:</label>
+            <label className="text-bios w-24">Name:</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-bios-highlight focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
               placeholder="Enter your name..."
             />
           </div>
           <div className="flex items-center">
-            <label className="text-[#000000] w-24">Email:</label>
+            <label className="text-bios w-24">Email:</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-bios-highlight focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono"
               placeholder="Enter your email..."
             />
           </div>
           <div className="flex items-start">
-            <label className="text-[#000000] w-24">Message:</label>
+            <label className="text-bios w-24">Message:</label>
             <textarea
               value={formData.message}
               onChange={(e) =>
                 setFormData({ ...formData, message: e.target.value })
               }
               rows={4}
-              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-black focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono resize-none"
+              className="flex-1 bg-[#000040] border border-[#AAAAAA] px-2 py-1 text-bios-highlight focus:border-[var(--bios-success)] focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] outline-none font-mono resize-none"
               placeholder="Enter your message..."
             />
           </div>
@@ -124,13 +124,13 @@ function ContactSection() {
             <button
               type="button"
               onClick={() => setFormData({ name: "", email: "", message: "" })}
-              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[var(--bios-bg)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ CLEAR ]
             </button>
             <button
               type="submit"
-              className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+              className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-[var(--bios-bg)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ SEND ]
             </button>
@@ -138,7 +138,7 @@ function ContactSection() {
         </form>
       </div>
 
-      <div className="text-[#606060] text-xs text-center">
+      <div className="text-bios-dim text-xs text-center">
         Note: Contact form is for demonstration only. Please use email or social links for actual inquiries.
       </div>
     </div>

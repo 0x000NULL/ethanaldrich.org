@@ -3,6 +3,7 @@ export type ThemeVariant = "blue" | "green" | "amber" | "turbo";
 export interface ThemeColors {
   "bios-bg": string;
   "bios-text": string;
+  "bios-text-dim": string;
   "bios-highlight": string;
   "bios-accent": string;
   "bios-success": string;
@@ -18,8 +19,9 @@ export interface ThemeColors {
 
 export const themes: Record<ThemeVariant, ThemeColors> = {
   blue: {
-    "bios-bg": "#2222CC",
-    "bios-text": "#AAAAAA",
+    "bios-bg": "#0000AA",
+    "bios-text": "#DDDDDD",
+    "bios-text-dim": "#8888BB",
     "bios-highlight": "#FFFFFF",
     "bios-accent": "#000000",
     "bios-success": "#228B22",
@@ -35,6 +37,7 @@ export const themes: Record<ThemeVariant, ThemeColors> = {
   green: {
     "bios-bg": "#002200",
     "bios-text": "#33FF33",
+    "bios-text-dim": "#22AA22",
     "bios-highlight": "#00FF00",
     "bios-accent": "#004400",
     "bios-success": "#00FF00",
@@ -50,6 +53,7 @@ export const themes: Record<ThemeVariant, ThemeColors> = {
   amber: {
     "bios-bg": "#221100",
     "bios-text": "#FFAA33",
+    "bios-text-dim": "#CC8822",
     "bios-highlight": "#FFCC00",
     "bios-accent": "#442200",
     "bios-success": "#FFAA00",
@@ -65,6 +69,7 @@ export const themes: Record<ThemeVariant, ThemeColors> = {
   turbo: {
     "bios-bg": "#1a0a2e",
     "bios-text": "#00FFFF",
+    "bios-text-dim": "#9999DD",
     "bios-highlight": "#FF00FF",
     "bios-accent": "#2d1b4e",
     "bios-success": "#00FF00",

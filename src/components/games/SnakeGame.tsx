@@ -74,7 +74,7 @@ export default function SnakeGame() {
 
       {/* Desktop Controls */}
       {!isMobile && (
-        <div className="text-[#606060] text-xs text-center space-y-1">
+        <div className="text-bios-dim text-xs text-center space-y-1">
           <div>Arrow Keys or WASD to move</div>
           <div>P or Space to pause</div>
         </div>
@@ -91,7 +91,7 @@ export default function SnakeGame() {
 
       {/* Mobile hint when not playing */}
       {isMobile && (!isPlaying || gameOver) && (
-        <div className="text-[#606060] text-xs text-center mt-2">
+        <div className="text-bios-dim text-xs text-center mt-2">
           Swipe on grid or use D-pad to control
         </div>
       )}
