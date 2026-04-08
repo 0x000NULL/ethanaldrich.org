@@ -121,7 +121,7 @@ function ProjectsSection() {
               onClick={() => setSelectedProject(project.id)}
               className={`w-full text-left px-2 py-1 ${
                 selectedProject === project.id
-                  ? "bg-[#AAAAAA] text-[#0000AA]"
+                  ? "bg-[#AAAAAA] text-[#2222CC]"
                   : "hover:bg-[#000080]"
               }`}
             >

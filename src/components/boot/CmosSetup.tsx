@@ -42,7 +42,7 @@ const personalStats = [
 ];
 
 const baseThemeOptions: { id: ThemeVariant; label: string; preview: string }[] = [
-  { id: "blue", label: "Classic Blue", preview: "#0000AA" },
+  { id: "blue", label: "Classic Blue", preview: "#2222CC" },
   { id: "green", label: "Green Phosphor", preview: "#003300" },
   { id: "amber", label: "Amber CRT", preview: "#331100" },
 ];
@@ -190,7 +190,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             }}
             className={`py-1 px-2 cursor-pointer ${
               selectedIndex === index
-                ? "bg-[#AAAAAA] text-[#0000AA]"
+                ? "bg-[#AAAAAA] text-[#2222CC]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -246,7 +246,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             }}
             className={`flex items-center gap-4 py-1 px-2 cursor-pointer ${
               selectedIndex === index
-                ? "bg-[#AAAAAA] text-[#0000AA]"
+                ? "bg-[#AAAAAA] text-[#2222CC]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -291,7 +291,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
             onClick={() => setBootSelectedIndex(index)}
             className={`py-1 px-2 cursor-pointer flex items-center gap-2 ${
               bootSelectedIndex === index
-                ? "bg-[#AAAAAA] text-[#0000AA]"
+                ? "bg-[#AAAAAA] text-[#2222CC]"
                 : "hover:bg-[#000080]"
             }`}
           >
@@ -387,7 +387,7 @@ export default function CmosSetup({ onExit }: CmosSetupProps) {
       {/* Exit button for mouse users */}
       <button
         onClick={onExit}
-        className="absolute top-4 right-4 px-3 py-1 text-sm border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors"
+        className="absolute top-4 right-4 px-3 py-1 text-sm border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors"
       >
         Exit to Desktop
       </button>

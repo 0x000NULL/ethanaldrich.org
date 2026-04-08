@@ -124,13 +124,13 @@ function ContactSection() {
             <button
               type="button"
               onClick={() => setFormData({ name: "", email: "", message: "" })}
-              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+              className="px-4 py-1 border border-[#AAAAAA] hover:bg-[#AAAAAA] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ CLEAR ]
             </button>
             <button
               type="submit"
-              className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-[#0000AA] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
+              className="px-4 py-1 border border-[var(--bios-success)] text-[var(--bios-success)] hover:bg-[var(--bios-success)] hover:text-[#2222CC] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--bios-accent)] focus-visible:outline-none"
             >
               [ SEND ]
             </button>
