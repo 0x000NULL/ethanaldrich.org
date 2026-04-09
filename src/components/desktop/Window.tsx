@@ -48,6 +48,7 @@ export default function Window({
   if (isMobile) {
     return (
       <div
+        data-window={id}
         className="fixed inset-0 z-50 flex flex-col bg-[#C0C0C0]"
         onClick={handleFocus}
       >
@@ -81,6 +82,7 @@ export default function Window({
       <div ref={constraintsRef} className="fixed inset-0 pointer-events-none" />
 
       <motion.div
+        data-window={id}
         drag={!windowState.isMaximized}
         dragMomentum={false}
         dragConstraints={constraintsRef}

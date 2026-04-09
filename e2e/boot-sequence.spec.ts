@@ -65,7 +65,7 @@ test.describe("Boot Sequence", () => {
 
     // Should show CMOS setup screen
     await expect(
-      page.locator("text=CMOS SETUP UTILITY")
+      page.locator("text=BIOS SETUP UTILITY")
     ).toBeVisible({ timeout: 5000 });
   });
 });

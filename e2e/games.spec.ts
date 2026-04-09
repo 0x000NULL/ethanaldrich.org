@@ -30,19 +30,20 @@ test.describe("Games", () => {
       // Select Snake
       await page.click("text=SNAKE.EXE");
 
-      // Should show game UI
-      await expect(page.locator("text=START")).toBeVisible();
+      // Should show game UI (the [ START ] button in the overlay)
+      const startButton = page.getByRole("button", { name: "[ START ]" });
+      await expect(startButton).toBeVisible();
 
       // Start the game
-      await page.click("text=START");
+      await startButton.click();
 
-      // Score should be visible
-      await expect(page.locator("text=Score:")).toBeVisible();
+      // Score should be visible (use specific match to avoid "High Score:" collision)
+      await expect(page.getByText(/^Score:/).first()).toBeVisible();
     });
 
     test("should respond to keyboard controls", async ({ page }) => {
       await page.click("text=SNAKE.EXE");
-      await page.click("text=START");
+      await page.getByRole("button", { name: "[ START ]" }).click();
 
       // Wait a moment for game to start
       await page.waitForTimeout(500);
@@ -54,7 +55,7 @@ test.describe("Games", () => {
       await page.keyboard.press("ArrowLeft");
 
       // Game should still be running
-      await expect(page.locator("text=Score:")).toBeVisible();
+      await expect(page.getByText(/^Score:/).first()).toBeVisible();
     });
 
     test("should pause and resume", async ({ page }) => {
