@@ -1,0 +1,191 @@
+---
+id: "montr-signage"
+filename: "MONTR-SIGNAGE"
+extension: "TXT"
+size: 13602
+date: "04-09-2026"
+title: "Building Montr: Distributed Digital Signage in Node.js and Rust"
+description: "How I built a hub-and-spoke media playlist system for 25+ displays — why I chose two languages, why mpv runs as a subprocess, and what shipping it taught me about reliability."
+---
+
+# Building Montr
+
+Distributed digital signage, two languages, one annoyingly reliable little daemon.
+
+══════════════════════════════════════════════════════════
+
+## The Problem
+
+Most digital signage systems fall into one of two camps. The expensive ones lock you into proprietary hardware and a SaaS dashboard that costs more per screen per month than the screen itself. The cheap ones are a Raspberry Pi running a kiosk Chromium tab pointed at a Google Slides URL, and they fall over the moment the network blinks.
+
+I wanted something in between: a self-hosted server I could run on a small VM, lightweight clients I could deploy to anything from an Intel NUC to an old laptop in a back office, and a playback path reliable enough that I'd trust it on a wall I couldn't physically reach for a week. The current Montr deployment targets 25 concurrent displays with 50 GB of media storage, and the architecture is set up to scale past that without rewriting anything.
+
+This post is a tour through the design choices I made and the parts I'm proudest of.
+
+──────────────────────────────────────────────────────────
+
+## Architecture
+
+Montr is hub-and-spoke. One server, many clients, a WebSocket connection between them, HTTP for media transfer, and a database adapter layer that lets you pick whichever backend you already have running.
+
+```
+        Web UI ↔ Server (Node.js) ↔ DB + Storage
+                       │
+                       │  WebSocket + HTTP
+                       │
+              ┌────────┼────────┬────────┐
+             C1       C2       C3   ... Cn   (Rust)
+              │        │        │        │
+          Display  Display  Display  Display
+```
+
+The server is Node.js + TypeScript on Express, with a `ws` WebSocket server for push updates and a static file route for both the management UI and the media payloads. Clients are Rust binaries that wrap an `mpv` subprocess and talk to the server over a persistent socket. That's the whole system, conceptually.
+
+──────────────────────────────────────────────────────────
+
+## Why Two Languages
+
+I get this question a lot. "Why didn't you just use Node on both sides? Or just Rust on both sides?"
+
+The answer is a deliberate split:
+
+  **Server side wants iteration speed.** I'm constantly tweaking the
+  schema, adding endpoints, restructuring the playlist API. Node + TS is
+  forgiving and the ecosystem covers everything I need: image processing
+  (Sharp), media metadata (ffprobe), validation (Zod), logging (Winston).
+  I can ship a new admin feature in an evening.
+
+  **Client side wants determinism.** A signage client is a long-running
+  daemon on hardware I may never touch again. It needs to handle network
+  drops, partial downloads, mpv crashes, and OS reboots without a babysitter.
+  Rust gives me compile-time guarantees against the entire class of bugs
+  that would otherwise wake me up at 2am because a screen in a lobby is
+  showing a tokio panic backtrace.
+
+It's two different cost-benefit curves, so I picked two different tools. The cost is that I maintain two build pipelines and two dependency trees. Worth it.
+
+──────────────────────────────────────────────────────────
+
+## The mpv Question
+
+When you build something that plays video, you eventually have to decide how to talk to your media engine. The "obvious" path is libmpv — the official C library, with bindings for most languages. I tried that first. It works. It also locks you to a specific libmpv ABI version, which becomes a packaging nightmare the moment you ship to multiple distros.
+
+So I went sideways: I run mpv as a subprocess and talk to it over its built-in JSON IPC socket.
+
+```rust
+// Simplified - the real version handles reconnection and partial frames
+let mut socket = UnixStream::connect("/tmp/mpv-socket").await?;
+let cmd = json!({ "command": ["loadfile", path, "replace"] });
+socket.write_all(format!("{}\n", cmd).as_bytes()).await?;
+```
+
+This sounds janky and I expected it to be janky. It is not. mpv's IPC protocol is well documented, the socket is stable across versions, and "spawn a subprocess and pipe JSON at it" turns out to be a much more portable contract than "link against a C library at exactly the right SOVERSION." If mpv crashes, I respawn it and the rest of the client is unaffected. If I want to upgrade the playback engine on a specific machine, I install a new mpv package and restart the service. No ABI dance.
+
+The lesson: pragmatism beats elegance when "elegance" means three weeks of cross-distro packaging hell.
+
+──────────────────────────────────────────────────────────
+
+## The Client State Machine
+
+A signage client has more states than you'd think. Mine looks roughly like this:
+
+```
+STARTING → CONNECTING → REGISTERING → WAITING_PLAYLIST
+                                            │
+                                            ▼
+                       PLAYING ←── READY ←── DOWNLOADING
+```
+
+Each transition has explicit failure handling. CONNECTING can fail because the server's down — back off and retry. REGISTERING can fail because the auth token is stale — re-fetch and retry. DOWNLOADING can fail because a checksum doesn't match — purge the partial and re-queue. PLAYING can fail because mpv died — respawn and resume from the current playlist position.
+
+Modeling this as an explicit state machine instead of a tangle of "if this then that" was the single biggest reliability win in the project. When a screen misbehaves, the client logs tell me exactly which state it's stuck in, and I can almost always reproduce the bug from that one log line.
+
+──────────────────────────────────────────────────────────
+
+## Atomic, Resumable Downloads
+
+The cache manager is one of those subsystems that looks boring on paper and turns out to be doing a lot of work. Three rules:
+
+  1. **Bounded concurrency.** A semaphore caps simultaneous downloads at
+     two. Without this, a fresh client pulling a 50-item playlist would
+     saturate its uplink and stall the WebSocket heartbeat.
+
+  2. **Atomic writes.** Every download lands at `<hash>.tmp` first, gets
+     verified against a SHA2 hash from the server, and then renames into
+     place. If the client dies mid-download, the next startup sees a `.tmp`
+     file and discards it. The cache directory is always in a consistent
+     state.
+
+  3. **Telemetry on every operation.** Bytes downloaded, cache hits, cache
+     misses, eviction count. All of it streams up to the server so I can
+     see at a glance which displays are healthy and which are quietly
+     thrashing their disk.
+
+That third rule used to be optional. After the second time I had to SSH into a client to figure out why its disk kept filling up, I made telemetry first-class.
+
+──────────────────────────────────────────────────────────
+
+## Auto-Update Without Downtime
+
+The clients update themselves. On startup, each client checks a manifest hosted on a DigitalOcean Spaces bucket. If a newer version exists, it downloads it, verifies the signature, and then uses `execvp` to replace the running process in place — same PID, new binary, no service restart required by an operator. Combined with systemd's automatic restart-on-exit on Linux and the equivalent service wrappers on Windows, it means I can ship a client patch by uploading a single file to object storage and waiting.
+
+This is the kind of thing that feels overengineered until the day you have a critical bug fix and twelve clients to push it to. Then it feels essential.
+
+──────────────────────────────────────────────────────────
+
+## The Database Adapter Layer
+
+Montr supports SQLite (default), MySQL, Microsoft SQL Server, and MongoDB. Four backends, one query interface, no ORM.
+
+I went back and forth on this. The "right" answer in 2026 is probably "just use Postgres" — and for a personal project, sure. But Montr targets a real deployment context where the customer often already has a database server they want everything to live in, and "rip out your existing infra to use mine" is not a winning sales pitch. The adapter pattern adds maybe 400 lines of code per backend; the alternative is locking out anyone whose ops team has a strong opinion.
+
+The adapters share a common `BlobStore` and `MetadataStore` interface. SQL backends use parameterized queries and a small migration runner; the Mongo adapter wraps the same interface around document collections. Tests run against all four in CI via Docker Compose.
+
+──────────────────────────────────────────────────────────
+
+## What's Next: v1.3
+
+I'm currently in the middle of two features for the next release:
+
+  **Playlist interrupt with priority.** A way to push an emergency
+  playlist (an evacuation message, a critical announcement) that
+  preempts whatever's currently playing on every targeted client and
+  resumes the original schedule when it finishes. This is conceptually
+  simple — a priority stack on the client — but the edge cases are
+  endless. What happens if the interrupt arrives mid-download? What if
+  the client is offline when the interrupt is queued and reconnects an
+  hour later?
+
+  **Content approval queue.** A workflow where uploaded media has to
+  be approved by a second user before it can land on a playlist. This
+  is the boring kind of feature that nobody asks about until they need
+  it for compliance reasons, and then it's the only thing they care
+  about.
+
+I also recently shipped per-client system metrics (CPU, memory, uptime) and live log event streaming to the server dashboard. Watching CPU graphs from twelve clients tick along in real time on a single page is one of those small dopamine hits that makes the whole project feel like it's pulling its weight.
+
+──────────────────────────────────────────────────────────
+
+## Things I'd Do Differently
+
+**I would not have started with a custom ORM-free query layer for the SQL adapters.** I thought I'd save complexity. I saved very little. Next time I'd use a thin query builder and accept the dependency.
+
+**I would have built the telemetry surface earlier.** I built it after I needed it twice. Both times I needed it, I lost an afternoon to debugging that telemetry would have made trivial. Build the dashboards before you think you need them.
+
+**I'd write integration tests against real mpv from day one.** I have unit tests for the client state machine and they're great, but the bugs that bite hardest live in the seam between my code and mpv's IPC quirks. A small "spawn mpv, send commands, assert behavior" test harness would have caught at least three regressions before they hit a real screen.
+
+──────────────────────────────────────────────────────────
+
+## Wrapping Up
+
+Montr isn't trying to be a unicorn product. It's a focused tool for a specific job: get media onto screens, reliably, on hardware I trust, without paying SaaS rent. The hybrid Node+Rust architecture is unusual, and I think that's the right call for what it's doing. The boring infrastructure work — atomic downloads, state machines, telemetry, auto-update — is what makes the difference between a demo and something I'd actually deploy.
+
+If you're thinking about building your own signage system: the pieces are not as scary as they look from the outside. mpv is your friend. WebSockets are good. Pick a state machine over a pile of booleans. Ship telemetry early. And don't be afraid to use two languages if the cost-benefit math actually justifies it.
+
+I'll write a follow-up after v1.3 ships, focused on the interrupt system specifically. There's a lot to say about getting "stop what you're doing and play this instead" right when the network is unreliable and the clients can be in any state.
+
+Until then — happy displaying.
+
+──────────────────────────────────────────────────────────
+
+— Ethan Aldrich
