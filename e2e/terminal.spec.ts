@@ -30,8 +30,10 @@ test.describe("Terminal", () => {
     await input.fill("DIR");
     await input.press("Enter");
 
-    await expect(page.locator("text=Directory of C:\\ALDRICH")).toBeVisible();
-    await expect(page.locator("text=ABOUT")).toBeVisible();
+    // Volume label is unique to DIR output
+    await expect(page.locator("text=ALDRICH_SYS")).toBeVisible();
+    // ABOUT.EXE filename appears in the file listing
+    await expect(page.locator("text=ABOUT").first()).toBeVisible();
   });
 
   test("should execute HELP command", async ({ page }) => {
@@ -50,8 +52,8 @@ test.describe("Terminal", () => {
     // Wait for program to load
     await expect(page.locator("text=Loading ABOUT.EXE")).toBeVisible();
 
-    // Terminal should close and window should open
-    await expect(page.locator("text=About Me")).toBeVisible({ timeout: 5000 });
+    // Terminal should close and window should open (matched via title bar)
+    await expect(page.locator("text=ABOUT.EXE - Ethan Aldrich")).toBeVisible({ timeout: 5000 });
   });
 
   test("should display file contents with TYPE", async ({ page }) => {
