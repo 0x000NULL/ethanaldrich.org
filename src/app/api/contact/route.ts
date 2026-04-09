@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const CONTACT_TO = "ethan@ethanaldrich.net";
-const CONTACT_FROM = "Contact Form <e.aldrich@budgetlasvegas.com>";
+const CONTACT_FROM = "Contact Form <e.aldrich@budgetvegas.com>";
 
 const MAX_NAME_LENGTH = 200;
 const MAX_EMAIL_LENGTH = 200;
@@ -92,19 +92,15 @@ export async function POST(request: NextRequest) {
     });
 
     if (!res.ok) {
-      if (process.env.NODE_ENV === "development") {
-        const errorText = await res.text().catch(() => "<unreadable>");
-        console.error("Resend API error:", res.status, errorText);
-      }
+      const errorText = await res.text().catch(() => "<unreadable>");
+      console.error("Resend API error:", res.status, errorText);
       return NextResponse.json(
         { error: "Failed to send message" },
         { status: 502 }
       );
     }
   } catch (error: unknown) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Failed to call Resend:", error);
-    }
+    console.error("Failed to call Resend:", error);
     return NextResponse.json(
       { error: "Failed to send message" },
       { status: 502 }
