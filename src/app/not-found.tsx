@@ -3,61 +3,24 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div
-      className="fixed inset-0 bg-[#0000AA] text-white p-8 font-mono flex flex-col"
+      className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--metro-bg)] p-8 text-[var(--metro-ink)]"
       role="main"
     >
-      <div className="max-w-2xl mx-auto w-full">
-        <div className="bg-[#AAAAAA] text-[#0000AA] px-2 py-1 inline-block mb-8 font-bold">
-          ALDRICH OS
+      <div className="w-full max-w-md text-center">
+        <div className="board-type mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full border-[6px] border-[var(--line-c)] text-2xl font-bold">
+          404
         </div>
-
-        <div className="space-y-4">
-          <p className="text-xl">
-            A file not found exception 0x00000404 has occurred.
-          </p>
-
-          <p className="text-lg text-[#FFFF00]">Bad command or file name.</p>
-
-          <div className="my-8 text-[#AAAAAA] border border-[#AAAAAA] p-4">
-            <pre className="whitespace-pre-wrap text-sm">
-              {`C:\\ALDRICH\\> cd requested_page
-The system cannot find the path specified.
-
-C:\\ALDRICH\\> dir *.exe
- Volume in drive C is PORTFOLIO
- Directory of C:\\ALDRICH
-
-ABOUT    EXE     2,048  02-22-26   4:20a
-CAREER   EXE     4,096  02-22-26   4:20a
-PROJECTS EXE     8,192  02-22-26   4:20a
-SKILLS   DAT    16,384  02-22-26   4:20a
-CONTACT  COM     1,024  02-22-26   4:20a
-BLOG     TXT    32,768  02-22-26   4:20a
-GAMES    EXE     4,096  02-22-26   4:20a
-         7 file(s)      68,608 bytes
-                        640 KB free`}
-            </pre>
-          </div>
-
-          <p>
-            The page you&apos;re looking for has been moved, deleted, or never
-            existed.
-          </p>
-
-          <div className="flex gap-4 flex-wrap mt-8">
-            <Link
-              href="/"
-              className="px-6 py-3 border-2 border-white hover:bg-white hover:text-[#0000AA] transition-colors min-w-[180px] min-h-[44px] inline-flex items-center justify-center font-bold"
-            >
-              [ RETURN TO DESKTOP ]
-            </Link>
-          </div>
-
-          <p className="mt-8">
-            Press any key to continue
-            <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
-          </p>
-        </div>
+        <h1 className="mb-2 text-2xl font-bold">Station not found</h1>
+        <p className="mb-8 text-[var(--metro-ink-dim)]">
+          This stop isn&apos;t on the map. It may have been renamed, or the line
+          never ran here.
+        </p>
+        <Link
+          href="/"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-md border-2 border-[var(--metro-ink)] px-6 py-3 font-bold transition-colors hover:bg-[var(--metro-ink)] hover:text-[var(--metro-bg)]"
+        >
+          Return to the map
+        </Link>
       </div>
     </div>
   );
