@@ -6,19 +6,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ethanaldrich.org",
   },
-  title: "Ethan Aldrich | CTO & IT Infrastructure Specialist",
+  title: "Ethan Aldrich | Platform & Infrastructure Engineer",
   description:
-    "Personal portfolio of Ethan Aldrich - CTO specializing in IT infrastructure, homelab engineering, and automotive projects. Experience the web like it's 1995.",
+    "Ethan Aldrich — Platform & Infrastructure Engineer. Founder & CTO of Fimil. A portfolio mapped as a transit system: career, projects, and learning as subway lines.",
   keywords: [
     "Ethan Aldrich",
-    "CTO",
-    "IT Infrastructure",
-    "SQL Server",
-    "Power BI",
-    "Homelab",
+    "Platform Engineer",
+    "Infrastructure Engineer",
+    "Kubernetes",
+    "DevOps",
+    "Fimil",
+    "Security Engineering",
     "Las Vegas",
-    "Budget Rent a Car",
-    "Malco Enterprises",
   ],
   authors: [{ name: "Ethan Aldrich" }],
   creator: "Ethan Aldrich",
@@ -27,23 +26,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://ethanaldrich.org",
     siteName: "Ethan Aldrich Portfolio",
-    title: "Ethan Aldrich | CTO & IT Infrastructure Specialist",
+    title: "Ethan Aldrich | Platform & Infrastructure Engineer",
     description:
-      "Personal portfolio of Ethan Aldrich - CTO specializing in IT infrastructure, homelab engineering, and automotive projects.",
+      "A portfolio mapped as a Tokyo-Metro transit system — career, projects, and learning as subway lines.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Ethan Aldrich Portfolio - Retro BIOS Theme",
+        alt: "Ethan Aldrich Portfolio — career rendered as a subway map",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ethan Aldrich | CTO & IT Infrastructure Specialist",
+    title: "Ethan Aldrich | Platform & Infrastructure Engineer",
     description:
-      "Personal portfolio of Ethan Aldrich - CTO specializing in IT infrastructure, homelab engineering, and automotive projects.",
+      "A portfolio mapped as a Tokyo-Metro transit system — career, projects, and learning as subway lines.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -56,20 +55,23 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Ethan Aldrich",
-  jobTitle: "Chief Technology Officer",
+  jobTitle: "Platform & Infrastructure Engineer",
   worksFor: {
     "@type": "Organization",
-    name: "Malco Enterprises of Nevada, LLC",
+    name: "Fimil",
   },
   url: "https://ethanaldrich.org",
+  sameAs: [
+    "https://github.com/0x000NULL",
+    "https://www.linkedin.com/in/ethanaldrich",
+  ],
   knowsAbout: [
-    "IT Infrastructure",
-    "SQL Server",
-    "Power BI",
-    "Network Administration",
-    "Homelab Engineering",
-    "Linux Systems",
-    "Virtualization",
+    "Kubernetes",
+    "Platform Engineering",
+    "DevOps",
+    "Distributed Systems",
+    "Security Engineering",
+    "Infrastructure",
   ],
   address: {
     "@type": "PostalAddress",
@@ -88,13 +90,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <meta name="theme-color" content="#0000AA" />
+        <meta name="theme-color" content="#F7F4EC" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bios-text">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

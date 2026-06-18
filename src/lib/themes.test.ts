@@ -9,35 +9,25 @@ import {
 
 describe("themes", () => {
   describe("theme definitions", () => {
-    it("should have four theme variants", () => {
-      expect(Object.keys(themes)).toEqual(["blue", "green", "amber", "turbo"]);
+    it("has the single metro variant", () => {
+      expect(Object.keys(themes)).toEqual(["metro"]);
     });
 
-    it("should have all required color properties for each theme", () => {
+    it("defines all metro color tokens as hex", () => {
       const requiredColors = [
-        "bios-bg",
-        "bios-text",
-        "bios-text-dim",
-        "bios-highlight",
-        "bios-accent",
-        "bios-success",
-        "bios-error",
-        "desktop-bg",
-        "chrome-base",
-        "chrome-shadow",
-        "chrome-highlight",
-        "chrome-dark",
-        "titlebar-start",
-        "titlebar-end",
+        "metro-bg",
+        "metro-ink",
+        "metro-ink-dim",
+        "metro-panel",
+        "metro-border",
+        "metro-roundel",
+        "metro-accent",
       ];
-
-      for (const variant of Object.keys(themes) as ThemeVariant[]) {
-        for (const colorKey of requiredColors) {
-          expect(themes[variant]).toHaveProperty(colorKey);
-          expect(themes[variant][colorKey as keyof typeof themes.blue]).toMatch(
-            /^#[0-9A-Fa-f]{6}$/
-          );
-        }
+      for (const colorKey of requiredColors) {
+        expect(themes.metro).toHaveProperty(colorKey);
+        expect(themes.metro[colorKey as keyof typeof themes.metro]).toMatch(
+          /^#[0-9A-Fa-f]{6}$/
+        );
       }
     });
   });
@@ -50,25 +40,16 @@ describe("themes", () => {
     beforeEach(() => {
       mockSetProperty = vi.fn();
       mockSetAttribute = vi.fn();
-
       originalDocumentElement = document.documentElement;
 
-      // Mock document.documentElement.style.setProperty
       Object.defineProperty(document, "documentElement", {
-        value: {
-          style: {
-            setProperty: mockSetProperty,
-          },
-        },
+        value: { style: { setProperty: mockSetProperty } },
         writable: true,
       });
 
-      // Mock document.querySelector for meta tag
       vi.spyOn(document, "querySelector").mockImplementation((selector) => {
         if (selector === 'meta[name="theme-color"]') {
-          return {
-            setAttribute: mockSetAttribute,
-          } as unknown as Element;
+          return { setAttribute: mockSetAttribute } as unknown as Element;
         }
         return null;
       });
@@ -82,41 +63,20 @@ describe("themes", () => {
       vi.restoreAllMocks();
     });
 
-    it("should set CSS variables on document root", () => {
-      applyTheme("blue");
-
-      expect(mockSetProperty).toHaveBeenCalledWith("--bios-bg", "#0000AA");
-      expect(mockSetProperty).toHaveBeenCalledWith("--bios-text", "#DDDDDD");
-      expect(mockSetProperty).toHaveBeenCalledWith(
-        "--bios-highlight",
-        "#FFFFFF"
-      );
+    it("sets the metro CSS variables on :root", () => {
+      applyTheme("metro");
+      expect(mockSetProperty).toHaveBeenCalledWith("--metro-bg", "#F7F4EC");
+      expect(mockSetProperty).toHaveBeenCalledWith("--metro-ink", "#1A1A1A");
     });
 
-    it("should update theme-color meta tag", () => {
-      applyTheme("green");
-
-      expect(mockSetAttribute).toHaveBeenCalledWith("content", "#002200");
+    it("mirrors the background to the theme-color meta tag", () => {
+      applyTheme("metro");
+      expect(mockSetAttribute).toHaveBeenCalledWith("content", "#F7F4EC");
     });
 
-    it("should handle all theme variants", () => {
-      const variants: ThemeVariant[] = ["blue", "green", "amber", "turbo"];
-
-      for (const variant of variants) {
-        mockSetProperty.mockClear();
-        applyTheme(variant);
-
-        expect(mockSetProperty).toHaveBeenCalledWith(
-          "--bios-bg",
-          themes[variant]["bios-bg"]
-        );
-      }
-    });
-
-    it("should not throw when meta tag is not found", () => {
+    it("does not throw when the meta tag is missing", () => {
       vi.spyOn(document, "querySelector").mockReturnValue(null);
-
-      expect(() => applyTheme("blue")).not.toThrow();
+      expect(() => applyTheme("metro")).not.toThrow();
     });
   });
 
@@ -125,61 +85,25 @@ describe("themes", () => {
       vi.mocked(localStorage.getItem).mockReturnValue(null);
     });
 
-    it("should return stored theme from localStorage", () => {
-      vi.mocked(localStorage.getItem).mockReturnValue("green");
-
-      const result = getStoredTheme();
-
-      expect(result).toBe("green");
+    it("returns the stored theme", () => {
+      vi.mocked(localStorage.getItem).mockReturnValue("metro");
+      expect(getStoredTheme()).toBe("metro");
       expect(localStorage.getItem).toHaveBeenCalledWith("aldrich-theme");
     });
 
-    it("should return blue as default when no stored theme", () => {
+    it("falls back to metro for missing or invalid values", () => {
       vi.mocked(localStorage.getItem).mockReturnValue(null);
-
-      const result = getStoredTheme();
-
-      expect(result).toBe("blue");
-    });
-
-    it("should return blue for invalid stored values", () => {
-      vi.mocked(localStorage.getItem).mockReturnValue("invalid-theme");
-
-      const result = getStoredTheme();
-
-      expect(result).toBe("blue");
-    });
-
-    it("should accept all valid theme variants", () => {
-      const variants: ThemeVariant[] = ["blue", "green", "amber", "turbo"];
-
-      for (const variant of variants) {
-        vi.mocked(localStorage.getItem).mockReturnValue(variant);
-        expect(getStoredTheme()).toBe(variant);
-      }
+      expect(getStoredTheme()).toBe("metro");
+      vi.mocked(localStorage.getItem).mockReturnValue("blue");
+      expect(getStoredTheme()).toBe("metro");
     });
   });
 
   describe("storeTheme", () => {
-    it("should save theme to localStorage", () => {
-      storeTheme("amber");
-
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        "aldrich-theme",
-        "amber"
-      );
-    });
-
-    it("should store all valid theme variants", () => {
-      const variants: ThemeVariant[] = ["blue", "green", "amber", "turbo"];
-
-      for (const variant of variants) {
-        storeTheme(variant);
-        expect(localStorage.setItem).toHaveBeenCalledWith(
-          "aldrich-theme",
-          variant
-        );
-      }
+    it("saves the theme to localStorage", () => {
+      const variant: ThemeVariant = "metro";
+      storeTheme(variant);
+      expect(localStorage.setItem).toHaveBeenCalledWith("aldrich-theme", "metro");
     });
   });
 });
