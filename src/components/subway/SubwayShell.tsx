@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 import { useNavStore } from "@/store/nav-store";
 import { getStation } from "@/data/subway";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import SubwayMap from "./SubwayMap";
+import StripMapView from "./StripMapView";
 import StationIndex from "./StationIndex";
 import StationPanel from "./StationPanel";
 import RecenterButton from "./RecenterButton";
 import ServiceAlertBanner from "./ServiceAlertBanner";
 import DepartureBoard from "./DepartureBoard";
 import A11yMapOutline from "./A11yMapOutline";
+import IntroSplash from "./IntroSplash";
 
 /**
  * Top-level client shell. Owns the hydration gate, one-time initialization
@@ -25,6 +28,8 @@ export default function SubwayShell() {
   const selectStation = useNavStore((s) => s.selectStation);
   const setHoveredStation = useNavStore((s) => s.setHoveredStation);
   const selectedStationCode = useNavStore((s) => s.selectedStationCode);
+  const setViewMode = useNavStore((s) => s.setViewMode);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -74,6 +79,11 @@ export default function SubwayShell() {
     window.history.replaceState(null, "", url.toString());
   }, [mounted, selectedStationCode]);
 
+  // Mobile gets the vertical strip map; desktop gets the pan/zoom SVG.
+  useEffect(() => {
+    setViewMode(isMobile ? "strip" : "map");
+  }, [isMobile, setViewMode]);
+
   if (!mounted) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[var(--metro-bg)]">
@@ -84,13 +94,20 @@ export default function SubwayShell() {
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-[var(--metro-bg)]">
-      <SubwayMap />
+      {isMobile ? (
+        <StripMapView />
+      ) : (
+        <>
+          <SubwayMap />
+          <StationIndex />
+          <DepartureBoard />
+          <RecenterButton />
+          <A11yMapOutline onSelect={selectStation} onHover={setHoveredStation} />
+        </>
+      )}
       <ServiceAlertBanner />
-      <StationIndex />
-      <DepartureBoard />
-      <RecenterButton />
       <StationPanel />
-      <A11yMapOutline onSelect={selectStation} onHover={setHoveredStation} />
+      <IntroSplash />
     </main>
   );
 }

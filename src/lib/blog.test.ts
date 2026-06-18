@@ -15,17 +15,26 @@ vi.mock("fs", () => ({
 // Mock gray-matter
 vi.mock("gray-matter", () => ({
   default: vi.fn((content: string) => {
-    // Parse YAML frontmatter manually for testing
+    // Parse YAML frontmatter manually for testing (scalars + simple flow arrays).
     const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
     if (match) {
       const frontmatter = match[1];
       const body = match[2];
-      const data: Record<string, string> = {};
+      const data: Record<string, unknown> = {};
 
       frontmatter.split("\n").forEach((line) => {
         const [key, ...valueParts] = line.split(": ");
         if (key && valueParts.length) {
-          data[key.trim()] = valueParts.join(": ").trim();
+          const raw = valueParts.join(": ").trim();
+          let value: unknown = raw;
+          if (raw.startsWith("[")) {
+            try {
+              value = JSON.parse(raw.replace(/'/g, '"'));
+            } catch {
+              value = raw;
+            }
+          }
+          data[key.trim()] = value;
         }
       });
 
@@ -36,7 +45,13 @@ vi.mock("gray-matter", () => ({
 }));
 
 import fs from "fs";
-import { getBlogPosts, getBlogPost, getAllBlogSlugs } from "./blog";
+import {
+  getBlogPosts,
+  getBlogPost,
+  getAllBlogSlugs,
+  getAllTags,
+  getPostsByTag,
+} from "./blog";
 
 describe("blog utilities", () => {
   beforeEach(() => {
@@ -121,11 +136,11 @@ Just content, no frontmatter`);
 
       expect(posts).toHaveLength(1);
       expect(posts[0].id).toBe("minimal-post");
-      expect(posts[0].filename).toBe("MINIMAL-POST");
-      expect(posts[0].extension).toBe("TXT");
       expect(posts[0].title).toBe("Untitled");
       expect(posts[0].description).toBe("");
       expect(posts[0].slug).toBe("minimal-post");
+      expect(posts[0].tags).toEqual([]);
+      expect(posts[0].readingTime).toMatch(/^\d+ min read$/);
     });
 
     it("should extract slug from filename without extension", () => {
@@ -145,23 +160,41 @@ Content`);
       expect(posts[0].slug).toBe("my-blog-post");
     });
 
-    it("should use file size when size not in frontmatter", () => {
+    it("should compute reading time from the body word count", () => {
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readdirSync).mockReturnValue([
         "post.mdx",
       ] as unknown as ReturnType<typeof fs.readdirSync>);
 
-      const content = `---
+      const body = Array(400).fill("word").join(" ");
+      vi.mocked(fs.readFileSync).mockReturnValue(`---
 title: Test
 date: 02-28-2026
 ---
-This is the content`;
-
-      vi.mocked(fs.readFileSync).mockReturnValue(content);
+${body}`);
 
       const posts = getBlogPosts();
 
-      expect(posts[0].size).toBe(content.length);
+      // round(400 / 200) = 2
+      expect(posts[0].readingTime).toBe("2 min read");
+    });
+
+    it("should parse a flow array of tags from frontmatter", () => {
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readdirSync).mockReturnValue([
+        "tagged.mdx",
+      ] as unknown as ReturnType<typeof fs.readdirSync>);
+
+      vi.mocked(fs.readFileSync).mockReturnValue(`---
+title: Tagged
+date: 02-28-2026
+tags: ["homelab", "proxmox"]
+---
+Content`);
+
+      const posts = getBlogPosts();
+
+      expect(posts[0].tags).toEqual(["homelab", "proxmox"]);
     });
   });
 
@@ -246,10 +279,10 @@ Just content`);
       const post = getBlogPost("test");
 
       expect(post?.id).toBe("test");
-      expect(post?.filename).toBe("TEST");
-      expect(post?.extension).toBe("TXT");
       expect(post?.title).toBe("Untitled");
       expect(post?.description).toBe("");
+      expect(post?.tags).toEqual([]);
+      expect(post?.readingTime).toMatch(/^\d+ min read$/);
     });
   });
 
@@ -287,6 +320,47 @@ Just content`);
       const slugs = getAllBlogSlugs();
 
       expect(slugs).toEqual(["post", "other"]);
+    });
+  });
+
+  describe("getAllTags / getPostsByTag", () => {
+    beforeEach(() => {
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readdirSync).mockReturnValue([
+        "a.mdx",
+        "b.mdx",
+      ] as unknown as ReturnType<typeof fs.readdirSync>);
+      vi.mocked(fs.readFileSync).mockImplementation((filePath) => {
+        if (String(filePath).includes("a.mdx")) {
+          return `---
+title: A
+date: 01-01-2026
+tags: ["x", "y"]
+---
+Content`;
+        }
+        return `---
+title: B
+date: 02-01-2026
+tags: ["y"]
+---
+Content`;
+      });
+    });
+
+    it("aggregates tag counts, sorted by count then alphabetically", () => {
+      expect(getAllTags()).toEqual([
+        { tag: "y", count: 2 },
+        { tag: "x", count: 1 },
+      ]);
+    });
+
+    it("returns only posts carrying a given tag", () => {
+      const xPosts = getPostsByTag("x");
+      expect(xPosts.map((p) => p.title)).toEqual(["A"]);
+
+      const yPosts = getPostsByTag("y");
+      expect(yPosts.map((p) => p.title).sort()).toEqual(["A", "B"]);
     });
   });
 });
