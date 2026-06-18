@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getBlogPost } from "@/lib/blog";
 import { serialize } from "next-mdx-remote/serialize";
+import { mdxOptions } from "@/lib/mdxOptions";
 
 export async function GET(
   request: Request,
@@ -20,8 +21,9 @@ export async function GET(
     return NextResponse.json({ error: "Post not found" }, { status: 404 });
   }
 
-  // Serialize MDX content for client-side rendering
-  const mdxSource = await serialize(post.content);
+  // Serialize MDX content for client-side rendering. Shares mdxOptions with the
+  // page's compileMDX so highlighted/GFM output is identical on both paths.
+  const mdxSource = await serialize(post.content, { mdxOptions });
 
   return NextResponse.json({
     ...post,

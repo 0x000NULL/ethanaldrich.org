@@ -1,10 +1,10 @@
 import { MetadataRoute } from "next";
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPosts, getAllTags } from "@/lib/blog";
+import { STATIONS } from "@/data/subway";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://ethanaldrich.org";
 
-  // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -14,7 +14,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Dynamic blog posts
+  const blogIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog`,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+  ];
+
   const posts = getBlogPosts();
   const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
@@ -25,5 +32,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...blogPages];
+  const tagPages: MetadataRoute.Sitemap = getAllTags().map(({ tag }) => ({
+    url: `${baseUrl}/blog/tag/${tag}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.4,
+  }));
+
+  // Each station is an indexable page (the SSG /station/[code] route).
+  const stationPages: MetadataRoute.Sitemap = STATIONS.map((station) => ({
+    url: `${baseUrl}/station/${station.code}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [
+    ...staticPages,
+    ...blogIndex,
+    ...blogPages,
+    ...stationPages,
+    ...tagPages,
+  ];
 }

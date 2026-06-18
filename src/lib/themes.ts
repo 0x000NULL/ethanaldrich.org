@@ -1,116 +1,62 @@
-export type ThemeVariant = "blue" | "green" | "amber" | "turbo";
+/**
+ * Tokyo-Metro design tokens. The runtime mechanism (CSS variables applied to :root,
+ * persisted to localStorage, mirrored to the theme-color meta tag) is carried over
+ * from the old BIOS theme system; only the palette changed. There is a single
+ * "metro" variant today — the machinery is kept so a future variant is a one-liner.
+ */
+export type ThemeVariant = "metro";
 
 export interface ThemeColors {
-  "bios-bg": string;
-  "bios-text": string;
-  "bios-text-dim": string;
-  "bios-highlight": string;
-  "bios-accent": string;
-  "bios-success": string;
-  "bios-error": string;
-  "desktop-bg": string;
-  "chrome-base": string;
-  "chrome-shadow": string;
-  "chrome-highlight": string;
-  "chrome-dark": string;
-  "titlebar-start": string;
-  "titlebar-end": string;
+  /** Paper-cream map background. */
+  "metro-bg": string;
+  /** Primary ink for labels and body copy. */
+  "metro-ink": string;
+  /** Secondary ink (subtitles, captions). */
+  "metro-ink-dim": string;
+  /** Panel / sheet surface. */
+  "metro-panel": string;
+  /** Hairline borders and ticks. */
+  "metro-border": string;
+  /** Roundel fill (so the line color reads as a ring). */
+  "metro-roundel": string;
+  /** Interactive accent / focus ring. */
+  "metro-accent": string;
 }
 
 export const themes: Record<ThemeVariant, ThemeColors> = {
-  blue: {
-    "bios-bg": "#0000AA",
-    "bios-text": "#DDDDDD",
-    "bios-text-dim": "#8888BB",
-    "bios-highlight": "#FFFFFF",
-    "bios-accent": "#000000",
-    "bios-success": "#228B22",
-    "bios-error": "#FF5555",
-    "desktop-bg": "#0a0a80",
-    "chrome-base": "#C0C0C0",
-    "chrome-shadow": "#808080",
-    "chrome-highlight": "#FFFFFF",
-    "chrome-dark": "#000000",
-    "titlebar-start": "#000080",
-    "titlebar-end": "#1084d0",
-  },
-  green: {
-    "bios-bg": "#002200",
-    "bios-text": "#33FF33",
-    "bios-text-dim": "#22AA22",
-    "bios-highlight": "#00FF00",
-    "bios-accent": "#004400",
-    "bios-success": "#00FF00",
-    "bios-error": "#FF5555",
-    "desktop-bg": "#003300",
-    "chrome-base": "#C0C0C0",
-    "chrome-shadow": "#808080",
-    "chrome-highlight": "#FFFFFF",
-    "chrome-dark": "#000000",
-    "titlebar-start": "#003300",
-    "titlebar-end": "#00AA00",
-  },
-  amber: {
-    "bios-bg": "#221100",
-    "bios-text": "#FFAA33",
-    "bios-text-dim": "#CC8822",
-    "bios-highlight": "#FFCC00",
-    "bios-accent": "#442200",
-    "bios-success": "#FFAA00",
-    "bios-error": "#FF5555",
-    "desktop-bg": "#331a00",
-    "chrome-base": "#C0C0C0",
-    "chrome-shadow": "#808080",
-    "chrome-highlight": "#FFFFFF",
-    "chrome-dark": "#000000",
-    "titlebar-start": "#442200",
-    "titlebar-end": "#FF8800",
-  },
-  turbo: {
-    "bios-bg": "#1a0a2e",
-    "bios-text": "#00FFFF",
-    "bios-text-dim": "#9999DD",
-    "bios-highlight": "#FF00FF",
-    "bios-accent": "#2d1b4e",
-    "bios-success": "#00FF00",
-    "bios-error": "#FF5555",
-    "desktop-bg": "#1f0f4a",
-    "chrome-base": "#C0C0C0",
-    "chrome-shadow": "#808080",
-    "chrome-highlight": "#FFFFFF",
-    "chrome-dark": "#000000",
-    "titlebar-start": "#6B0F9E",
-    "titlebar-end": "#FF00FF",
+  metro: {
+    "metro-bg": "#F7F4EC",
+    "metro-ink": "#1A1A1A",
+    "metro-ink-dim": "#6B6B6B",
+    "metro-panel": "#FFFFFF",
+    "metro-border": "#D8D2C4",
+    "metro-roundel": "#FFFFFF",
+    "metro-accent": "#1A1A1A",
   },
 };
 
 const THEME_STORAGE_KEY = "aldrich-theme";
+const DEFAULT_THEME: ThemeVariant = "metro";
 
 export function applyTheme(theme: ThemeVariant): void {
   if (typeof window === "undefined") return;
 
-  const colors = themes[theme];
+  const colors = themes[theme] ?? themes[DEFAULT_THEME];
   const root = document.documentElement;
-
   Object.entries(colors).forEach(([key, value]) => {
     root.style.setProperty(`--${key}`, value);
   });
 
-  // Update theme-color meta tag
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
   if (themeColorMeta) {
-    themeColorMeta.setAttribute("content", colors["bios-bg"]);
+    themeColorMeta.setAttribute("content", colors["metro-bg"]);
   }
 }
 
 export function getStoredTheme(): ThemeVariant {
-  if (typeof window === "undefined") return "blue";
-
+  if (typeof window === "undefined") return DEFAULT_THEME;
   const stored = localStorage.getItem(THEME_STORAGE_KEY);
-  if (stored && ["blue", "green", "amber", "turbo"].includes(stored)) {
-    return stored as ThemeVariant;
-  }
-  return "blue";
+  return stored === "metro" ? "metro" : DEFAULT_THEME;
 }
 
 export function storeTheme(theme: ThemeVariant): void {
