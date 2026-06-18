@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { STATIONS, getStation, LINE_MAP } from "@/data/subway";
 import { transfersForStation } from "@/lib/subway/selectors";
+import { getBlogPosts } from "@/lib/blog";
+import { resolvePostRefs } from "@/lib/blog-format";
 
 export function generateStaticParams() {
   return STATIONS.map((s) => ({ code: s.code }));
@@ -37,6 +39,9 @@ export default async function StationPage({
   if (!station) notFound();
 
   const transfers = transfersForStation(station.code);
+  const related = station.relatedPosts
+    ? resolvePostRefs(getBlogPosts(), station.relatedPosts)
+    : [];
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl bg-[var(--metro-bg)] px-5 py-10 text-[var(--metro-ink)]">
@@ -89,16 +94,24 @@ export default async function StationPage({
         </ul>
       )}
 
-      {station.relatedPosts && station.relatedPosts.length > 0 && (
-        <ul className="mt-4 space-y-1">
-          {station.relatedPosts.map((slug) => (
-            <li key={slug}>
-              <Link href={`/blog/${slug}`} className="underline">
-                Read: /blog/{slug}
-              </Link>
-            </li>
-          ))}
-        </ul>
+      {related.length > 0 && (
+        <div className="mt-4">
+          <h2 className="mb-1 text-xs font-bold uppercase tracking-wide text-[var(--metro-ink-dim)]">
+            Related writing
+          </h2>
+          <ul className="space-y-1">
+            {related.map((p) => (
+              <li key={p.slug}>
+                <Link
+                  href={`/blog/${p.slug}`}
+                  className="underline hover:no-underline"
+                >
+                  {p.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <p className="mt-8">

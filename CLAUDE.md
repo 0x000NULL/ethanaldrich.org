@@ -46,9 +46,9 @@ Immutable config arrays re-exported through `index.ts`. **Render code never hard
 - `train.ts` — pure reducer `advanceTrain(state, ctx, dtMs)` (handles dwell + end-of-line reversal) and `trainPose`.
 - `selectors.ts` — derived state: `getViewBox()` (asymmetric `VIEWBOX_PAD` keeps content clear of the corner overlays), `getLinePolylines` (memoized), `lineBounds`, `transfersForStation`, `focusedLineCodes`, `buildTrainRuntimes`. `BASE_SPEED=0.05` px/ms, express ×1.6, `DWELL_MS=900`.
 
-### 3. Render layer (`src/components/subway/`, 15 components)
+### 3. Render layer (`src/components/subway/`)
 
-`SubwayShell` (client shell: hydration gate, init, deep-link sync, stats) → `SubwayMap` (the `<svg>`, `role="img"`, pan/zoom) which renders `LineLayer`→`Line`, `TrainLayer`→`Train`, `StationLayer`→`Station`/`Interchange`. Overlays: `StationIndex` (legend), `StationPanel` (case-study dialog), `ServiceAlertBanner`, `DepartureBoard` (recent posts), `RecenterButton`, and `A11yMapOutline` (screen-reader/keyboard nav).
+`SubwayShell` (client shell: hydration gate, init, deep-link sync, stats, **mobile switch** via `useIsMobile`). On desktop it renders `SubwayMap` (the `<svg>`, `role="img"`, pan/zoom) → `LineLayer`→`Line`, `TrainLayer`→`Train`, `StationLayer`→`Station`/`Interchange`, plus the `StationIndex` legend, `DepartureBoard`, `RecenterButton`, and sr-only `A11yMapOutline`. On small screens it swaps all of that for `StripMapView` (a vertical, scrollable list of lines/stations with transfer chips — itself the accessible interface, so the sr-only outline isn't rendered there). Shared across both: `ServiceAlertBanner`, `StationPanel` (case-study dialog, full-width sheet on mobile), and `IntroSplash` (Suica "tap to enter", once per session, focus-trapped, reduced-motion aware).
 
 ### 4. Interaction (`src/hooks/`)
 
@@ -64,9 +64,13 @@ Single `metro` variant. `applyTheme()` writes 7 `--metro-*` CSS vars to `:root` 
 
 ### Blog / MDX & SEO
 
-- `src/lib/blog.ts` reads `src/content/blog/*.mdx` via `gray-matter` (`getBlogPosts`, `getBlogPost`, `getAllBlogSlugs`).
-- `src/lib/mdxComponents.tsx` — shared styled MDX renderers, used by both blog posts and station case studies.
-- SSG routes give every post and station a crawlable page: `src/app/blog/[slug]/page.tsx` and `src/app/station/[code]/page.tsx` (both `generateStaticParams` + `generateMetadata`); `sitemap.ts` lists home + all posts + all stations.
+- `src/lib/blog.ts` reads `src/content/blog/*.mdx` via `gray-matter` (`getBlogPosts`, `getBlogPost`, `getAllBlogSlugs`, `getAllTags`, `getPostsByTag`). Frontmatter is `id`/`date` (`MM-DD-YYYY`)/`title`/`description`/`tags[]`/optional `author`/`updatedAt`; `readingTime` is derived. One `mapFrontmatter` maps both list and single reads.
+- `src/lib/blog-format.ts` — pure, DOM-free presentation helpers (`formatDate`, `toISODate`, `readingTimeLabel`, `getAdjacentPosts`, `getRelatedPosts`, `groupPostsByYear`, `resolvePostRefs`). All date parsing is from numeric parts (never `new Date(string)`) to avoid TZ drift. Keep blog logic here, not in `page.tsx` (which is coverage-excluded).
+- `src/lib/mdxComponents.tsx` — shared styled MDX renderers (blog + station case studies). Inline `code` gets a pill; highlighted block `code` (carries `data-language`/`data-theme`) is left raw inside the `pre` frame. Includes GFM `table`/`th`/`td` and an `img` override.
+- `src/lib/mdxOptions.ts` — **single** remark/rehype pipeline (remark-gfm, rehype-slug, rehype-pretty-code [Shiki, `github-light`, build-time inline-style tokens → CSP-safe], rehype-autolink-headings), imported by **both** `compileMDX` (page) and `serialize` (`/api/blog/[slug]`) so output can't drift.
+- `src/lib/blogJsonLd.ts` — pure `buildBlogPostingJsonLd` (rendered as `<script type="application/ld+json">` on each post).
+- `src/components/blog/{PostCard,PostList}.tsx` — the metro "line of stations" list, reused by the index, tag pages, and a post's related section.
+- SSG routes: `src/app/blog/page.tsx` (index, grouped by year), `src/app/blog/[slug]/page.tsx` (post + article OG/twitter/canonical metadata, prev/next, related, JSON-LD), `src/app/blog/[slug]/opengraph-image.tsx` (per-post social card), `src/app/blog/tag/[tag]/page.tsx` (per-tag), and `src/app/station/[code]/page.tsx`. `sitemap.ts` lists home + `/blog` + all posts + all tags + all stations.
 
 ### API routes (`src/app/api/`)
 
@@ -89,7 +93,7 @@ Single `metro` variant. `applyTheme()` writes 7 `--metro-*` CSS vars to `:root` 
 
 - **Unit:** Vitest + React Testing Library + MSW (`src/__tests__/mocks/`), jsdom env. Setup (`src/__tests__/setup.ts`) mocks storage/matchMedia/rAF/observers and adds defensive `getPointAtLength`/`getTotalLength` stubs; it is node-safe (guards `window`) so `// @vitest-environment node` SSR tests work.
 - **Coverage gate: 90%** global (branches/functions/lines/statements). Excluded: test files, `src/__tests__/**`, `layout.tsx`, `opengraph-image.tsx`, and `src/app/**/page.tsx` (thin RSC composition + server-only MDX, validated by the build/e2e instead). Keep logic in the pure modules (≈100% coverable) and components thin.
-- **E2E:** Playwright across Chromium/Firefox/WebKit + mobile. **`e2e/` is currently empty** — the old BIOS specs were deleted and new subway specs are not yet written, so `test:e2e` finds nothing until they're added.
+- **E2E:** Playwright across Chromium/Firefox/WebKit + mobile (Pixel 5 / iPhone 12). Specs live in `e2e/`: `subway-navigation` (click roundel → panel), `keyboard-a11y` (arrow-rove a line, Enter opens, Escape closes), `deep-link` (`?station=CODE` opens the panel; `/blog` → post → back), and `mobile-strip` (strip view + transfer chips). Project-specific tests guard with `test.skip(isMobileProject(testInfo.project.name), …)`; `e2e/utils.ts` holds `enterMap` (dismiss the intro splash). The `webServer` runs `npm run dev` and reuses an existing server outside CI.
 
 ## Deployment
 
