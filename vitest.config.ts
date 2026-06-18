@@ -19,7 +19,10 @@ export default defineConfig({
         "src/**/*.spec.{ts,tsx}",
         "src/__tests__/**",
         "src/app/layout.tsx",
-        "src/app/opengraph-image.tsx",
+        "src/app/**/opengraph-image.tsx",
+        // RSC page entry points: thin composition + server-only MDX rendering,
+        // validated by the production build and Playwright e2e rather than unit tests.
+        "src/app/**/page.tsx",
         "**/*.d.ts",
       ],
       thresholds: {
