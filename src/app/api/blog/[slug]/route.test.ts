@@ -29,4 +29,15 @@ describe("GET /api/blog/[slug]", () => {
     });
     expect(res.status).toBe(404);
   });
+
+  it("highlights fenced code via the shared mdxOptions pipeline", async () => {
+    // montr-signage contains a ```rust fence; rehype-pretty-code wraps it in a
+    // figure marker, proving the API path runs the same plugins as the page.
+    const res = await GET(req(), {
+      params: Promise.resolve({ slug: "montr-signage" }),
+    });
+    expect(res.status).toBe(200);
+    const post = await res.json();
+    expect(post.mdxSource.compiledSource).toContain("rehype-pretty-code");
+  });
 });
