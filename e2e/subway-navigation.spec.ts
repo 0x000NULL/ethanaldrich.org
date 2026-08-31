@@ -13,11 +13,11 @@ test.describe("subway navigation (desktop)", () => {
     // Click the roundel circle; the click bubbles to the <g>'s handler. force is
     // needed because the station label sits above the roundel, so the <g> bbox
     // centre is empty and the parent <svg> would otherwise intercept.
-    await page.locator('[data-station-code="P-09"] circle').click({ force: true });
+    await page.locator('[data-station-code="P-07"] circle').click({ force: true });
 
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
-    await expect(dialog).toContainText("Fimil");
+    await expect(dialog).toContainText("Montr");
 
     await page.getByRole("button", { name: /close station details/i }).click();
     await expect(dialog).toBeHidden();

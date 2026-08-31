@@ -33,17 +33,21 @@ describe("lineBounds", () => {
 
 describe("linesServingStation", () => {
   it("returns the owning line", () => {
-    expect(linesServingStation("P-09")).toContain("P");
+    expect(linesServingStation("P-07")).toContain("P");
     expect(linesServingStation("nope")).toEqual([]);
   });
 });
 
 describe("transfersForStation", () => {
   it("finds the marquee partner from either side", () => {
-    const fromCareer = transfersForStation("C-02");
-    expect(fromCareer.some((t) => t.partnerCode === "P-09" && t.marquee)).toBe(true);
-    const fromProjects = transfersForStation("P-09");
-    expect(fromProjects.some((t) => t.partnerCode === "C-02" && t.marquee)).toBe(true);
+    const fromEducation = transfersForStation("E-06");
+    expect(fromEducation.some((t) => t.partnerCode === "P-04" && t.marquee)).toBe(
+      true
+    );
+    const fromProjects = transfersForStation("P-04");
+    expect(fromProjects.some((t) => t.partnerCode === "E-06" && t.marquee)).toBe(
+      true
+    );
   });
 
   it("returns the partner name and lines", () => {
@@ -64,9 +68,9 @@ describe("focusedLineCodes", () => {
   });
 
   it("includes the station's line plus transfer-partner lines", () => {
-    const focus = focusedLineCodes("C-02");
-    expect(focus.has("C")).toBe(true);
-    expect(focus.has("P")).toBe(true); // via the Fimil marquee transfer
-    expect(focus.has("E")).toBe(false);
+    const focus = focusedLineCodes("E-06");
+    expect(focus.has("E")).toBe(true);
+    expect(focus.has("P")).toBe(true); // via the Security+ marquee transfer
+    expect(focus.has("C")).toBe(false);
   });
 });

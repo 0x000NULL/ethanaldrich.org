@@ -16,6 +16,11 @@ describe("sitemap", () => {
 
   it("includes per-station URLs", () => {
     const entries = sitemap();
-    expect(entries.some((e) => e.url.endsWith("/station/P-09"))).toBe(true);
+    expect(entries.some((e) => e.url.endsWith("/station/P-07"))).toBe(true);
+  });
+
+  it("includes the resume PDF", () => {
+    const entries = sitemap();
+    expect(entries.some((e) => e.url.endsWith("/resume.pdf"))).toBe(true);
   });
 });

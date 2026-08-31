@@ -1,22 +1,27 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const TAGLINE = "Software, Infrastructure & Security Engineering";
+const TITLE = `Ethan Aldrich | ${TAGLINE}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://ethanaldrich.org"),
   alternates: {
     canonical: "https://ethanaldrich.org",
   },
-  title: "Ethan Aldrich | Platform & Infrastructure Engineer",
+  title: TITLE,
   description:
-    "Ethan Aldrich — Platform & Infrastructure Engineer. Founder & CTO of Fimil. A portfolio mapped as a transit system: career, projects, and learning as subway lines.",
+    "Ethan Aldrich — CTO at Budget Rent a Car Las Vegas and Twelve Management, working across software, infrastructure, and security engineering. A portfolio mapped as a transit system: career, projects, and learning as subway lines.",
   keywords: [
     "Ethan Aldrich",
-    "Platform Engineer",
+    "Software Engineer",
     "Infrastructure Engineer",
+    "Cybersecurity",
+    "Security Engineering",
+    "Chief Technology Officer",
     "Kubernetes",
     "DevOps",
-    "Fimil",
-    "Security Engineering",
+    "Full-Stack Development",
     "Las Vegas",
   ],
   authors: [{ name: "Ethan Aldrich" }],
@@ -26,24 +31,18 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://ethanaldrich.org",
     siteName: "Ethan Aldrich Portfolio",
-    title: "Ethan Aldrich | Platform & Infrastructure Engineer",
+    title: TITLE,
     description:
       "A portfolio mapped as a Tokyo-Metro transit system — career, projects, and learning as subway lines.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Ethan Aldrich Portfolio — career rendered as a subway map",
-      },
-    ],
+    // Images come from the generated card in src/app/opengraph-image.tsx.
+    // Declaring them here would override that route (and the old /og-image.png
+    // never existed in public/, so every social preview 404'd).
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ethan Aldrich | Platform & Infrastructure Engineer",
+    title: TITLE,
     description:
       "A portfolio mapped as a Tokyo-Metro transit system — career, projects, and learning as subway lines.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -55,22 +54,30 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Ethan Aldrich",
-  jobTitle: "Platform & Infrastructure Engineer",
-  worksFor: {
-    "@type": "Organization",
-    name: "Fimil",
-  },
+  jobTitle: "Chief Technology Officer",
+  worksFor: [
+    {
+      "@type": "Organization",
+      name: "Malco Enterprises of Nevada (Budget Rent a Car Las Vegas)",
+    },
+    {
+      "@type": "Organization",
+      name: "Twelve Management",
+    },
+  ],
   url: "https://ethanaldrich.org",
   sameAs: [
     "https://github.com/0x000NULL",
-    "https://www.linkedin.com/in/ethanaldrich",
+    "https://www.linkedin.com/in/ethan-aldrich",
   ],
   knowsAbout: [
+    "Software Engineering",
+    "Cybersecurity",
+    "Network Security",
     "Kubernetes",
     "Platform Engineering",
     "DevOps",
     "Distributed Systems",
-    "Security Engineering",
     "Infrastructure",
   ],
   address: {

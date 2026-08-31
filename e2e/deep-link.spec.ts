@@ -5,11 +5,11 @@ test.describe("deep links and blog navigation", () => {
   test("?station=CODE opens that station's panel", async ({ page }) => {
     // The deep link selects the station on mount; the panel renders on both the
     // desktop map and the mobile strip view.
-    await enterMap(page, "/?station=P-09");
+    await enterMap(page, "/?station=P-07");
 
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
-    await expect(dialog).toContainText("Fimil");
+    await expect(dialog).toContainText("Montr");
   });
 
   test("the blog index links into a post and back to the map", async ({ page }) => {
