@@ -23,15 +23,20 @@ function labelSide(lineCode: LineCode): LabelSide {
 /** Two-line label geometry, staggered into near/far rows to avoid collisions. */
 function labelLayout(side: LabelSide, band: LabelBand, r: number) {
   const far = band === "far";
+  // SUB_GAP clears the 13u name. The far offsets below must clear a whole
+  // two-line block (name + gap + sub) so a far label never lands on a
+  // neighbouring station's near label — which is what used to collide on the
+  // Projects line around "Security Observability Stack".
+  const SUB_GAP = 15;
   if (side === "above") {
-    const nameY = far ? -(r + 34) : -(r + 11);
-    return { x: 0, nameY, subY: nameY - 13, anchor: "middle" as const };
+    const nameY = far ? -(r + 46) : -(r + 11);
+    return { x: 0, nameY, subY: nameY - SUB_GAP, anchor: "middle" as const };
   }
   if (side === "below") {
-    const nameY = far ? r + 40 : r + 16;
-    return { x: 0, nameY, subY: nameY + 13, anchor: "middle" as const };
+    const nameY = far ? r + 56 : r + 16;
+    return { x: 0, nameY, subY: nameY + SUB_GAP, anchor: "middle" as const };
   }
-  return { x: r + 9, nameY: -3, subY: 11, anchor: "start" as const };
+  return { x: r + 9, nameY: -3, subY: 12, anchor: "start" as const };
 }
 
 function isDashedRing(station: StationT): boolean {
@@ -112,7 +117,7 @@ export default function Station({
         x={label.x}
         y={label.nameY}
         textAnchor={label.anchor}
-        fontSize={12}
+        fontSize={13}
         fontWeight={600}
         fill="var(--metro-ink)"
       >
@@ -122,7 +127,7 @@ export default function Station({
         x={label.x}
         y={label.subY}
         textAnchor={label.anchor}
-        fontSize={8.5}
+        fontSize={10}
         fontWeight={400}
         fill="var(--metro-ink-dim)"
       >

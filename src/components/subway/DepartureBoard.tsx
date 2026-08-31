@@ -25,11 +25,11 @@ export default function DepartureBoard() {
 
   return (
     <aside
-      className="pointer-events-auto absolute bottom-5 left-5 z-10 w-96 rounded-lg border bg-[#141414] p-5 text-[#f2c14e] shadow-xl"
-      style={{ borderColor: "#000" }}
+      className="pointer-events-auto absolute bottom-5 left-5 z-10 w-[26rem] max-w-[calc(100%-2.5rem)] rounded-lg border bg-[var(--metro-board-bg)] p-5 text-[var(--metro-board-ink)] shadow-xl"
+      style={{ borderColor: "var(--metro-board-edge)" }}
       aria-label="Recently departed — latest writing"
     >
-      <div className="board-type mb-3 text-xl font-bold uppercase tracking-widest text-[#f2c14e]/80">
+      <div className="board-type mb-3 text-sm font-bold uppercase tracking-widest text-[var(--metro-board-ink)]/80">
         ▸ Now Departing
       </div>
       <ul className="space-y-3">
@@ -37,10 +37,10 @@ export default function DepartureBoard() {
           <li key={p.slug}>
             <a
               href={`/blog/${p.slug}`}
-              className="board-type flex items-baseline justify-between gap-4 text-2xl hover:text-white"
+              className="board-type flex items-baseline justify-between gap-3 text-sm hover:text-white"
             >
-              <span className="truncate">{p.title}</span>
-              <span className="flex-none text-[#f2c14e]/60">{p.date.slice(0, 5)}</span>
+              <span className="line-clamp-2">{p.title}</span>
+              <span className="flex-none text-[var(--metro-board-ink)]/60">{p.date.slice(0, 5)}</span>
             </a>
           </li>
         ))}

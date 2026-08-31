@@ -33,7 +33,7 @@ import type { LineCode, Train } from "@/data/subway/types";
 // The left pad reserves room for the StationIndex legend, which floats over the
 // map. It is proportional to content width: the E line now starts at gx=-1, so
 // 320 no longer cleared the panel once the wider map scaled down to fit.
-export const VIEWBOX_PAD = { top: 110, right: 80, bottom: 150, left: 480 };
+export const VIEWBOX_PAD = { top: 110, right: 140, bottom: 170, left: 520 };
 
 export interface ViewBox {
   x: number;

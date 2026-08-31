@@ -1,11 +1,15 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { render, fireEvent, within } from "@testing-library/react";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { render, fireEvent, within, waitFor } from "@testing-library/react";
 import StationPanel from "./StationPanel";
 import { useNavStore } from "@/store/nav-store";
 
 beforeEach(() => {
   useNavStore.setState({ selectedStationCode: null, panelOpen: false });
+  // The panel fetches post titles for "Related writing" on mount.
+  vi.stubGlobal("fetch", vi.fn(() => Promise.reject(new Error("offline"))));
 });
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe("StationPanel", () => {
   it("renders nothing when closed", () => {
@@ -32,11 +36,33 @@ describe("StationPanel", () => {
     expect(useNavStore.getState().selectedStationCode).toBe("P-04");
   });
 
-  it("links related blog posts", () => {
+  it("links related blog posts by title once /api/blog resolves", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve([
+              { slug: "montr-signage", title: "Building Montr", date: "04-09-2026" },
+            ]),
+        } as Response)
+      )
+    );
+    useNavStore.setState({ selectedStationCode: "P-07", panelOpen: true });
+    const { findByRole } = render(<StationPanel />);
+    const link = await findByRole("link", { name: "Building Montr" });
+    expect(link.getAttribute("href")).toBe("/blog/montr-signage");
+  });
+
+  it("falls back to the slug when the post list is unavailable", async () => {
     useNavStore.setState({ selectedStationCode: "P-07", panelOpen: true });
     const { getByRole } = render(<StationPanel />);
-    const link = getByRole("link", { name: "/blog/montr-signage" });
-    expect(link.getAttribute("href")).toBe("/blog/montr-signage");
+    await waitFor(() => {
+      expect(
+        getByRole("link", { name: "montr-signage" }).getAttribute("href")
+      ).toBe("/blog/montr-signage");
+    });
   });
 
   it("renders a minimal station without optional sections", () => {

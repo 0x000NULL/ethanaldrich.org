@@ -22,7 +22,7 @@ export default function StripMapView() {
   const selected = useNavStore((s) => s.selectedStationCode);
 
   return (
-    <div className="h-full w-full overflow-y-auto bg-[var(--metro-bg)] px-4 pb-24 pt-20 text-[var(--metro-ink)]">
+    <div className="h-full w-full overflow-y-auto bg-[var(--metro-bg)] px-4 pb-24 pt-6 text-[var(--metro-ink)]">
       <h1 className="text-2xl font-bold">Aldrich Transit</h1>
       <p className="mt-1 text-sm text-[var(--metro-ink-dim)]">
         Tap a station for the story.
