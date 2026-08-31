@@ -8,7 +8,7 @@ interface UseIsMobileOptions {
 }
 
 export function useIsMobile(options: UseIsMobileOptions = {}): boolean {
-  const { breakpoint = 768, checkTouch = false } = options;
+  const { breakpoint = 1024, checkTouch = false } = options;
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

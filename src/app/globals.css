@@ -16,6 +16,11 @@
   --line-p: #c9197f;
   --line-w: #7a8b99;
 
+  /* Departure board — the one deliberately dark surface on the site. */
+  --metro-board-bg: #141414;
+  --metro-board-edge: #000000;
+  --metro-board-ink: #f2c14e;
+
   --background: var(--metro-bg);
   --foreground: var(--metro-ink);
 
@@ -37,84 +42,94 @@
   --color-line-c: var(--line-c);
   --color-line-p: var(--line-p);
   --color-line-w: var(--line-w);
+  --color-metro-board-bg: var(--metro-board-bg);
+  --color-metro-board-ink: var(--metro-board-ink);
   --font-sans: var(--font-sans);
   --font-board: var(--font-board);
 }
 
-/* ───────────────────────── Base ───────────────────────── */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  height: 100%;
-  overscroll-behavior: none;
-}
-
-body {
-  background: var(--metro-bg);
-  color: var(--metro-ink);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* Screen-reader-only utility for the parallel a11y map outline. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Keyboard focus ring on every interactive roundel / control. */
-:focus-visible {
-  outline: 3px solid var(--metro-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* Long-form station case study — comfortable reading column. */
-.station-prose {
-  max-width: 68ch;
-  line-height: 1.6;
-}
-
-::selection {
-  background: var(--metro-ink);
-  color: var(--metro-bg);
-}
-
-/* Departure-board / station-code monospace. */
-.board-type {
-  font-family: var(--font-board);
-  letter-spacing: 0.02em;
-}
-
-/* Mobile touch targets. */
-@media (max-width: 768px) {
-  button,
-  [role="button"] {
-    -webkit-user-select: none;
-    user-select: none;
-    touch-action: manipulation;
+/* ───────────────────────── Base ─────────────────────────
+   Everything below lives in a cascade layer on purpose. Tailwind puts its
+   utilities in `@layer utilities`, and UNLAYERED css always beats layered css
+   regardless of specificity — so a bare `* { padding: 0 }` here would silently
+   kill every `p-*`/`m-*`/`space-y-*` utility in the app. Keep new rules inside
+   a layer. (The `*` reset that used to sit here was redundant anyway: Tailwind's
+   preflight already zeroes margin/padding and sets border-box in `@layer base`.) */
+@layer base {
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    height: 100%;
+    overscroll-behavior: none;
   }
 
-  .touch-target {
-    min-width: 44px;
-    min-height: 44px;
+  body {
+    background: var(--metro-bg);
+    color: var(--metro-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Keyboard focus ring on every interactive roundel / control. No radius here:
+     the element's own `rounded-*` utility should shape the ring. */
+  :focus-visible {
+    outline: 3px solid var(--metro-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--metro-ink);
+    color: var(--metro-bg);
+  }
+}
+
+@layer components {
+  /* Screen-reader-only utility for the parallel a11y map outline. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Long-form station case study — comfortable reading column. */
+  .station-prose {
+    max-width: 68ch;
+    line-height: 1.6;
+  }
+
+  /* Departure-board / station-code monospace. */
+  .board-type {
+    font-family: var(--font-board);
+    letter-spacing: 0.02em;
+  }
+
+  /* Mobile touch targets. */
+  @media (max-width: 768px) {
+    .touch-target {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+}
+
+@layer base {
+  @media (max-width: 768px) {
+    button,
+    [role="button"] {
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
   }
 }
 

@@ -40,17 +40,20 @@ export default function ServiceAlertBanner() {
   };
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-5 z-10 flex w-full max-w-5xl -translate-x-1/2 flex-col gap-3 px-5">
+    <div
+      data-alert-banner
+      className="mx-auto flex w-full max-w-5xl flex-none flex-col gap-3 px-5 pt-5"
+    >
       {visible.map((alert) => {
         const color = LINE_MAP[alert.lineCode]?.color ?? "var(--metro-ink)";
         return (
           <div
             key={alert.id}
             role="status"
-            className="pointer-events-auto flex items-center gap-4 rounded-lg border bg-[var(--metro-panel)]/95 px-6 py-4 text-2xl shadow-lg backdrop-blur"
+            className="flex items-center gap-3 rounded-lg border bg-[var(--metro-panel)]/95 px-4 py-2.5 text-base shadow-lg backdrop-blur"
             style={{ borderColor: "var(--metro-border)", borderLeft: `7px solid ${color}` }}
           >
-            <span aria-hidden="true" className="text-3xl">
+            <span aria-hidden="true" className="flex-none text-lg">
               {SEVERITY_ICON[alert.severity]}
             </span>
             <button
@@ -63,7 +66,7 @@ export default function ServiceAlertBanner() {
               <button
                 onClick={() => dismissAlert(alert.id)}
                 aria-label="Dismiss alert"
-                className="text-4xl leading-none text-[var(--metro-ink-dim)] hover:text-[var(--metro-ink)]"
+                className="flex-none px-1 text-2xl leading-none text-[var(--metro-ink-dim)] hover:text-[var(--metro-ink)]"
               >
                 ×
               </button>

@@ -10,14 +10,28 @@ import type { ComponentProps } from "react";
  * `<pre>` frame below supplies the border/paper background.
  */
 export const mdxComponents = {
-  h1: (props: ComponentProps<"h1">) => (
-    <h1 className="mb-4 mt-2 scroll-mt-20 text-2xl font-bold text-[var(--metro-ink)]" {...props} />
+  // rehype-autolink-headings uses behavior:"wrap", so each heading's text is
+  // wrapped in an <a>. Without these the anchor inherits the `a` rule below and
+  // every heading renders underlined, as if it were a broken link.
+  // The body h1 renders as <h2>: the post page already supplies the page-level
+  // <h1> from frontmatter, and a second h1 breaks the document outline.
+  h1: (props: ComponentProps<"h2">) => (
+    <h2
+      className="mb-4 mt-2 scroll-mt-20 text-2xl font-bold text-[var(--metro-ink)] [&>a]:text-inherit [&>a]:no-underline"
+      {...props}
+    />
   ),
   h2: (props: ComponentProps<"h2">) => (
-    <h2 className="mb-3 mt-6 scroll-mt-20 text-xl font-bold text-[var(--metro-ink)]" {...props} />
+    <h2
+      className="mb-3 mt-6 scroll-mt-20 text-xl font-bold text-[var(--metro-ink)] [&>a]:text-inherit [&>a]:no-underline"
+      {...props}
+    />
   ),
   h3: (props: ComponentProps<"h3">) => (
-    <h3 className="mb-2 mt-4 scroll-mt-20 text-lg font-bold text-[var(--metro-ink)]" {...props} />
+    <h3
+      className="mb-2 mt-4 scroll-mt-20 text-lg font-bold text-[var(--metro-ink)] [&>a]:text-inherit [&>a]:no-underline"
+      {...props}
+    />
   ),
   p: (props: ComponentProps<"p">) => <p className="mb-3 leading-relaxed" {...props} />,
   ul: (props: ComponentProps<"ul">) => (
