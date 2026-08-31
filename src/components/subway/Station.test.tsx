@@ -24,13 +24,13 @@ describe("Station", () => {
   it("fires select and hover handlers", () => {
     const onSelect = vi.fn();
     const onHover = vi.fn();
-    const { container } = renderStation(getStation("P-09")!, { onSelect, onHover });
-    const g = container.querySelector('[data-station-code="P-09"]')!;
+    const { container } = renderStation(getStation("P-07")!, { onSelect, onHover });
+    const g = container.querySelector('[data-station-code="P-07"]')!;
     fireEvent.click(g);
     fireEvent.pointerEnter(g);
     fireEvent.pointerLeave(g);
-    expect(onSelect).toHaveBeenCalledWith("P-09");
-    expect(onHover).toHaveBeenCalledWith("P-09");
+    expect(onSelect).toHaveBeenCalledWith("P-07");
+    expect(onHover).toHaveBeenCalledWith("P-07");
     expect(onHover).toHaveBeenCalledWith(null);
   });
 
@@ -52,7 +52,7 @@ describe("Station", () => {
   });
 
   it("renders in-progress stations like normal stops (white fill, solid ring)", () => {
-    const { container } = renderStation(getStation("E-05")!); // Network+ (in-progress)
+    const { container } = renderStation(getStation("E-12")!); // WGU degree (in-progress)
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("fill")).toBe("var(--metro-roundel)");
     expect(circle.getAttribute("stroke-dasharray")).toBeNull(); // solid, not dashed
@@ -64,14 +64,14 @@ describe("Station", () => {
   });
 
   it("enlarges the active station", () => {
-    const { container } = renderStation(getStation("P-09")!, { active: true });
+    const { container } = renderStation(getStation("P-07")!, { active: true });
     const circle = container.querySelector("circle")!;
     expect(Number(circle.getAttribute("r"))).toBeGreaterThan(11);
   });
 
   it("dims when requested", () => {
-    const { container } = renderStation(getStation("P-09")!, { dimmed: true });
-    const g = container.querySelector('[data-station-code="P-09"]') as SVGGElement;
+    const { container } = renderStation(getStation("P-07")!, { dimmed: true });
+    const g = container.querySelector('[data-station-code="P-07"]') as SVGGElement;
     expect(Number(g.style.opacity)).toBeLessThan(1);
   });
 });

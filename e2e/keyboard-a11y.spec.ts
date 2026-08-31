@@ -15,9 +15,9 @@ test.describe("keyboard accessibility (desktop)", () => {
     // Focus the first station on the Education line.
     await page.getByRole("button", { name: /High School/ }).focus();
 
-    // Arrow down roves to the next station on the same line (Network+).
+    // Arrow down roves to the next station on the same line (A+).
     await page.keyboard.press("ArrowDown");
-    await expect(page.getByRole("button", { name: /Network\+/ })).toBeFocused();
+    await expect(page.getByRole("button", { name: /E-02 A\+/ })).toBeFocused();
 
     // Enter opens the station panel.
     await page.keyboard.press("Enter");

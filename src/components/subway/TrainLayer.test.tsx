@@ -27,7 +27,7 @@ describe("TrainLayer", () => {
       </svg>
     );
     // The Career train is express → its group has an extra rect (stripe).
-    const fimil = container.querySelector('[data-train="t-fimil"]')!;
-    expect(fimil.querySelectorAll("rect").length).toBeGreaterThanOrEqual(2);
+    const express = container.querySelector('[data-train="t-career"]')!;
+    expect(express.querySelectorAll("rect").length).toBeGreaterThanOrEqual(2);
   });
 });

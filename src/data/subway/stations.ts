@@ -3,33 +3,63 @@ import type { Station } from "./types";
 /**
  * Hand-authored octolinear layout (validated by src/data/subway/index.test.ts).
  *
- * Grid bands: E (Education) gy=4 · P (Projects) gy=6 · C (Career) gy=8–10 ·
- * S (17S Cyber) gy=2 top-right dashed · W (Weekend) gx=3 dashed downward.
+ * Grid bands: E (Education) gy=4 · P (Projects) gy=6 · C (Career) gy=10–12 ·
+ * W (Weekend) gx=3 dashed downward. The E line starts at gx=-1 so the four
+ * earned certifications fit to the left of the Security+ ↔ P-04 interchange,
+ * which is pinned at gx=9 by the peanut spacing rule.
  *
- * Honesty rule: resume-backed work is "operational"; the cert path and the 17S
- * officer path are aspirational and carried as "planned" / "under-construction".
+ * Honesty rule: work that actually happened is "operational"; the remaining
+ * cert path is "planned"; the degree in flight is "in-progress". A finished
+ * role stays "operational" and carries its end date in `dates`.
  */
 export const STATIONS: Station[] = [
-  // ───────────────────────── E — Education (cyan, planned) ─────────────────────────
+  // ───────────────────────── E — Education (cyan) ─────────────────────────
   {
     code: "E-01",
     name: "High School",
     nameJa: "高校",
     lineCodes: ["E"],
-    grid: { gx: 3, gy: 4 },
+    grid: { gx: -1, gy: 4 },
     status: "operational",
     dates: "2015 – 2020",
     summary: "West Career & Technical Academy, Las Vegas — Graphic Design diploma.",
   },
   {
-    code: "E-05",
+    code: "E-02",
+    name: "A+",
+    nameJa: "A＋",
+    lineCodes: ["E"],
+    grid: { gx: 1, gy: 4 },
+    status: "operational",
+    summary: "CompTIA A+ — hardware, OS and endpoint support fundamentals.",
+  },
+  {
+    code: "E-03",
     name: "Network+",
     nameJa: "ネットワーク＋",
     lineCodes: ["E"],
+    grid: { gx: 3, gy: 4 },
+    status: "operational",
+    summary: "CompTIA Network+ — the credential under the SD-WAN and VLAN work.",
+  },
+  {
+    code: "E-04",
+    name: "IT Ops Specialist",
+    nameJa: "IT運用専門",
+    lineCodes: ["E"],
     grid: { gx: 5, gy: 4 },
-    status: "in-progress",
-    labelBand: "near",
-    summary: "CompTIA Network+ — studying; awaiting a Pearson exam seat.",
+    status: "operational",
+    summary: "CompTIA IT Operations Specialist — the stackable A+ and Network+ credential.",
+  },
+  {
+    code: "E-05",
+    name: "ITIL v4",
+    nameJa: "ITIL v4",
+    lineCodes: ["E"],
+    grid: { gx: 7, gy: 4 },
+    status: "operational",
+    summary: "ITIL v4 Foundations — the service management behind the GLPI rollout.",
+    relatedPosts: ["glpi-deploy"],
   },
   {
     code: "E-06",
@@ -69,23 +99,26 @@ export const STATIONS: Station[] = [
   },
   {
     code: "E-12",
-    name: "BSCSIA Conferred",
-    nameJa: "学士号取得",
+    name: "WGU — B.S. Cybersecurity",
+    nameJa: "学士課程",
     lineCodes: ["E"],
     grid: { gx: 19, gy: 4 },
-    status: "planned",
+    status: "in-progress",
     terminus: true,
-    labelSide: "below", // keep the upward MSCSIA spur clear of the label
-    summary: "B.S. Cybersecurity & Information Assurance — degree conferred (terminus).",
+    labelSide: "below", // keep the upward master's spur clear of the label
+    labelBand: "near", // pull the below-label up off the Projects trunk
+    dates: "expected May 2029",
+    summary:
+      "Western Governors University — B.S. Cybersecurity & Information Assurance, in progress.",
   },
   {
     code: "E-13",
-    name: "MSCSIA",
+    name: "M.S. Cybersecurity",
     nameJa: "修士号予定",
     lineCodes: ["E"],
     grid: { gx: 19, gy: 2 },
     status: "planned",
-    summary: "Master's / SecurityX — planned service beyond the degree.",
+    summary: "M.S. Cybersecurity & Information Assurance — planned service beyond the degree.",
   },
 
   // ───────────────────────── P — Projects (magenta) ─────────────────────────
@@ -163,6 +196,7 @@ export const STATIONS: Station[] = [
     lineCodes: ["P"],
     grid: { gx: 15, gy: 6 },
     status: "operational",
+    terminus: true,
     hasBody: true,
     summary: "Distributed digital signage — Rust client + Node/TS server, 25+ displays.",
     dates: "2025 – Present",
@@ -170,31 +204,19 @@ export const STATIONS: Station[] = [
     links: [{ label: "github.com/0x000NULL", href: "https://github.com/0x000NULL" }],
     relatedPosts: ["montr-signage"],
   },
-  {
-    code: "P-09",
-    name: "Fimil Platform",
-    nameJa: "フィミル基盤",
-    lineCodes: ["P"],
-    grid: { gx: 17, gy: 6 },
-    status: "operational",
-    terminus: true,
-    labelSide: "above", // keep the downward Fimil interchange peanut clear of the label
-    hasBody: true,
-    summary: "Multi-tenant security-scanning SaaS — 12+ scanners, async, first-to-market MCP.",
-    dates: "2025 – Present",
-    stack: [
-      "Kubernetes",
-      "FastAPI",
-      "Celery",
-      "Redis",
-      "PostgreSQL",
-      "React 18",
-      "MCP",
-    ],
-    links: [{ label: "fimil.dev", href: "https://fimil.dev" }],
-  },
 
   // ───────────────────────── C — Career (red, express) ─────────────────────────
+  {
+    code: "C-00",
+    name: "Starbucks",
+    nameJa: "スターバックス",
+    lineCodes: ["C"],
+    grid: { gx: 7, gy: 12 },
+    status: "operational",
+    summary:
+      "Assistant Store Manager — the four years before the line turned technical.",
+    dates: "Jun 2017 – Sep 2021",
+  },
   {
     code: "C-01",
     name: "Malco / Budget",
@@ -203,25 +225,38 @@ export const STATIONS: Station[] = [
     grid: { gx: 13, gy: 10 },
     status: "operational",
     hasBody: true,
-    summary: "CTO / IT Director — K8s, SD-WAN & a distributed stack across 8 locations.",
+    summary:
+      "Chief Technology Officer — K8s, SD-WAN & a distributed stack across 8 locations.",
     dates: "Sep 2021 – Present",
-    stack: ["Kubernetes", "SD-WAN", "Cisco IOS", "Node.js", "MongoDB", "C#/.NET"],
+    stack: [
+      "Kubernetes",
+      "SD-WAN",
+      "Cisco IOS",
+      "Node.js",
+      "MongoDB",
+      "C#/.NET",
+      "Python/FastAPI",
+      "Celery",
+      "Terraform",
+      "MCP",
+    ],
+    links: [{ label: "Résumé (PDF)", href: "/resume.pdf" }],
     relatedPosts: ["glpi-deploy"],
   },
   {
-    code: "C-02",
-    name: "Fimil — Founder & CTO",
-    nameJa: "創業者兼CTO",
+    code: "C-03",
+    name: "Twelve Management",
+    nameJa: "トゥエルブ社",
     lineCodes: ["C"],
-    grid: { gx: 17, gy: 8 },
+    grid: { gx: 17, gy: 10 },
     status: "operational",
     terminus: true,
     express: true,
-    hasBody: true,
-    summary: "Founder & CTO — built and deployed the platform solo. Express service.",
-    dates: "2025 – Present",
-    stack: ["Kubernetes", "FastAPI", "PostgreSQL", "DevOps"],
-    links: [{ label: "fimil.dev", href: "https://fimil.dev" }],
+    summary:
+      "Chief Technology Officer — IT built from scratch for 9 subsidiaries and a team of 52.",
+    dates: "Nov 2021 – Present",
+    stack: ["Windows Server", "Active Directory", "Networking", "Security Policy"],
+    links: [{ label: "Résumé (PDF)", href: "/resume.pdf" }],
   },
 
   // ───────────────────────── W — Weekend (dashed spur off P-01) ─────────────────────

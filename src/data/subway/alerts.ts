@@ -2,11 +2,11 @@ import type { ServiceAlert } from "./types";
 
 export const ALERTS: ServiceAlert[] = [
   {
-    id: "a-fimil",
-    lineCode: "C",
+    id: "a-certs",
+    lineCode: "E",
     severity: "info",
-    message: "Career Line: Fimil running express — private beta.",
-    stationCode: "C-02",
+    message: "Education Line: A+, Network+, IT Ops Specialist & ITIL v4 now in service.",
+    stationCode: "E-03",
     dismissible: true,
   },
 ];

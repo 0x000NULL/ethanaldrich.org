@@ -42,9 +42,9 @@ describe("SubwayMap", () => {
 
   it("selecting a station updates the store and opens the panel", () => {
     const { container } = render(<SubwayMap />);
-    const fimil = container.querySelector('[data-station-code="P-09"]')!;
-    fireEvent.click(fimil);
-    expect(useNavStore.getState().selectedStationCode).toBe("P-09");
+    const station = container.querySelector('[data-station-code="P-07"]')!;
+    fireEvent.click(station);
+    expect(useNavStore.getState().selectedStationCode).toBe("P-07");
     expect(useNavStore.getState().panelOpen).toBe(true);
   });
 
