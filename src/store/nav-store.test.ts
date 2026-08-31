@@ -20,14 +20,14 @@ beforeEach(() => {
 
 describe("selection", () => {
   it("selecting a station opens the panel", () => {
-    initial.selectStation("P-09");
+    initial.selectStation("P-07");
     const s = useNavStore.getState();
-    expect(s.selectedStationCode).toBe("P-09");
+    expect(s.selectedStationCode).toBe("P-07");
     expect(s.panelOpen).toBe(true);
   });
 
   it("selecting null closes the panel", () => {
-    initial.selectStation("P-09");
+    initial.selectStation("P-07");
     initial.selectStation(null);
     expect(useNavStore.getState().panelOpen).toBe(false);
   });
@@ -92,9 +92,9 @@ describe("service alerts", () => {
   });
 
   it("initializes from localStorage", () => {
-    vi.mocked(localStorage.getItem).mockReturnValue(JSON.stringify(["a-fimil"]));
+    vi.mocked(localStorage.getItem).mockReturnValue(JSON.stringify(["a-certs"]));
     initial.initializeAlerts();
-    expect(useNavStore.getState().dismissedAlerts).toEqual(["a-fimil"]);
+    expect(useNavStore.getState().dismissedAlerts).toEqual(["a-certs"]);
   });
 
   it("recovers from malformed storage", () => {

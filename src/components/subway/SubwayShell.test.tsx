@@ -37,11 +37,11 @@ describe("SubwayShell", () => {
   });
 
   it("opens the station named in a ?station= deep link", async () => {
-    window.history.replaceState(null, "", "/?station=P-09");
+    window.history.replaceState(null, "", "/?station=P-07");
     const { default: SubwayShell } = await import("./SubwayShell");
     render(<SubwayShell />);
     await waitFor(() =>
-      expect(useNavStore.getState().selectedStationCode).toBe("P-09")
+      expect(useNavStore.getState().selectedStationCode).toBe("P-07")
     );
   });
 

@@ -22,8 +22,10 @@ describe("A11yMapOutline", () => {
     const { getByRole } = render(
       <A11yMapOutline onSelect={() => {}} onHover={() => {}} />
     );
-    const fimil = getByRole("button", { name: /C-02 Fimil/i });
-    expect(fimil.textContent).toMatch(/Transfer to Fimil Platform/i);
+    const transferStop = getByRole("button", { name: /E-06 Security\+/i });
+    expect(transferStop.textContent).toMatch(
+      /Transfer to Security Observability Stack/i
+    );
   });
 
   it("calls onSelect when a station is activated", () => {
@@ -31,8 +33,8 @@ describe("A11yMapOutline", () => {
     const { getByRole } = render(
       <A11yMapOutline onSelect={onSelect} onHover={() => {}} />
     );
-    fireEvent.click(getByRole("button", { name: /P-09 Fimil Platform/i }));
-    expect(onSelect).toHaveBeenCalledWith("P-09");
+    fireEvent.click(getByRole("button", { name: /P-07 Montr Signage/i }));
+    expect(onSelect).toHaveBeenCalledWith("P-07");
   });
 
   it("mirrors focus to the map via onHover", () => {
@@ -54,7 +56,7 @@ describe("A11yMapOutline", () => {
     const first = getByRole("button", { name: /E-01 High School/i });
     first.focus();
     fireEvent.keyDown(first, { key: "ArrowDown" });
-    const second = getByRole("button", { name: /E-05 Network\+/i });
+    const second = getByRole("button", { name: /E-02 A\+/i });
     expect(document.activeElement).toBe(second);
   });
 });
