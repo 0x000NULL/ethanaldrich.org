@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useNavStore } from "@/store/nav-store";
 import { getStation, LINE_MAP } from "@/data/subway";
 import { transfersForStation } from "@/lib/subway/selectors";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { resolvePostRefs } from "@/lib/blog-format";
+import type { BlogPostMeta } from "@/lib/blog";
 import type { LineCode, StationStatus } from "@/data/subway/types";
 
 const STATUS_LABEL: Record<StationStatus, string> = {
@@ -35,10 +38,29 @@ export default function StationPanel() {
   const selectStation = useNavStore((s) => s.selectStation);
   const ref = useFocusTrap<HTMLDivElement>(panelOpen, closePanel);
 
+  // Post titles for "Related writing". This is a client component, so it can't
+  // read the filesystem the way /station/[code] does — it asks the same API the
+  // departure board uses and resolves slugs with the shared pure helper.
+  const [posts, setPosts] = useState<BlogPostMeta[]>([]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/blog", { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: BlogPostMeta[]) => setPosts(data))
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
+
   const station = code ? getStation(code) : undefined;
   if (!panelOpen || !station) return null;
 
   const transfers = transfersForStation(station.code);
+  // Fall back to the slug until the titles land, so the links are never missing.
+  const resolved = resolvePostRefs(posts, station.relatedPosts ?? []);
+  const relatedLinks = (station.relatedPosts ?? []).map((slug) => ({
+    slug,
+    label: resolved.find((p) => p.slug === slug)?.title ?? slug,
+  }));
 
   return (
     <div
@@ -46,7 +68,7 @@ export default function StationPanel() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="station-panel-title"
-      className="absolute right-0 top-0 z-20 flex h-full w-full max-w-md flex-col overflow-y-auto border-l bg-[var(--metro-panel)] p-5 text-[var(--metro-ink)] shadow-xl"
+      className="absolute right-0 top-0 z-20 flex h-full w-full max-w-md flex-col overflow-y-auto border-l bg-[var(--metro-panel)] p-5 text-[var(--metro-ink)] shadow-xl md:bottom-auto md:right-5 md:top-5 md:h-auto md:max-h-[calc(100%-2.5rem)] md:rounded-xl md:border"
       style={{ borderColor: "var(--metro-border)" }}
     >
       <div className="flex items-start justify-between gap-4">
@@ -159,10 +181,10 @@ export default function StationPanel() {
             Related writing
           </h3>
           <ul className="space-y-1">
-            {station.relatedPosts.map((slug) => (
+            {relatedLinks.map(({ slug, label }) => (
               <li key={slug}>
                 <a href={`/blog/${slug}`} className="text-sm underline hover:no-underline">
-                  /blog/{slug}
+                  {label}
                 </a>
               </li>
             ))}

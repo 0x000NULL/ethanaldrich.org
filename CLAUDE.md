@@ -45,15 +45,15 @@ Immutable config arrays re-exported through `index.ts`. **Render code never hard
 - `geometry.ts` — `GRID = 52` (px per integer grid unit). Octolinear predicates (`octolinearDir`, `isOctolinear`, `snapToOctolinear`), `buildLinePath`, `measurePolyline`, `poseAtDistance`/`poseAt`, `detectLabelCollisions`, `easeInOutCubic`.
 - `viewport.ts` — pan/zoom transform `Viewport {x,y,k}` where screen `s = u*k + {x,y}`. `fitToBounds`, `zoomAt`, `clampViewport`, `screenToUser`/`userToScreen`, `zoomToLine`/`zoomToStation`. `MIN_K=0.25`, `MAX_K=4`.
 - `train.ts` — pure reducer `advanceTrain(state, ctx, dtMs)` (handles dwell + end-of-line reversal) and `trainPose`.
-- `selectors.ts` — derived state: `getViewBox()` (asymmetric `VIEWBOX_PAD` keeps content clear of the corner overlays), `getLinePolylines` (memoized), `lineBounds`, `transfersForStation`, `focusedLineCodes`, `buildTrainRuntimes`. `BASE_SPEED=0.05` px/ms, express ×1.6, `DWELL_MS=900`.
+- `selectors.ts` — derived state: `getViewBox()` (asymmetric `VIEWBOX_PAD` reserves room for the floating corner overlays — the `left` pad in particular must keep the network clear of the `StationIndex` legend; note the reserve is in viewBox units so its on-screen size scales with viewport width), `getLinePolylines` (memoized), `lineBounds`, `transfersForStation`, `focusedLineCodes`, `buildTrainRuntimes`. `BASE_SPEED=0.05` px/ms, express ×1.6, `DWELL_MS=900`.
 
 ### 3. Render layer (`src/components/subway/`)
 
-`SubwayShell` (client shell: hydration gate, init, deep-link sync, stats, **mobile switch** via `useIsMobile`). On desktop it renders `SubwayMap` (the `<svg>`, `role="img"`, pan/zoom) → `LineLayer`→`Line`, `TrainLayer`→`Train`, `StationLayer`→`Station`/`Interchange`, plus the `StationIndex` legend, `DepartureBoard`, `RecenterButton`, and sr-only `A11yMapOutline`. On small screens it swaps all of that for `StripMapView` (a vertical, scrollable list of lines/stations with transfer chips — itself the accessible interface, so the sr-only outline isn't rendered there). Shared across both: `ServiceAlertBanner`, `StationPanel` (case-study dialog, full-width sheet on mobile), and `IntroSplash` (Suica "tap to enter", once per session, focus-trapped, reduced-motion aware).
+`SubwayShell` (client shell: hydration gate, init, deep-link sync, stats, **mobile switch** via `useIsMobile`). On desktop it renders `SubwayMap` (the `<svg>`, `role="img"`, pan/zoom) → `LineLayer`→`Line`, `TrainLayer`→`Train`, `StationLayer`→`Station`/`Interchange`, plus the `StationIndex` legend, `DepartureBoard`, `RecenterButton`, and sr-only `A11yMapOutline`. Below 1024px it swaps all of that for `StripMapView` (a vertical, scrollable list of lines/stations with transfer chips — itself the accessible interface, so the sr-only outline isn't rendered there). Shared across both: `ServiceAlertBanner` (a banner **row** in normal flow at the top of the shell, not floating chrome — it reserves its own space so it can never cover the legend or the strip header), `StationPanel` (case-study dialog; a content-height card on desktop, full-height sheet on mobile), and `IntroSplash` (Suica "tap to enter", once per session, focus-trapped, reduced-motion aware).
 
 ### 4. Interaction (`src/hooks/`)
 
-`useSubwayPanZoom` (drag-pan/wheel-zoom; captures only past a 4px drag threshold so clicks reach stations, and suppresses the click after a pan), `useTrainAnimation` (rAF loop via `performance.now()`, honors reduced-motion), `useRovingStations` (arrow-key roving tabindex), `useFocusTrap` (panel dialog), `useIsMobile`.
+`useSubwayPanZoom` (drag-pan/wheel-zoom; captures only past a 4px drag threshold so clicks reach stations, and suppresses the click after a pan), `useTrainAnimation` (rAF loop via `performance.now()`, honors reduced-motion), `useRovingStations` (arrow-key roving tabindex), `useFocusTrap` (panel dialog), `useIsMobile` (default breakpoint **1024** — below that the map's SVG labels shrink past legibility, so the strip view takes over).
 
 ### State — `src/store/nav-store.ts` (Zustand, no persist middleware)
 
@@ -85,6 +85,7 @@ Single `metro` variant. `applyTheme()` writes 7 `--metro-*` CSS vars to `:root` 
 - **Octolinear only** (0/45/90°), enforced by `validateConfig`; place stations on integer `GRID=52` coordinates.
 - **Pure logic stays DOM-free and SSR-deterministic** (no `getPointAtLength`; config-derived viewBox).
 - **Config is the single source of truth**; add a station/line/train by editing `src/data/subway/*`, not components.
+- **All custom CSS lives in a `@layer`.** Tailwind v4 puts its utilities in `@layer utilities`, and unlayered CSS beats layered CSS regardless of specificity — an unlayered `* { padding: 0 }` silently kills every `p-*`/`m-*`/`space-y-*` utility site-wide. `globals.css` wraps its rules in `@layer base` / `@layer components` for exactly this reason; don't add a bare top-level rule.
 - **Reduced motion respected end-to-end** (store flag → `TrainLayer` → `useTrainAnimation`).
 - **Accessibility-first:** line letters on roundels (colorblind aid), focus-trapped dialogs, the sr-only `A11yMapOutline` mirrors the visual map.
 - Path alias `@/*` → `./src/*`.

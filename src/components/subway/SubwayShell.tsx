@@ -93,20 +93,24 @@ export default function SubwayShell() {
   }
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-[var(--metro-bg)]">
-      {isMobile ? (
-        <StripMapView />
-      ) : (
-        <>
-          <SubwayMap />
-          <StationIndex />
-          <DepartureBoard />
-          <RecenterButton />
-          <A11yMapOutline onSelect={selectStation} onHover={setHoveredStation} />
-        </>
-      )}
+    <main className="flex h-screen w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
+      {/* In flow, not floating: the banner reserves its own row so it can never
+          cover the legend, the strip-view header, or the top of the map. */}
       <ServiceAlertBanner />
-      <StationPanel />
+      <div className="relative flex-1 overflow-hidden">
+        {isMobile ? (
+          <StripMapView />
+        ) : (
+          <>
+            <SubwayMap />
+            <StationIndex />
+            <DepartureBoard />
+            <RecenterButton />
+            <A11yMapOutline onSelect={selectStation} onHover={setHoveredStation} />
+          </>
+        )}
+        <StationPanel />
+      </div>
       <IntroSplash />
     </main>
   );
