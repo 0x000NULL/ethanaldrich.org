@@ -7,6 +7,9 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // Override default ignores of eslint-config-next.
   globalIgnores([
+    // Standalone resume document + its build script: no Next/React surface.
+    "resume/**",
+    "scripts/**",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",

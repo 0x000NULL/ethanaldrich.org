@@ -50,8 +50,8 @@ export default async function Image() {
         <div style={{ fontSize: "76px", fontWeight: "bold", marginBottom: "16px" }}>
           ETHAN ALDRICH
         </div>
-        <div style={{ fontSize: "34px", color: "#6B6B6B" }}>
-          Platform &amp; Infrastructure Engineer
+        <div style={{ fontSize: "32px", color: "#6B6B6B" }}>
+          Software, Infrastructure &amp; Security Engineering
         </div>
         <div
           style={{

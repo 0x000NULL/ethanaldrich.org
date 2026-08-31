@@ -6,7 +6,18 @@ export const LINES: Line[] = [
     name: "Education Line",
     nameJa: "教育線",
     color: "#009BBF",
-    stationCodes: ["E-01", "E-05", "E-06", "E-07", "E-08", "E-09", "E-12"],
+    stationCodes: [
+      "E-01",
+      "E-02",
+      "E-03",
+      "E-04",
+      "E-05",
+      "E-06",
+      "E-07",
+      "E-08",
+      "E-09",
+      "E-12",
+    ],
     branches: [{ fromCode: "E-12", stationCodes: ["E-13"], dashed: true }],
   },
   {
@@ -15,9 +26,9 @@ export const LINES: Line[] = [
     nameJa: "経歴線",
     color: "#E60012",
     express: true,
-    stationCodes: ["C-01", "C-02"],
-    // C-01 → C-02 is (13,10)→(17,8): a 45° diagonal then a horizontal run.
-    vias: [{ from: "C-01", to: "C-02", points: [{ gx: 15, gy: 8 }] }],
+    stationCodes: ["C-00", "C-01", "C-03"],
+    // C-00 → C-01 is (7,12)→(13,10): run east along gy=12, then climb 45°.
+    vias: [{ from: "C-00", to: "C-01", points: [{ gx: 11, gy: 12 }] }],
   },
   {
     code: "P",
@@ -32,7 +43,6 @@ export const LINES: Line[] = [
       "P-05",
       "P-06",
       "P-07",
-      "P-09",
     ],
   },
   {
@@ -47,9 +57,8 @@ export const LINES: Line[] = [
 ];
 
 export const TRANSFERS: Transfer[] = [
-  // Marquee: the founder (Career terminus) and the platform (Projects) are one node.
-  { a: "C-02", b: "P-09", marquee: true },
-  // Certs → applied builds.
-  { a: "E-06", b: "P-04" },
+  // Marquee: the security credential and the security build are one node.
+  { a: "E-06", b: "P-04", marquee: true },
+  // Cert → applied build.
   { a: "E-07", b: "P-05" },
 ];

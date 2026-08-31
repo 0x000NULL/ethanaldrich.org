@@ -1,0 +1,508 @@
+<!doctype html>
+<!--
+  SOURCE OF TRUTH for public/resume.pdf.
+
+  Regenerate with:  npm run build:resume
+
+  Deliberately standalone: no external assets, no webfonts, no network. Kept
+  outside src/ so it stays clear of the Next build, the tsconfig type-check,
+  and the 90% vitest coverage gate. Open it directly in a browser and hit
+  Ctrl+P for a live print preview while editing.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ethan Aldrich — Resume</title>
+    <style>
+      /* Page size only. Margins come from page.pdf() so they repeat on page 2. */
+      @page {
+        size: Letter;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Calibri, "Helvetica Neue", Arial, Helvetica,
+          sans-serif;
+        font-size: 9.6pt;
+        line-height: 1.36;
+        color: #111;
+        orphans: 2;
+        widows: 2;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* ── Header ─────────────────────────────────────────────────── */
+
+      header {
+        text-align: center;
+        border-bottom: 2px solid #1f3a5f;
+        padding-bottom: 7px;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 21pt;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: #1f3a5f;
+        margin: 0 0 3px;
+      }
+
+      .title {
+        font-size: 10.2pt;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1px;
+      }
+
+      .subtitle {
+        font-size: 8.8pt;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .contact {
+        font-size: 8.4pt;
+        color: #444;
+        line-height: 1.5;
+      }
+
+      /* ── Sections ───────────────────────────────────────────────── */
+
+      h2 {
+        font-size: 8.8pt;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #1f3a5f;
+        border-bottom: 1px solid #9aa7b5;
+        padding-bottom: 2px;
+        margin: 12px 0 6px;
+        break-after: avoid;
+      }
+
+      p.summary {
+        margin: 0;
+        text-align: justify;
+      }
+
+      /* ── Experience ─────────────────────────────────────────────── */
+
+      .role {
+        margin-bottom: 9px;
+        break-inside: avoid;
+      }
+
+      .role:last-child {
+        margin-bottom: 0;
+      }
+
+      .role-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+
+      .role-title {
+        font-size: 10pt;
+        font-weight: 700;
+      }
+
+      /* Org on its own line — keeps a long employer name from colliding with
+         the right-aligned date in .role-head. */
+      .org {
+        font-size: 9.4pt;
+        color: #333;
+      }
+
+      .meta {
+        font-size: 8.4pt;
+        color: #555;
+        white-space: nowrap;
+      }
+
+      ul {
+        margin: 3px 0 0;
+        padding-left: 15px;
+      }
+
+      li {
+        margin-bottom: 1.5px;
+        break-inside: avoid;
+      }
+
+      li::marker {
+        font-size: 0.8em;
+        color: #6b7785;
+      }
+
+      /* ── Projects ───────────────────────────────────────────────── */
+
+      .project {
+        margin-bottom: 6px;
+        break-inside: avoid;
+      }
+
+      .project:last-child {
+        margin-bottom: 0;
+      }
+
+      .project-head {
+        font-size: 9.4pt;
+      }
+
+      .project-head strong {
+        font-weight: 700;
+      }
+
+      .project-head .tech {
+        color: #555;
+        font-size: 8.4pt;
+      }
+
+      .project p {
+        margin: 1px 0 0;
+      }
+
+      /* ── Skills / Education / Certs ─────────────────────────────── */
+
+      .row {
+        margin-bottom: 3px;
+        break-inside: avoid;
+      }
+
+      .row:last-child {
+        margin-bottom: 0;
+      }
+
+      .row .label {
+        font-weight: 700;
+      }
+
+      .edu {
+        margin-bottom: 5px;
+        break-inside: avoid;
+      }
+
+      .edu:last-child {
+        margin-bottom: 0;
+      }
+
+      .edu-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+
+      .edu-note {
+        font-size: 8.6pt;
+        color: #555;
+        font-style: italic;
+      }
+
+      .certs {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Ethan Aldrich</h1>
+      <div class="title">
+        Chief Technology Officer &middot; Software, Infrastructure &amp;
+        Security Engineering
+      </div>
+      <div class="subtitle">
+        Full-Stack Development &middot; Platform Engineering &middot; Network
+        &amp; IT Operations
+      </div>
+      <div class="contact">
+        Las Vegas, NV &middot; Remote / Relocation OK &middot; (702) 817-9986
+        &middot; <a href="mailto:ethan@ethanaldrich.org">ethan@ethanaldrich.org</a><br />
+        <a href="https://ethanaldrich.org">ethanaldrich.org</a> &middot;
+        <a href="https://www.linkedin.com/in/ethan-aldrich">linkedin.com/in/ethan-aldrich</a>
+        &middot; <a href="https://github.com/0x000NULL">github.com/0x000NULL</a>
+      </div>
+    </header>
+
+    <h2>Summary</h2>
+    <p class="summary">
+      Technology leader and hands-on engineer responsible for the full IT,
+      network, and software footprint of two Las Vegas companies: a rental car
+      operator with eight locations, and a management group with nine
+      subsidiaries. Comfortable end to end: Cisco IOS and VLAN design,
+      Kubernetes and CI/CD, and the Node.js and C#/.NET applications that
+      replaced a paper-driven business with software I wrote. Currently pursuing
+      a B.S. in Cybersecurity and Information Assurance, with CompTIA A+,
+      Network+, IT Operations Specialist, and ITIL v4 in hand.
+    </p>
+
+    <h2>Experience</h2>
+
+    <div class="role">
+      <div class="role-head">
+        <div class="role-title">Chief Technology Officer</div>
+        <div class="meta">Sep 2021 – Present &middot; Las Vegas, NV</div>
+      </div>
+      <div class="org">
+        Malco Enterprises of Nevada &middot; Budget Rent A Car of Las Vegas
+      </div>
+      <ul>
+        <li>
+          Lead technology strategy, infrastructure, and cybersecurity operations
+          across eight rental locations serving the Las Vegas metropolitan area.
+        </li>
+        <li>
+          Own the network end to end — SD-WAN, Cisco IOS, VLAN segmentation, PoE,
+          firewall policy, VPN infrastructure, and intrusion monitoring — and
+          maintain PCI DSS compliance across all payment processing systems.
+        </li>
+        <li>
+          Architected and operate the distributed application stack that replaced
+          paper processes company-wide: digital check-in/check-out
+          (~5,600 transactions/day), a claims management platform with vehicle
+          lifecycle tracking, digital vehicle inspections, and a rental workflow
+          automation engine — Node.js/Express/MongoDB behind Nginx with load
+          balancing on DigitalOcean Kubernetes.
+        </li>
+        <li>
+          Built Maverik (C#/.NET), an API wrapper over the mainframe rental
+          platform, improving operational efficiency by 85%.
+        </li>
+        <li>
+          Deployed and maintain six self-hosted GitHub Actions runners across two
+          GitHub organizations for parallel CI/CD across all internal repositories.
+        </li>
+        <li>
+          Run the internal Python service tier: FastAPI APIs, Celery/Redis job
+          queues monitored with Flower, and SQLAlchemy/Alembic schema migrations,
+          with cloud infrastructure managed as code in Terraform.
+        </li>
+        <li>
+          Built internal Model Context Protocol (MCP) servers putting the rental,
+          fleet-reporting, and rate-management SQL Server databases behind an
+          agent-callable interface.
+        </li>
+        <li>
+          Administer Active Directory (provisioning, Group Policy, access
+          control), Windows and Linux servers, SQL Server with Power BI
+          reporting, the Wizard and WAND rental platforms, and a GLPI-based ITSM
+          practice.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <div class="role-title">Chief Technology Officer</div>
+        <div class="meta">Nov 2021 – Present &middot; Las Vegas, NV</div>
+      </div>
+      <div class="org">Twelve Management</div>
+      <ul>
+        <li>
+          Built the complete IT and network infrastructure from the ground up for
+          a management company and nine subsidiaries spanning development, jet
+          charter, and retail.
+        </li>
+        <li>
+          Directed cross-functional technical operations for a team of 52,
+          holding system reliability, security, and scalability through a period
+          of rapid organizational growth.
+        </li>
+        <li>
+          Established standardized technology practices, security policies, and
+          operational procedures across all subsidiary entities.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <div class="role-title">Assistant Store Manager</div>
+        <div class="meta">Jun 2017 – Sep 2021 &middot; Las Vegas, NV</div>
+      </div>
+      <div class="org">Starbucks Coffee Company</div>
+      <ul>
+        <li>
+          Led shift operations, scheduling, inventory, and staff training for a
+          high-volume retail location.
+        </li>
+      </ul>
+    </div>
+
+    <h2>Projects &amp; Open Source</h2>
+
+    <div class="project">
+      <div class="project-head">
+        <strong>Montr — Distributed Digital Signage</strong>
+        <span class="tech">&middot; Rust, Node.js/TypeScript &middot; 2025 – Present</span>
+      </div>
+      <p>
+        Rust playback client and a Node/TypeScript control server driving up to
+        25 concurrent displays over WebSocket. Cross-platform builds (Linux,
+        macOS, Windows) with an automated multi-platform release pipeline in
+        GitHub Actions. Running in production across Budget lobby displays.
+      </p>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <strong>Internal MCP Tooling</strong>
+        <span class="tech">&middot; Python, Model Context Protocol, SQL Server &middot; 2025 – Present</span>
+      </div>
+      <p>
+        Model Context Protocol servers exposing the Wizard rental,
+        fleet-reporting, and rate-management SQL Server databases to AI agents
+        through a typed tool interface: object and schema search, query explain
+        plans, per-database health checks, and SQL execution — so operational
+        questions get answered without handing out direct database access.
+      </p>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <strong>Yacht Network &amp; AV Integration</strong>
+        <span class="tech">&middot; 2025</span>
+      </div>
+      <p>
+        Full network and AV build on an Ocean Alexander 32E and a Princess Y72:
+        UniFi switching and Wi-Fi, VLAN segmentation, PoE, Control4 integration,
+        and dual-Starlink failover.
+      </p>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <strong>Proxmox Homelab</strong>
+        <span class="tech">&middot; 2020 – Present</span>
+      </div>
+      <p>
+        Multi-node Proxmox VE cluster running dozens of self-hosted services
+        behind Nginx and Tailscale — the proving ground for most of what later
+        ships at work.
+      </p>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <strong>ethanaldrich.org</strong>
+        <span class="tech">&middot; Next.js 16, React 19, TypeScript</span>
+      </div>
+      <p>
+        Personal site built as an interactive Tokyo-Metro subway map:
+        config-driven data layer, pure-TypeScript SVG geometry with no DOM
+        measurement, a 90% unit-coverage gate, and Playwright end-to-end tests
+        across five browser targets.
+      </p>
+    </div>
+
+    <h2>Skills</h2>
+
+    <div class="row">
+      <span class="label">Infrastructure &amp; Cloud:</span> Kubernetes &middot;
+      Docker &middot; Proxmox VE &middot; DigitalOcean &middot; S3-compatible
+      object storage &middot; Nginx (reverse proxy, load balancing) &middot;
+      Linux (Ubuntu/Debian/Arch) &middot; Windows Server
+    </div>
+    <div class="row">
+      <span class="label">Networking:</span> SD-WAN &middot; Cisco IOS &middot;
+      VLAN segmentation &middot; UniFi &middot; Firewalls &middot; VPN &middot;
+      DNS/DHCP &middot; PoE &middot; Tailscale &middot; Starlink failover
+    </div>
+    <div class="row">
+      <span class="label">Security &amp; Compliance:</span> PCI DSS &middot;
+      network segmentation &middot; firewall and VPN policy &middot; intrusion
+      monitoring &middot; Active Directory access control &middot; TLS/SSL
+      &middot; GitHub Security (CodeQL, Dependabot, secret scanning) &middot;
+      GPG-signed commits &middot; security auditing
+    </div>
+    <div class="row">
+      <span class="label">Languages:</span> TypeScript &middot; JavaScript
+      &middot; Python &middot; C# &middot; Rust &middot; C/C++ &middot; SQL
+      (T-SQL) &middot; Bash &middot; PowerShell &middot; HTML/CSS
+    </div>
+    <div class="row">
+      <span class="label">Frameworks &amp; Runtimes:</span> Node.js &middot;
+      Express &middot; React &middot; Next.js &middot; Astro &middot; FastAPI
+      &middot; .NET &middot; TailwindCSS &middot; Vite
+    </div>
+    <div class="row">
+      <span class="label">Data &amp; Queues:</span> PostgreSQL &middot; MongoDB
+      &middot; Microsoft SQL Server &middot; SQLite &middot; Redis &middot;
+      Celery &middot; Flower &middot; SQLAlchemy &middot; Alembic &middot; Power
+      BI
+    </div>
+    <div class="row">
+      <span class="label">Architecture:</span> Microservices &middot;
+      event-driven architecture &middot; distributed systems &middot; async job
+      queues &middot; REST API design &middot; CI/CD pipeline design
+    </div>
+    <div class="row">
+      <span class="label">DevOps &amp; Automation:</span> GitHub Actions
+      (self-hosted runners, multi-org) &middot; Dependabot &middot; branch
+      protection &middot; semantic versioning &middot; multi-platform release
+      automation &middot; Vitest and Playwright test automation
+    </div>
+    <div class="row">
+      <span class="label">APIs &amp; Integrations:</span> Model Context Protocol
+      (MCP) servers &middot; Microsoft Graph API &middot; DigitalOcean API
+      &middot; RingCentral &middot; NetSuite &middot; Mailcow
+    </div>
+    <div class="row">
+      <span class="label">IT Operations &amp; Leadership:</span> ITIL v4 &middot;
+      GLPI ITSM &middot; Active Directory and Group Policy &middot; technology
+      procurement and vendor evaluation &middot; cross-functional team leadership
+    </div>
+
+    <h2>Education</h2>
+
+    <div class="edu">
+      <div class="edu-head">
+        <div>
+          <strong>Western Governors University</strong> — B.S. Cybersecurity and
+          Information Assurance
+        </div>
+        <div class="meta">Expected May 2029</div>
+      </div>
+      <div class="edu-note">
+        M.S. Cybersecurity and Information Assurance planned.
+      </div>
+    </div>
+
+    <div class="edu">
+      <div class="edu-head">
+        <div>
+          <strong>West Career and Technical Academy</strong> — High School
+          Diploma, Graphic Design &middot; Las Vegas, NV
+        </div>
+        <div class="meta">2015 – 2020</div>
+      </div>
+    </div>
+
+    <h2>Certifications</h2>
+    <div class="row certs">
+      CompTIA A+ &middot; CompTIA Network+ &middot; CompTIA IT Operations
+      Specialist &middot; ITIL v4 Foundations
+    </div>
+  </body>
+</html>

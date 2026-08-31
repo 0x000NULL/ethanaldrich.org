@@ -18,17 +18,17 @@ describe("buildTrainRuntimes", () => {
 
   it("gives express trains a higher speed", () => {
     const [express] = buildTrainRuntimes([
-      { id: "x", lineCode: "C", fromCode: "C-01", toCode: "C-02", express: true, nowServing: "x" },
+      { id: "x", lineCode: "C", fromCode: "C-01", toCode: "C-03", express: true, nowServing: "x" },
     ]);
     const [local] = buildTrainRuntimes([
-      { id: "y", lineCode: "C", fromCode: "C-01", toCode: "C-02", nowServing: "y" },
+      { id: "y", lineCode: "C", fromCode: "C-01", toCode: "C-03", nowServing: "y" },
     ]);
     expect(express.ctx.speed).toBeGreaterThan(local.ctx.speed);
   });
 
   it("derives a backward direction when toCode precedes fromCode", () => {
     const [r] = buildTrainRuntimes([
-      { id: "rev", lineCode: "P", fromCode: "P-09", toCode: "P-01", nowServing: "rev" },
+      { id: "rev", lineCode: "P", fromCode: "P-07", toCode: "P-01", nowServing: "rev" },
     ]);
     expect(r.initial.direction).toBe(-1);
   });

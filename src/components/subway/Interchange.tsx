@@ -12,7 +12,7 @@ interface InterchangeProps {
 /**
  * The white "peanut" connector linking two transfer stations. Drawn beneath the
  * roundels (in StationLayer) so the roundels sit on top. The marquee transfer
- * (Fimil) is rendered heavier.
+ * (Security+ ↔ Security Observability Stack) is rendered heavier.
  */
 export default function Interchange({ transfer }: InterchangeProps) {
   const a = STATION_MAP[transfer.a];

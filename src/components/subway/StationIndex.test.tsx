@@ -25,6 +25,14 @@ describe("StationIndex", () => {
     expect(queryByText("Education Line")).toBeTruthy();
   });
 
+  it("keeps the resume link reachable even when collapsed", () => {
+    const { getByRole } = render(<StationIndex />);
+    const link = getByRole("link", { name: /résumé/i });
+    expect(link.getAttribute("href")).toBe("/resume.pdf");
+    fireEvent.click(getByRole("button", { name: /hide/i }));
+    expect(getByRole("link", { name: /résumé/i })).toBeTruthy();
+  });
+
   it("frames a line (changes the transform) when clicked", () => {
     const { getByText } = render(<StationIndex />);
     fireEvent.click(getByText("Projects Line"));

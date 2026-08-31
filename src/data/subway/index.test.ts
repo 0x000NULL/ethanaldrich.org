@@ -24,7 +24,7 @@ describe("network config", () => {
   });
 
   it("looks up stations and lines by code", () => {
-    expect(getStation("P-09")?.name).toBe("Fimil Platform");
+    expect(getStation("P-07")?.name).toBe("Montr Signage");
     expect(getStation("nope")).toBeUndefined();
     expect(getLine("E")?.name).toBe("Education Line");
     expect(getLine("X")).toBeUndefined();
@@ -66,11 +66,11 @@ describe("octolinearity (independent re-check)", () => {
 });
 
 describe("interchange topology", () => {
-  it("the Fimil marquee transfer connects Career and Projects", () => {
+  it("the marquee transfer connects Education and Projects", () => {
     const marquee = TRANSFERS.find((t) => t.marquee);
-    expect(marquee).toMatchObject({ a: "C-02", b: "P-09" });
-    expect(getStation("C-02")?.lineCodes).toContain("C");
-    expect(getStation("P-09")?.lineCodes).toContain("P");
+    expect(marquee).toMatchObject({ a: "E-06", b: "P-04" });
+    expect(getStation("E-06")?.lineCodes).toContain("E");
+    expect(getStation("P-04")?.lineCodes).toContain("P");
   });
 
   it("Security+ and CySA+ transfer Education into Projects (E∩P)", () => {
@@ -81,13 +81,14 @@ describe("interchange topology", () => {
 });
 
 describe("line geometry resolution", () => {
-  it("inserts the Career via-corner between C-01 and C-02", () => {
+  it("inserts the Career via-corner between C-00 and C-01", () => {
     const trunk = getTrunkPolyline("C");
-    // C-01, corner (15,8), C-02 → 3 vertices, 2 stations indexed.
-    expect(trunk.grid).toHaveLength(3);
-    expect(trunk.grid[1]).toEqual({ gx: 15, gy: 8 });
-    expect(trunk.stationVertex["C-01"]).toBe(0);
-    expect(trunk.stationVertex["C-02"]).toBe(2);
+    // C-00, corner (11,12), C-01, C-03 → 4 vertices, 3 stations indexed.
+    expect(trunk.grid).toHaveLength(4);
+    expect(trunk.grid[1]).toEqual({ gx: 11, gy: 12 });
+    expect(trunk.stationVertex["C-00"]).toBe(0);
+    expect(trunk.stationVertex["C-01"]).toBe(2);
+    expect(trunk.stationVertex["C-03"]).toBe(3);
   });
 
   it("renders the Education MSCSIA branch", () => {

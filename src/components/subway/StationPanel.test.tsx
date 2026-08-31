@@ -14,20 +14,22 @@ describe("StationPanel", () => {
   });
 
   it("renders the selected station's case-study card", () => {
-    useNavStore.setState({ selectedStationCode: "P-09", panelOpen: true });
+    useNavStore.setState({ selectedStationCode: "C-01", panelOpen: true });
     const { getByRole, getByText } = render(<StationPanel />);
     const dialog = getByRole("dialog");
-    expect(within(dialog).getByText("Fimil Platform")).toBeTruthy();
+    expect(within(dialog).getByText("Malco / Budget")).toBeTruthy();
     expect(within(dialog).getByText(/In service/i)).toBeTruthy();
     expect(within(dialog).getByText("Kubernetes")).toBeTruthy(); // stack chip
-    expect(getByText(/fimil\.dev/i)).toBeTruthy(); // link
+    expect(getByText(/Résumé \(PDF\)/i)).toBeTruthy(); // link
   });
 
   it("shows transfers and navigates to the partner station", () => {
-    useNavStore.setState({ selectedStationCode: "P-09", panelOpen: true });
+    useNavStore.setState({ selectedStationCode: "E-06", panelOpen: true });
     const { getByRole } = render(<StationPanel />);
-    fireEvent.click(getByRole("button", { name: /Transfer to Fimil — Founder & CTO/i }));
-    expect(useNavStore.getState().selectedStationCode).toBe("C-02");
+    fireEvent.click(
+      getByRole("button", { name: /Transfer to Security Observability Stack/i })
+    );
+    expect(useNavStore.getState().selectedStationCode).toBe("P-04");
   });
 
   it("links related blog posts", () => {
@@ -48,7 +50,7 @@ describe("StationPanel", () => {
   });
 
   it("flags express service", () => {
-    useNavStore.setState({ selectedStationCode: "C-02", panelOpen: true });
+    useNavStore.setState({ selectedStationCode: "C-03", panelOpen: true });
     const { getByText } = render(<StationPanel />);
     expect(getByText("Express")).toBeTruthy();
   });
