@@ -6,10 +6,10 @@ describe("Interchange", () => {
   it("renders a peanut for a valid transfer", () => {
     const { container } = render(
       <svg>
-        <Interchange transfer={{ a: "C-02", b: "P-09", marquee: true }} />
+        <Interchange transfer={{ a: "E-06", b: "P-04", marquee: true }} />
       </svg>
     );
-    const g = container.querySelector('[data-transfer="C-02-P-09"]')!;
+    const g = container.querySelector('[data-transfer="E-06-P-04"]')!;
     expect(g).toBeTruthy();
     expect(g.querySelectorAll("line").length).toBe(2); // outline + fill
   });

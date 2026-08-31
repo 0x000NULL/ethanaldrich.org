@@ -35,6 +35,16 @@ export default function StationIndex() {
         </button>
       </div>
 
+      {/* Outside the collapse so the résumé stays reachable when the legend is hidden. */}
+      <a
+        href="/resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block text-xl text-[var(--metro-ink-dim)] underline hover:text-[var(--metro-ink)]"
+      >
+        Résumé (PDF) ↗
+      </a>
+
       {open && (
         <>
           <ul className="mt-4 space-y-3">

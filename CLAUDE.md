@@ -9,6 +9,7 @@ npm run dev           # Start dev server at localhost:3000
 npm run build         # Production build (next build)
 npm run start         # Start production server (next start -p ${PORT:-3000})
 npm run lint          # Run ESLint
+npm run build:resume  # Regenerate public/resume.pdf from resume/resume.html
 
 # Testing
 npm run test          # Vitest in watch mode
@@ -28,8 +29,8 @@ The codebase is layered, lowest to highest: **data → pure geometry/logic → S
 
 Immutable config arrays re-exported through `index.ts`. **Render code never hard-codes a station** — it iterates config.
 
-- `lines.ts` — `LINES` (4 active: **E** Education cyan, **C** Career red/express, **P** Projects magenta, **W** Weekend gray/dashed) and `TRANSFERS` (3 peanut interchanges; C-02↔P-09 "Fimil" is the marquee).
-- `stations.ts` — `STATIONS` (21). Status is `operational` | `in-progress` | `planned`. Optional per-station `labelSide` (`above`|`below`|`right`) and `labelBand` (`near`|`far`) override label placement to dodge branches/peanuts. Other optional fields: `dates`, `stack`, `links`, `relatedPosts`, `hasBody`.
+- `lines.ts` — `LINES` (4 active: **E** Education cyan, **C** Career red/express, **P** Projects magenta, **W** Weekend gray/dashed) and `TRANSFERS` (2 peanut interchanges; E-06↔P-04 "Security+ meets the observability build" is the marquee).
+- `stations.ts` — `STATIONS` (24). Status is `operational` | `in-progress` | `planned`. Optional per-station `labelSide` (`above`|`below`|`right`) and `labelBand` (`near`|`far`) override label placement to dodge branches/peanuts. Other optional fields: `dates`, `stack`, `links`, `relatedPosts`, `hasBody`.
 - `trains.ts` — `TRAINS` (3): which line, from/to station, `nowServing` label, `eta`, `express?`.
 - `alerts.ts` — `ALERTS` (service announcements; `dismissible` flag).
 - `types.ts` — `LineCode` (`E|C|P|W`), `StationStatus`, `Station`, `Line`, `Transfer`, `Train`, `ServiceAlert`, `NetworkConfig`.

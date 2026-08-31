@@ -30,7 +30,10 @@ import type { LineCode, Train } from "@/data/subway/types";
  * left and bottom keeps map content clear of the legend (top-left) and departure
  * board (bottom-left); modest top room clears the alert banner.
  */
-export const VIEWBOX_PAD = { top: 110, right: 80, bottom: 150, left: 320 };
+// The left pad reserves room for the StationIndex legend, which floats over the
+// map. It is proportional to content width: the E line now starts at gx=-1, so
+// 320 no longer cleared the panel once the wider map scaled down to fit.
+export const VIEWBOX_PAD = { top: 110, right: 80, bottom: 150, left: 480 };
 
 export interface ViewBox {
   x: number;

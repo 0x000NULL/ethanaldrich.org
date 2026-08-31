@@ -27,6 +27,14 @@ export default function StripMapView() {
       <p className="mt-1 text-sm text-[var(--metro-ink-dim)]">
         Tap a station for the story.
       </p>
+      <a
+        href="/resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block text-sm text-[var(--metro-ink-dim)] underline"
+      >
+        Résumé (PDF) ↗
+      </a>
 
       {LINES.map((line) => {
         const stations = getStationsForLine(line.code);
