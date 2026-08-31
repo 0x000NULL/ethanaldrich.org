@@ -12,6 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
+    {
+      // Static asset, but a crawlable one — nothing else links to it otherwise.
+      url: `${baseUrl}/resume.pdf`,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
   ];
 
   const blogIndex: MetadataRoute.Sitemap = [
