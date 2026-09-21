@@ -38,10 +38,32 @@ Out of scope:
 - user-supplied route parameters are sanitised before touching the filesystem
   (`src/lib/blog.ts`, `src/lib/stations.ts`), after a CWE-22 path traversal was
   found and fixed in `423f07f`
-- rate limiting on the API routes (`src/lib/rate-limit.ts`)
+- rate limiting on the API routes (`src/lib/rate-limit.ts`). `getClientIp` reads
+  the **rightmost** `X-Forwarded-For` hop, not the leftmost: everything to the
+  left of the entry our own proxy appends is supplied by the caller, so reading
+  `split(",")[0]` let anyone mint a fresh quota key per request. If the number
+  of trusted proxies in front of this app ever changes, that index must change
+  with it
+- CodeQL static analysis (`.github/workflows/codeql.yml`) on every push and
+  weekly, since advisories land between pushes
 - Dependabot for npm and GitHub Actions, and `npm audit` enforced in CI at
   `--audit-level=high`
+- the security headers are asserted in both the production and development
+  branches (`src/__tests__/security-headers.test.ts`) and re-checked against a
+  real built server in CI
 - GPG-signed commits
+
+## Dependency overrides
+
+`package.json` pins two transitive dependencies. Neither is a downgrade for its
+own sake:
+
+- **`gray-matter` → `js-yaml@3.15.2`.** `3.15.2` is the patched 3.x. The pin is
+  scoped to `gray-matter` rather than applied globally because `gray-matter`
+  calls `yaml.safeLoad`, which was **removed** in js-yaml 4.x — a global pin
+  would silently break frontmatter parsing, and forcing 4.x on it breaks it
+  outright. ESLint keeps its own js-yaml 4 alongside.
+- **`yaml@2.9.1`** — patched release, no API change.
 
 ## Known accepted risk
 

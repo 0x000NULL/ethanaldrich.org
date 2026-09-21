@@ -13,6 +13,16 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: basic-xxs
+    # Without this, App Platform probes the TCP port only — a process that binds
+    # 3000 and then 500s on every request is considered healthy and gets rolled
+    # out over a working one.
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 20
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
     routes:
       - path: /
     envs:
@@ -22,8 +32,14 @@ services:
       - key: NEXT_TELEMETRY_DISABLED
         scope: RUN_AND_BUILD_TIME
         value: "1"
+    # A failed deploy was previously silent.
+    alerts:
+      - rule: DEPLOYMENT_FAILED
+      - rule: DOMAIN_FAILED
 domains:
   - domain: ethanaldrich.org
     type: PRIMARY
+  # NOTE: this ALIAS is declared but www does not currently resolve. That is a
+  # DNS record in the DigitalOcean panel, not something this file can fix.
   - domain: www.ethanaldrich.org
     type: ALIAS

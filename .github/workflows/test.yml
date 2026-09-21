@@ -41,7 +41,53 @@ jobs:
           retention-days: 7
 
   e2e-tests:
-    name: E2E Tests
+    # Chromium alone is what let the last WebKit regression through:
+    # `upgrade-insecure-requests` is exempted on localhost by Chrome but not by
+    # WebKit, so the page rendered completely unstyled with no JS and CI saw
+    # nothing. playwright.config.ts declares five projects; run the ones that
+    # can actually fail differently, and keep mobile in too - mobile-strip.spec.ts
+    # was dead in CI because no mobile project ever ran.
+    name: E2E Tests (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit, "Mobile Safari"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Mobile Safari rides on the webkit binary, so install that rather than
+      # the project name, which is not a browser Playwright knows how to fetch.
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.project == 'Mobile Safari' && 'webkit' || matrix.project }}
+
+      - name: Run E2E tests
+        run: npm run test:e2e -- --project="${{ matrix.project }}"
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 30
+
+  production-headers:
+    # The security headers are this repo's headline control, and e2e runs against
+    # `npm run dev`, where the production-only ones are deliberately absent. Assert
+    # them against a real built server - with curl, not a browser, so nothing has
+    # to render under upgrade-insecure-requests over plain-http localhost.
+    name: Production Headers
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -56,22 +102,43 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Build application
         run: npm run build
 
-      - name: Run E2E tests
-        run: npm run test:e2e -- --project=chromium
+      - name: Start the production server
+        run: |
+          npx next start -p 3000 &
+          for _ in $(seq 1 60); do
+            curl -sSf http://localhost:3000/ >/dev/null 2>&1 && exit 0
+            sleep 1
+          done
+          echo "::error::production server did not come up"
+          exit 1
 
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+      - name: Assert the production headers are present
+        run: |
+          set -euo pipefail
+          headers="$(curl -sSI http://localhost:3000/ | tr "[:upper:]" "[:lower:]")"
+          echo "$headers"
+          for expected in             "x-content-type-options: nosniff"             "x-frame-options: deny"             "x-xss-protection: 0"             "referrer-policy: strict-origin-when-cross-origin"             "permissions-policy:"             "strict-transport-security: max-age=63072000"             "content-security-policy:"
+          do
+            if ! grep -q "$expected" <<<"$headers"; then
+              echo "::error::missing header: $expected"
+              exit 1
+            fi
+          done
+          csp="$(grep "content-security-policy:" <<<"$headers")"
+          for directive in "object-src 'none'" "base-uri 'self'"                            "form-action 'self'" "frame-ancestors 'none'"                            "upgrade-insecure-requests"
+          do
+            if ! grep -q "$directive" <<<"$csp"; then
+              echo "::error::missing CSP directive: $directive"
+              exit 1
+            fi
+          done
+          if grep -q "unsafe-eval" <<<"$csp"; then
+            echo "::error::CSP allows unsafe-eval"
+            exit 1
+          fi
 
   lint:
     name: Lint
