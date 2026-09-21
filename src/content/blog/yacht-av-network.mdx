@@ -7,17 +7,7 @@ author: "Ethan Aldrich"
 tags: ["networking", "unifi", "av", "starlink"]
 ---
 
-LUXURY YACHT NETWORK & AV INSTALLATION
-=======================================
-UniFi, Control4, and Dual Starlink Integration
-
-Author: Ethan Aldrich
-Date: February 2026
-Project Type: Professional Installation
-Status: Complete
-
-TABLE OF CONTENTS
------------------
+### Table of Contents
 1. Introduction & Project Overview
 2. The Vessels
 3. Dual-Starlink Configuration Strategy
@@ -30,17 +20,14 @@ TABLE OF CONTENTS
 10. Lessons Learned & Recommendations
 11. Conclusion
 
-============================================================
-1. INTRODUCTION & PROJECT OVERVIEW
-============================================================
+## 1. Introduction & Project Overview
 
 This article documents a professional installation project involving
 two luxury yachts: an Ocean Alexander 32E and a Princess Y72. The
 scope included complete networking infrastructure, audio-visual
 systems, and satellite connectivity for both vessels.
 
-PROJECT SCOPE
--------------
+### Project Scope
 - Ocean Alexander 32E: Retrofit from factory-installed systems
 - Princess Y72: New installation on delivery
 
@@ -56,12 +43,9 @@ strategy per yacht that optimizes both cost and coverage across
 different operating scenarios - US coastal cruising versus
 international or open-ocean voyaging.
 
-============================================================
-2. THE VESSELS
-============================================================
+## 2. The Vessels
 
-OCEAN ALEXANDER 32E
--------------------
+### Ocean Alexander 32E
 The Ocean Alexander 32E is a luxury explorer yacht stretching
 approximately 100 feet in length. Known for its robust construction
 and long-range cruising capabilities, the 32E presented unique
@@ -76,8 +60,7 @@ The explorer yacht design, with multiple decks and heavy steel
 construction, created interesting RF propagation challenges that
 required careful access point placement.
 
-PRINCESS Y72
-------------
+### Princess Y72
 The Princess Y72 is a 72-foot motor yacht from the renowned British
 manufacturer. As a new installation, we had the advantage of planning
 cable runs and equipment locations from the start:
@@ -92,17 +75,14 @@ solutions and equipment configurations. The installation approach
 was standardized to maintain consistency and simplify future
 maintenance and support.
 
-============================================================
-3. DUAL-STARLINK CONFIGURATION STRATEGY
-============================================================
+## 3. Dual-Starlink Configuration Strategy
 
 One of the most innovative aspects of this installation was the
 dual-Starlink per vessel strategy. Each yacht has TWO Starlink
 terminals with different service plans optimized for different
 operating scenarios.
 
-TERMINAL 1: STANDARD STARLINK WITH ROAM PLAN
---------------------------------------------
+### Terminal 1: Standard Starlink with Roam Plan
 The first terminal uses a standard residential Starlink dish with
 the Roam plan activated:
 
@@ -121,8 +101,7 @@ The Roam plan allows the dish to be used anywhere within the US
 service area, making it perfect for coastal cruising from Florida
 to New England or Pacific Coast routes.
 
-TERMINAL 2: MARITIME STARLINK WITH GLOBAL PRIORITY
---------------------------------------------------
+### Terminal 2: Maritime Starlink with Global Priority
 The second terminal uses a proper maritime-rated Starlink dish
 with Global Priority service:
 
@@ -138,8 +117,7 @@ Advantages:
 - Priority network access for consistent speeds
 - In-motion capability at higher speeds
 
-FAILOVER CONFIGURATION
-----------------------
+### Failover Configuration
 The UniFi Dream Machine Pro manages both Starlink connections using
 multi-WAN load balancing:
 
@@ -152,8 +130,7 @@ The failover logic is configured to:
 3. Load balance across both for maximum throughput when appropriate
 4. Allow manual override via UniFi dashboard for specific scenarios
 
-COST OPTIMIZATION
------------------
+### Cost Optimization
 This dual-terminal approach saves significant money compared to
 running Maritime Global Priority full-time:
 
@@ -165,8 +142,7 @@ For vessels that spend 80% of their time in US waters with
 occasional international trips, this strategy can reduce annual
 connectivity costs substantially.
 
-MOUNTING CONSIDERATIONS
------------------------
+### Mounting Considerations
 Installing two Starlink dishes per vessel required careful planning:
 
 Location Selection:
@@ -185,16 +161,13 @@ Both dishes are mounted on the upper deck/flybridge area with
 custom fabricated brackets designed for each vessel's specific
 superstructure geometry.
 
-============================================================
-4. UNIFI NETWORK INFRASTRUCTURE
-============================================================
+## 4. UniFi Network Infrastructure
 
 The network backbone for both vessels is built on Ubiquiti's UniFi
 ecosystem, chosen for its enterprise features, central management,
 and excellent value proposition.
 
-DREAM MACHINE PRO (UDM-PRO)
----------------------------
+### Dream Machine Pro (UDM-Pro)
 The UDM-Pro serves as the network core:
 
 - Router/firewall with IDS/IPS capability
@@ -208,8 +181,7 @@ with proper ventilation. Marine environments are harsh on
 electronics, so maintaining appropriate temperature and humidity
 is critical.
 
-REDUNDANT POWER SUPPLY (RPS)
-----------------------------
+### Redundant Power Supply (RPS)
 Network uptime is critical on a vessel where connectivity may be
 the only link to emergency services or weather updates. The UniFi
 RPS provides:
@@ -222,8 +194,7 @@ RPS provides:
 The RPS is particularly important during anchor or marina stays
 where shore power connections can be unstable.
 
-ACCESS POINTS
--------------
+### Access Points
 WiFi coverage throughout both vessels is provided by UniFi U6/U7
 series access points:
 
@@ -247,8 +218,7 @@ Placement was determined through site surveys considering:
 Each vessel has 6-8 access points depending on layout, all
 powered via PoE from the central switches.
 
-POE SWITCHES
-------------
+### PoE Switches
 UniFi PoE switches distribute power and data throughout the vessel:
 
 - 24-port and 16-port models depending on location
@@ -260,39 +230,33 @@ Switches are installed in distribution points throughout each
 deck, minimizing cable run lengths while maintaining proper
 network topology.
 
-============================================================
-5. VLAN ARCHITECTURE & NETWORK SEGMENTATION
-============================================================
+## 5. VLAN Architecture & Network Segmentation
 
 Proper network segmentation is critical for both security and
 performance. The VLAN architecture separates traffic into distinct
 broadcast domains:
 
-VLAN 1 - MANAGEMENT (Native)
-----------------------------
+### VLAN 1 - Management (Native)
 - UniFi devices
 - Network infrastructure
 - Administrative access only
 - Isolated from all guest traffic
 
-VLAN 10 - CREW
---------------
+### VLAN 10 - Crew
 - Crew personal devices
 - Crew workstations
 - Internal communications
 - Access to onboard systems
 - Internet access
 
-VLAN 20 - GUEST
----------------
+### VLAN 20 - Guest
 - Guest personal devices
 - Captive portal capability
 - Internet access only
 - No access to internal systems
 - Bandwidth limits applied
 
-VLAN 30 - IOT/CONTROL4
-----------------------
+### VLAN 30 - IoT/Control4
 - Control4 controllers and devices
 - Audio/video equipment
 - Lighting controls
@@ -300,15 +264,13 @@ VLAN 30 - IOT/CONTROL4
 - Shade controls
 - Isolated from direct internet access
 
-VLAN 40 - SECURITY
-------------------
+### VLAN 40 - Security
 - UniFi Protect cameras (if installed)
 - Access control systems
 - Security sensors
 - NVR access from VLAN 1 only
 
-INTER-VLAN ROUTING
-------------------
+### Inter-VLAN Routing
 Firewall rules control traffic between VLANs:
 
 - Management can access all VLANs
@@ -322,15 +284,12 @@ This segmentation ensures that:
 3. Compromised devices cannot traverse networks
 4. Management access is properly secured
 
-============================================================
-6. CONTROL4 AV SYSTEM INTEGRATION
-============================================================
+## 6. Control4 AV System Integration
 
 Both vessels feature comprehensive Control4 smart yacht systems
 covering audio, video, lighting, and environmental controls.
 
-EA SERIES CONTROLLERS
----------------------
+### EA Series Controllers
 Each vessel has EA-series controllers managing the automation:
 
 - EA-5 as primary controller (larger vessel)
@@ -342,8 +301,7 @@ The EA controllers communicate with all endpoints via the
 dedicated IoT VLAN, ensuring reliable performance without
 interference from guest traffic.
 
-MULTI-ZONE AUDIO
-----------------
+### Multi-Zone Audio
 Audio distribution throughout each vessel includes:
 
 Zones:
@@ -371,8 +329,7 @@ Each zone can play independent sources or be grouped for
 whole-vessel audio. Volume limiting is applied to exterior
 zones for marina courtesy.
 
-VIDEO DISTRIBUTION
-------------------
+### Video Distribution
 Video throughout both vessels is distributed via:
 
 - HDBaseT matrix for primary distribution
@@ -387,8 +344,7 @@ Sources:
 - Local Plex server
 - Security camera feeds
 
-LIGHTING CONTROL
-----------------
+### Lighting Control
 Integrated lighting control includes:
 
 - Scene-based control (movie mode, entertaining, etc.)
@@ -397,8 +353,7 @@ Integrated lighting control includes:
 - Pathway lighting for safety
 - Exterior accent lighting
 
-SHADE CONTROL
--------------
+### Shade Control
 Motorized shades and blinds are integrated:
 
 - Automated based on sun position
@@ -406,8 +361,7 @@ Motorized shades and blinds are integrated:
 - Individual or group control
 - Manual override available
 
-CONTROL INTERFACES
-------------------
+### Control Interfaces
 Guests and crew interact with Control4 via:
 
 - In-wall touch panels at key locations
@@ -415,15 +369,12 @@ Guests and crew interact with Control4 via:
 - Voice control (when connectivity available)
 - Physical keypads for common functions
 
-============================================================
-7. MARINE ENVIRONMENT CHALLENGES
-============================================================
+## 7. Marine Environment Challenges
 
 Installing technology on vessels presents unique challenges that
 land-based installations never encounter.
 
-CORROSION RESISTANCE
---------------------
+### Corrosion Resistance
 Salt air is incredibly corrosive to electronics:
 
 Equipment Selection:
@@ -438,8 +389,7 @@ Installation Practices:
 - Gore-Tex vent plugs for pressure equalization
 - Regular inspection and maintenance schedule
 
-MARINE-RATED ENCLOSURES
------------------------
+### Marine-Rated Enclosures
 Not all networking equipment comes in marine versions:
 
 Solutions:
@@ -452,8 +402,7 @@ The UDM-Pro and core switches reside in climate-controlled
 spaces, but distribution equipment throughout the vessel
 requires proper protection.
 
-WATERPROOFING
--------------
+### Waterproofing
 Even interior spaces can experience moisture:
 
 Strategies:
@@ -466,8 +415,7 @@ Exterior installations (access points, speakers, cameras)
 require careful attention to mounting orientation and
 drainage.
 
-VIBRATION AND MOVEMENT
-----------------------
+### Vibration and Movement
 Vessels move constantly, creating stress on:
 
 - Cable connections (use strain relief everywhere)
@@ -478,8 +426,7 @@ Vessels move constantly, creating stress on:
 All equipment is mounted with appropriate vibration dampening,
 and cable runs include service loops to accommodate movement.
 
-POWER QUALITY
--------------
+### Power Quality
 Marine electrical systems can be challenging:
 
 Issues:
@@ -494,15 +441,12 @@ Solutions:
 - Power conditioning where necessary
 - Proper grounding (challenging on a vessel!)
 
-============================================================
-8. CABLE ROUTING & INFRASTRUCTURE
-============================================================
+## 8. Cable Routing & Infrastructure
 
 Running cables through a yacht is vastly different from
 a building installation.
 
-EXISTING PATHWAYS
------------------
+### Existing Pathways
 On the retrofit (OA 32E), we worked with existing pathways:
 
 - Traced factory-installed conduit runs
@@ -513,8 +457,7 @@ On the retrofit (OA 32E), we worked with existing pathways:
 On the new installation (Princess Y72), pathways were
 planned during commissioning with shipyard coordination.
 
-CABLE TYPES
------------
+### Cable Types
 Different cable types for different purposes:
 
 Data:
@@ -532,8 +475,7 @@ Power:
 - Marine-rated jacket material
 - Separate from data where possible
 
-PENETRATIONS
-------------
+### Penetrations
 Every penetration through a bulkhead is a potential leak point:
 
 Best Practices:
@@ -543,8 +485,7 @@ Best Practices:
 - Document all penetrations for future reference
 - Test for water intrusion after installation
 
-LABELING AND DOCUMENTATION
---------------------------
+### Labeling and Documentation
 Marine installations require excellent documentation:
 
 - Every cable labeled at both ends
@@ -555,15 +496,12 @@ Marine installations require excellent documentation:
 Future technicians (or yourself) will thank you when
 troubleshooting is needed.
 
-============================================================
-9. CONTROL4 + UNIFI INTEGRATION DETAILS
-============================================================
+## 9. Control4 + UniFi Integration Details
 
 Getting Control4 and UniFi to work together seamlessly required
 attention to several technical details.
 
-MDNS/BONJOUR
-------------
+### mDNS/Bonjour
 Control4 devices rely heavily on mDNS for discovery:
 
 Configuration:
@@ -575,8 +513,7 @@ Configuration:
 Without proper mDNS configuration, Control4 apps on guest
 devices cannot discover the controllers.
 
-IGMP SNOOPING
--------------
+### IGMP Snooping
 Multicast traffic is important for:
 
 - Audio streaming between zones
@@ -589,8 +526,7 @@ IGMP Configuration:
 - Set appropriate group membership timeouts
 - Test multicast routing between VLANs
 
-STATIC IP ASSIGNMENTS
----------------------
+### Static IP Assignments
 All Control4 devices receive static IPs via DHCP reservation:
 
 - Controllers
@@ -601,8 +537,7 @@ All Control4 devices receive static IPs via DHCP reservation:
 This ensures consistent addressing and simplifies firewall
 rules and troubleshooting.
 
-FIREWALL RULES
---------------
+### Firewall Rules
 Specific rules allow Control4 traffic while maintaining security:
 
 Allow:
@@ -615,8 +550,7 @@ Block:
 - Inter-device communication across VLANs (unless required)
 - Guest access to admin interfaces
 
-QOS CONFIGURATION
------------------
+### QoS Configuration
 Quality of Service ensures AV traffic receives priority:
 
 - Audio streams: High priority
@@ -626,12 +560,9 @@ Quality of Service ensures AV traffic receives priority:
 
 This prevents guest downloads from impacting AV performance.
 
-============================================================
-10. LESSONS LEARNED & RECOMMENDATIONS
-============================================================
+## 10. Lessons Learned & Recommendations
 
-STARLINK MOUNTING
------------------
+### Starlink Mounting
 Lesson: Initial mounting locations looked good but had partial
 sky obstructions from radar and antenna masts.
 
@@ -641,8 +572,7 @@ Recommendation:
 - Plan for multiple Starlinks with adequate separation
 - Consider dedicated mounting platform for clean sightlines
 
-NETWORK VLAN SETUP
-------------------
+### Network VLAN Setup
 Lesson: Initial guest network was too restrictive, preventing
 some smart devices (phones controlling AV) from functioning.
 
@@ -652,8 +582,7 @@ Recommendation:
 - Document all inter-VLAN rules with justification
 - Plan for guest devices that need IoT access
 
-CONTROL4 + UNIFI
-----------------
+### Control4 + UniFi
 Lesson: Default UniFi settings blocked mDNS between VLANs,
 breaking Control4 app discovery completely.
 
@@ -663,8 +592,7 @@ Recommendation:
 - Document required multicast traffic
 - Have Control4 programmer test from guest network
 
-MARINE-RATED GEAR
------------------
+### Marine-Rated Gear
 Lesson: Some "marine-rated" equipment still failed due to
 inadequate corrosion protection in tropical conditions.
 
@@ -674,8 +602,7 @@ Recommendation:
 - Plan for equipment replacement cycles
 - Maintain spare parts inventory
 
-CABLE ROUTING
--------------
+### Cable Routing
 Lesson: What looks accessible with panels open may be
 impossible to reach once the vessel is operational.
 
@@ -685,8 +612,7 @@ Recommendation:
 - Take photos of every cable pathway
 - Test all drops before closing up
 
-GENERAL RECOMMENDATIONS
------------------------
+### General Recommendations
 For anyone planning similar installations:
 
 1. Site Survey First
@@ -713,9 +639,7 @@ For anyone planning similar installations:
    - With the owner's representative
    - For ongoing support needs
 
-============================================================
-11. CONCLUSION
-============================================================
+## 11. Conclusion
 
 This dual-yacht installation project showcased the complexity
 and rewards of marine technology integration. The combination
@@ -724,8 +648,7 @@ dual-Starlink connectivity creates a truly modern vessel
 experience while respecting the unique challenges of the
 marine environment.
 
-KEY ACHIEVEMENTS
-----------------
+### Key Achievements
 - Reliable, enterprise-grade networking at sea
 - Seamless AV control throughout both vessels
 - Cost-optimized satellite connectivity strategy
@@ -742,8 +665,7 @@ effective - owners enjoy low-cost unlimited connectivity
 during US coastal cruising, with automatic failover to
 global coverage when venturing further afield.
 
-FUTURE CONSIDERATIONS
----------------------
+### Future Considerations
 - Starlink Gen 3 hardware upgrades when available
 - Additional UniFi Protect camera integration
 - Enhanced voice control with local processing
@@ -757,7 +679,3 @@ unforgiving to shortcuts and poor workmanship.
 Happy cruising!
 
 - Ethan
-
-============================================================
-END OF FILE
-============================================================

@@ -1,0 +1,72 @@
+---
+title: Case study
+---
+
+## Sole responder for a 314-person estate
+
+Malco Enterprises of Nevada runs Budget Rent A Car of Las Vegas: eight locations,
+314 employees, roughly 5,600 rental transactions a day. I am the Chief Technology
+Officer and, for security operations, the entire response function. There is no
+SOC to escalate to; detection, triage, investigation and the write-up all land on
+one desk.
+
+That shapes everything below. Tools are chosen for what one person can actually
+operate and tune, not for what looks good on an architecture diagram.
+
+## Detection and response
+
+The detection stack runs in production across all eight sites:
+
+- **Wazuh** for host intrusion detection and file integrity monitoring
+- **Suricata** for network intrusion detection
+- **Zeek** for protocol analysis and connection metadata
+- **Graylog** and **Elasticsearch** for aggregation and search
+- **Grafana** for visibility and on-call dashboards
+
+On the Windows and Azure estate, **Microsoft Defender** and **Microsoft Sentinel**
+carry endpoint and cloud detection. The ongoing work there is less about deploying
+and more about tuning: suppressing false positives without quietly losing the
+signal underneath them. An alert pipeline one person cannot keep up with is an
+alert pipeline nobody reads.
+
+When an endpoint is compromised or suspect, I run the forensic investigation
+myself: acquisition, analysis, root cause, and a written finding.
+
+## Compliance and the network
+
+I own **PCI DSS** compliance across every payment-processing system: recurring
+audits, vulnerability remediation cycles, and defending a live cardholder data
+environment. That is the constraint most decisions get measured against.
+
+The network is mine end to end: SD-WAN across the eight sites, Cisco IOS,
+VLAN segmentation, PoE, firewall policy, VPN infrastructure and intrusion
+monitoring. **Active Directory** and Group Policy for all 314 users sit on the
+same desk: provisioning, access control, policy hardening, and recurring Active
+Directory and Microsoft 365 security audits.
+
+Through all of it: **99.993% uptime since 2023**, on a **$750K annual IT budget**.
+
+## The software that runs the business
+
+The security work sits on top of an application stack I architected and still
+operate. It replaced paper processes company-wide:
+
+- digital check-in and check-out, at roughly 5,600 transactions per day
+- a claims management platform with vehicle lifecycle tracking
+- digital vehicle inspections
+- a rental workflow automation engine
+
+Built on Node.js, Express and MongoDB behind Nginx with load balancing on
+DigitalOcean Kubernetes.
+
+**Maverik** (C#/.NET) is an API wrapper over the mainframe rental platform's
+Bluezone HLLAPI interface; it improved operational efficiency on those workflows
+by 85%. The internal Python tier runs FastAPI services, Celery and Redis job
+queues monitored with Flower, and SQLAlchemy/Alembic migrations. Cloud
+infrastructure is managed as code in Terraform, with CI/CD across six self-hosted
+GitHub Actions runners spanning two organizations.
+
+Most recently I built internal **Model Context Protocol** servers that put the
+rental, fleet-reporting and rate-management SQL Server databases behind a typed,
+agent-callable interface, so operational questions get answered without handing
+anyone direct database credentials.

@@ -59,7 +59,6 @@ export const STATIONS: Station[] = [
     grid: { gx: 7, gy: 4 },
     status: "operational",
     summary: "ITIL v4 Foundations — the service management behind the GLPI rollout.",
-    relatedPosts: ["glpi-deploy"],
   },
   {
     code: "E-06",
@@ -79,7 +78,8 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 11, gy: 4 },
     status: "planned",
-    summary: "CompTIA CySA+. Transfer to the Projects line at the Malware Analysis Lab.",
+    summary:
+      "CompTIA CySA+: threat detection, incident response and behavioural analytics. Exam sat September 2026; result pending. Transfer to the Projects line at the Malware Analysis Lab.",
   },
   {
     code: "E-08",
@@ -88,7 +88,8 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 13, gy: 4 },
     status: "planned",
-    summary: "CompTIA PenTest+.",
+    summary:
+      "CompTIA PenTest+: penetration testing, vulnerability scanning and reporting. Exam sat September 2026; result pending.",
   },
   {
     code: "E-09",
@@ -97,7 +98,8 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 15, gy: 4 },
     status: "planned",
-    summary: "CompTIA Project+.",
+    summary:
+      "CompTIA Project+: scoping, scheduling and delivery for IT projects. Planned; not yet sat.",
   },
   {
     code: "E-10",
@@ -147,7 +149,6 @@ export const STATIONS: Station[] = [
     summary: "Proxmox VE cluster hosting dozens of self-hosted services.",
     dates: "2020 – Present",
     stack: ["Proxmox VE", "Docker", "LXC", "Tailscale", "Nginx"],
-    relatedPosts: ["homelab-setup"],
   },
   {
     code: "P-02",
@@ -178,9 +179,18 @@ export const STATIONS: Station[] = [
     nameJa: "監視基盤",
     lineCodes: ["P"],
     grid: { gx: 9, gy: 6 },
-    status: "planned",
-    summary: "Planned Zeek / Vector / Loki / Grafana pipeline. Transfer from Security+.",
-    stack: ["Zeek", "Vector", "Loki", "Grafana"],
+    status: "operational",
+    hasBody: true,
+    summary:
+      "Detection and monitoring in production across eight sites: Wazuh, Suricata and Zeek feeding Graylog, Elasticsearch and Grafana. Transfer from Security+.",
+    stack: [
+      "Wazuh",
+      "Suricata",
+      "Zeek",
+      "Graylog",
+      "Elasticsearch",
+      "Grafana",
+    ],
   },
   {
     code: "P-05",
@@ -239,22 +249,21 @@ export const STATIONS: Station[] = [
     status: "operational",
     hasBody: true,
     summary:
-      "Chief Technology Officer — K8s, SD-WAN & a distributed stack across 8 locations.",
-    dates: "Sep 2021 – Present",
+      "Chief Technology Officer: security operations, infrastructure and software for 314 employees across eight locations; 99.993% uptime since 2023 on a $750K annual IT budget.",
+    dates: "Sep 2021 to Present",
     stack: [
+      "Wazuh",
+      "Suricata",
+      "Microsoft Defender",
+      "Sentinel",
       "Kubernetes",
       "SD-WAN",
       "Cisco IOS",
-      "Node.js",
-      "MongoDB",
-      "C#/.NET",
-      "Python/FastAPI",
-      "Celery",
       "Terraform",
-      "MCP",
+      "Node.js",
+      "Python/FastAPI",
     ],
     links: [{ label: "Résumé (PDF)", href: "/resume.pdf" }],
-    relatedPosts: ["glpi-deploy"],
   },
   {
     code: "C-03",
@@ -265,9 +274,10 @@ export const STATIONS: Station[] = [
     status: "operational",
     terminus: true,
     express: true,
+    hasBody: true,
     summary:
-      "Chief Technology Officer — IT built from scratch for 9 subsidiaries and a team of 52.",
-    dates: "Nov 2021 – Present",
+      "Chief Technology Officer: IT built from scratch for nine subsidiaries and a team of 52.",
+    dates: "Nov 2021 to Present",
     stack: ["Windows Server", "Active Directory", "Networking", "Security Policy"],
     links: [{ label: "Résumé (PDF)", href: "/resume.pdf" }],
   },
@@ -281,7 +291,6 @@ export const STATIONS: Station[] = [
     grid: { gx: 3, gy: 8 },
     status: "operational",
     summary: "Mid-engine K24 swap targeting 200+ HP.",
-    relatedPosts: ["k24-swap"],
   },
   {
     code: "W-02",

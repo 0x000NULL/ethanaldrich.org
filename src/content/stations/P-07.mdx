@@ -1,0 +1,43 @@
+---
+title: Case study
+---
+
+## Distributed signage, in production
+
+A **Rust** playback client and a **Node.js/TypeScript** control server driving up
+to 25 concurrent displays over WebSocket, with an automated multi-platform
+release pipeline in GitHub Actions. Running in production across Budget lobby
+displays.
+
+## Why Rust on the player
+
+The playback client is the part that cannot fail quietly. A signage screen that
+crashes does not page anyone; it just shows a desktop, or nothing, in a customer
+lobby, potentially for days before someone mentions it.
+
+Rust was chosen for the client specifically because that process has to run for
+weeks unattended while driving video through **mpv**. Memory safety and
+predictable resource behaviour matter far more there than development speed. The
+control server, where the iteration actually happens, is Node and TypeScript.
+
+Splitting the two languages along that line was the central design decision: the
+boring, long-running, must-not-leak component in Rust; the part that changes
+often in TypeScript.
+
+## Coordination
+
+WebSocket keeps the displays in sync with the server and makes the connection
+state observable. A display that has dropped off should be visible as dropped
+off, not silently showing yesterday's content.
+
+Twenty-five displays is comfortably past the point where you can check them
+manually, which is what forced a real control plane rather than a pile of
+individually configured machines.
+
+## Release pipeline
+
+Multi-platform builds run automatically through GitHub Actions. Pushing an update
+to two dozen displays by hand is the kind of task that gets skipped, and skipped
+updates are how a fleet drifts out of a known state.
+
+Source is on [GitHub](https://github.com/0x000NULL).
