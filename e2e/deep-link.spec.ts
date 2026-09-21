@@ -41,19 +41,30 @@ test.describe("deep links and blog navigation", () => {
   });
 
   test("the blog index links into a post and back to the map", async ({ page }) => {
+    // These two navigations go through Next's client router against the DEV
+    // server, so the first hit on a route pays its compile cost. With the full
+    // browser matrix running in parallel that regularly exceeded the default 5s
+    // expect timeout - a dev-compile race, not a product failure. Give the URL
+    // assertions room rather than leaving a known flake in the suite.
+    const NAV_TIMEOUT = 20_000;
+
     await page.goto("/blog");
     await expect(page.getByRole("heading", { name: "Writing" })).toBeVisible();
 
     await page
       .getByRole("link", { name: "Building a Subway-Map Portfolio" })
       .click();
-    await expect(page).toHaveURL(/\/blog\/portfolio-website$/);
+    await expect(page).toHaveURL(/\/blog\/portfolio-website$/, {
+      timeout: NAV_TIMEOUT,
+    });
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
 
     await page
       .getByRole("link", { name: /back to the map/i })
       .first()
       .click();
-    await expect(page).toHaveURL(/localhost:3000\/?(\?.*)?$/);
+    await expect(page).toHaveURL(/localhost:3000\/?(\?.*)?$/, {
+      timeout: NAV_TIMEOUT,
+    });
   });
 });

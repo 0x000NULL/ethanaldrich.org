@@ -113,6 +113,53 @@ export function transfersForStation(code: string): TransferInfo[] {
   return out;
 }
 
+export interface StationNeighbour {
+  code: string;
+  name: string;
+}
+
+export interface AdjacentStations {
+  lineCode: LineCode | null;
+  lineName: string | null;
+  prev: StationNeighbour | null;
+  next: StationNeighbour | null;
+}
+
+/**
+ * The stations either side of `code` along its own line, in timetable order.
+ *
+ * /station/<code> was a dead end: the only ways out were the homepage and, on
+ * six of twenty-five stations, a related post. A line is an ordered sequence,
+ * so walking it is the natural navigation and it gives crawlers a path between
+ * the 25 leaf pages instead of leaving them hanging off the root.
+ *
+ * Branch stations (E-13) are not on the trunk, so they report no neighbours
+ * rather than guessing a position.
+ */
+export function adjacentStations(code: string): AdjacentStations {
+  const station = getStation(code);
+  const lineCode = station?.lineCodes[0] ?? null;
+  const line = lineCode ? LINE_MAP[lineCode] : undefined;
+  const empty: AdjacentStations = {
+    lineCode: lineCode ?? null,
+    lineName: line?.name ?? null,
+    prev: null,
+    next: null,
+  };
+  if (!station || !line) return empty;
+
+  const trunk = line.stationCodes;
+  const i = trunk.indexOf(station.code);
+  if (i === -1) return empty;
+
+  const at = (index: number): StationNeighbour | null => {
+    const neighbour = trunk[index] ? STATION_MAP[trunk[index]] : undefined;
+    return neighbour ? { code: neighbour.code, name: neighbour.name } : null;
+  };
+
+  return { ...empty, prev: at(i - 1), next: at(i + 1) };
+}
+
 /**
  * When a station is hovered/selected, dim every line that does NOT serve it (and
  * its transfer partners). Returns the set of line codes to render at full opacity;

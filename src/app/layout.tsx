@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://ethanaldrich.org"),
   alternates: {
     canonical: "https://ethanaldrich.org",
+    types: {
+      "application/rss+xml": [
+        { url: "/feed.xml", title: `${PROFILE.name} — Writing` },
+      ],
+    },
   },
   title: TITLE,
   description:

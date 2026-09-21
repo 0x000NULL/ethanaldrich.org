@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { STATIONS, getStation, LINE_MAP } from "@/data/subway";
-import { transfersForStation } from "@/lib/subway/selectors";
+import { transfersForStation, adjacentStations } from "@/lib/subway/selectors";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { getBlogPosts } from "@/lib/blog";
 import { getStationBody } from "@/lib/stations";
 import { mdxComponents } from "@/lib/mdxComponents";
 import { mdxOptions } from "@/lib/mdxOptions";
 import { resolvePostRefs } from "@/lib/blog-format";
+import { buildBreadcrumbJsonLd, buildStationJsonLd } from "@/lib/jsonLd";
 
 export function generateStaticParams() {
   return STATIONS.map((s) => ({ code: s.code }));
@@ -60,6 +61,7 @@ export default async function StationPage({
   if (!station) notFound();
 
   const transfers = transfersForStation(station.code);
+  const neighbours = adjacentStations(station.code);
   const related = station.relatedPosts
     ? resolvePostRefs(getBlogPosts(), station.relatedPosts)
     : [];
@@ -126,7 +128,21 @@ export default async function StationPage({
       {transfers.length > 0 && (
         <p className="mt-4 text-sm">
           <span className="font-bold">Transfers:</span>{" "}
-          {transfers.map((t) => `${t.partnerName} (${t.lineCodes.join(", ")})`).join("; ")}
+          {/* The panel on the map makes these clickable; here they were dead
+              text, which is the one place a reader is most likely to want to
+              follow the interchange. */}
+          {transfers.map((t, i) => (
+            <span key={t.partnerCode}>
+              {i > 0 ? "; " : ""}
+              <Link
+                href={`/station/${t.partnerCode}`}
+                className="underline underline-offset-2 hover:no-underline"
+              >
+                {t.partnerName}
+              </Link>{" "}
+              ({t.lineCodes.join(", ")})
+            </span>
+          ))}
         </p>
       )}
 
@@ -170,6 +186,66 @@ export default async function StationPage({
           View on the map
         </Link>
       </p>
+
+      {/* Walk the line. Without this a station is a dead end: the homepage and,
+          on six of twenty-five, a related post were the only ways out. */}
+      {(neighbours.prev || neighbours.next) && (
+        <nav
+          aria-label={
+            neighbours.lineName
+              ? `Along the ${neighbours.lineName}`
+              : "Adjacent stations"
+          }
+          className="mt-8 border-t pt-4"
+          style={{ borderColor: "var(--metro-border)" }}
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--metro-ink-dim)]">
+            {neighbours.lineName ?? "Adjacent stations"}
+          </p>
+          <ul className="flex flex-wrap justify-between gap-4 text-sm">
+            {neighbours.prev && (
+              <li>
+                <Link
+                  href={`/station/${neighbours.prev.code}`}
+                  className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:no-underline"
+                  rel="prev"
+                >
+                  ← {neighbours.prev.name}
+                </Link>
+              </li>
+            )}
+            {neighbours.next && (
+              <li className="ml-auto">
+                <Link
+                  href={`/station/${neighbours.next.code}`}
+                  className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:no-underline"
+                  rel="next"
+                >
+                  {neighbours.next.name} →
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildStationJsonLd(station)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            buildBreadcrumbJsonLd([
+              { name: "Map", path: "/" },
+              { name: `${station.name} (${station.code})` },
+            ])
+          ),
+        }}
+      />
     </main>
   );
 }
