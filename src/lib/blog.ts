@@ -39,7 +39,7 @@ function mapFrontmatter(
     author: (data.author as string) || undefined,
     updatedAt: (data.updatedAt as string) || undefined,
     readingTime: readingTimeLabel(content),
-    draft: data.draft === true || undefined,
+    draft: data.draft === true || data.draft === "true" || undefined,
   };
 }
 
@@ -87,9 +87,17 @@ export function getBlogPost(slug: string): BlogPost | null {
 
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
+  const meta = mapFrontmatter(slug, data, content);
+
+  // Excluding drafts from the index and sitemap is not enough on its own:
+  // /blog/[slug] is a dynamic route, so Next renders any slug not in
+  // generateStaticParams on demand, and an unfinished post stayed reachable by
+  // direct URL. Returning null here 404s the page and the API route together.
+  // Development still serves them so a draft can be previewed while it is written.
+  if (meta.draft && process.env.NODE_ENV === "production") return null;
 
   return {
-    ...mapFrontmatter(slug, data, content),
+    ...meta,
     content: content.trim(),
   };
 }

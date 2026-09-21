@@ -363,4 +363,59 @@ Content`;
       expect(yPosts.map((p) => p.title).sort()).toEqual(["A", "B"]);
     });
   });
+
+  describe("drafts", () => {
+    const DRAFT = [
+      "---",
+      'id: "wip"',
+      'date: "01-01-2026"',
+      'title: "Half Finished"',
+      'description: "d"',
+      "draft: true",
+      "---",
+      "Body text.",
+    ].join("\n");
+
+    function mockDraftOnDisk() {
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readdirSync).mockReturnValue(["wip.mdx"] as never);
+      vi.mocked(fs.readFileSync).mockReturnValue(DRAFT as never);
+    }
+
+    it("keeps drafts out of the index, tags and static params", () => {
+      mockDraftOnDisk();
+      expect(getBlogPosts()).toHaveLength(0);
+      expect(getAllBlogSlugs()).toHaveLength(0);
+      expect(getAllTags()).toHaveLength(0);
+    });
+
+    /**
+     * /blog/[slug] is a dynamic route, so excluding a draft from
+     * generateStaticParams is not enough on its own: Next will still render an
+     * unknown slug on demand. Production must refuse it outright.
+     */
+    it("404s a draft by direct URL in production", () => {
+      mockDraftOnDisk();
+      const prev = process.env.NODE_ENV;
+      vi.stubEnv("NODE_ENV", "production");
+      try {
+        expect(getBlogPost("wip")).toBeNull();
+      } finally {
+        vi.stubEnv("NODE_ENV", prev ?? "test");
+        vi.unstubAllEnvs();
+      }
+    });
+
+    it("still serves a draft in development so it can be previewed", () => {
+      mockDraftOnDisk();
+      vi.stubEnv("NODE_ENV", "development");
+      try {
+        const post = getBlogPost("wip");
+        expect(post).not.toBeNull();
+        expect(post!.draft).toBe(true);
+      } finally {
+        vi.unstubAllEnvs();
+      }
+    });
+  });
 });
