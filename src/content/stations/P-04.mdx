@@ -1,0 +1,59 @@
+---
+title: Case study
+---
+
+## Detection built for one responder
+
+This is the security monitoring that runs in production at Budget Rent A Car of
+Las Vegas: eight sites, 314 employees, a live cardholder data environment under
+PCI DSS. I built it and I am the only person who operates it.
+
+That constraint drove the design more than anything else. A stack that generates
+more alerts than one person can triage is not a detection capability; it is a
+backlog that everyone learns to ignore.
+
+## What runs
+
+| Layer | Tool | What it answers |
+| --- | --- | --- |
+| Host | Wazuh | What changed on this machine, and who changed it |
+| Network | Suricata | Does this traffic match something known bad |
+| Protocol | Zeek | What actually happened on the wire, in context |
+| Aggregation | Graylog, Elasticsearch | Where else did this appear |
+| Visibility | Grafana | Is anything on fire right now |
+
+Wazuh covers host intrusion detection and file integrity monitoring. Suricata
+handles network intrusion detection. Zeek produces the protocol and connection
+metadata that turns a signature hit into an actual story: Suricata says something
+matched, Zeek says what the session did before and after.
+
+Graylog and Elasticsearch give the whole thing one place to search. Grafana is
+the layer I look at first.
+
+## Tuning is the work
+
+Deployment was the short part. The long part is tuning: suppressing false
+positives without losing the signal underneath them.
+
+Every noisy rule is a decision with two bad failure modes. Leave it and the
+console becomes unreadable, which costs you the next real alert. Suppress it too
+broadly and you have created a blind spot you will not notice until it matters.
+Working through that rule by rule, with the business context of a rental
+operation in mind, is most of what running this stack actually involves.
+
+## Alongside it
+
+On the Windows and Azure estate, Microsoft Defender and Microsoft Sentinel carry
+endpoint and cloud detection; the same triage-and-tune loop applies there.
+
+When something gets through, the investigation is also mine: acquisition from the
+affected endpoint, analysis, root cause, and a written finding.
+
+## Honest scope
+
+This is enterprise detection and response at small-to-mid scale, operated
+single-handed. It is not a staffed SOC, and I have not worked in a federal
+accreditation context: no ACAS, no STIGs or SRGs, and no artifacts produced for
+an authorization decision. What I can speak to is building a detection pipeline
+from nothing, tuning it so it stays usable, and being the person who picks up the
+alert.

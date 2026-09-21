@@ -13,6 +13,8 @@ export interface BlogPostMeta {
   author?: string;
   updatedAt?: string;
   readingTime: string;
+  /** Unfinished. Excluded from the index, tags, sitemap and static params. */
+  draft?: boolean;
 }
 
 export interface BlogPost extends BlogPostMeta {
@@ -37,6 +39,7 @@ function mapFrontmatter(
     author: (data.author as string) || undefined,
     updatedAt: (data.updatedAt as string) || undefined,
     readingTime: readingTimeLabel(content),
+    draft: data.draft === true || undefined,
   };
 }
 
@@ -61,6 +64,7 @@ export function getBlogPosts(): BlogPostMeta[] {
       const { data, content } = matter(fileContents);
       return mapFrontmatter(slug, data, content);
     })
+    .filter((post) => !post.draft)
     .sort(byDateDesc);
 }
 
@@ -95,10 +99,8 @@ export function getAllBlogSlugs(): string[] {
     return [];
   }
 
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((file) => file.endsWith(".mdx") || file.endsWith(".md"))
-    .map((file) => file.replace(/\.mdx?$/, ""));
+  // Drafts get no static params, so no page is generated and nothing links in.
+  return getBlogPosts().map((post) => post.slug);
 }
 
 /** Every tag in use, with how many posts carry it (count desc, then alphabetical). */

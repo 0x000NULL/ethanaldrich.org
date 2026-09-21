@@ -120,6 +120,17 @@ export default function StationPanel() {
 
       <p className="mt-4 station-prose">{station.summary}</p>
 
+      {/* The SSG station pages were unreachable from the map before this: nothing
+          linked to them, so they were orphaned except via the sitemap. */}
+      {station.hasBody && (
+        <a
+          href={`/station/${station.code}`}
+          className="mt-3 inline-block text-sm font-semibold underline hover:no-underline"
+        >
+          Read the full case study →
+        </a>
+      )}
+
       {station.stack && station.stack.length > 0 && (
         <div className="mt-4">
           <h3 className="mb-1 text-xs font-bold uppercase tracking-wide text-[var(--metro-ink-dim)]">

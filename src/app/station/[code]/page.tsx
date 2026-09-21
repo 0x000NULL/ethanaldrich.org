@@ -3,7 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { STATIONS, getStation, LINE_MAP } from "@/data/subway";
 import { transfersForStation } from "@/lib/subway/selectors";
+import { compileMDX } from "next-mdx-remote/rsc";
 import { getBlogPosts } from "@/lib/blog";
+import { getStationBody } from "@/lib/stations";
+import { mdxComponents } from "@/lib/mdxComponents";
+import { mdxOptions } from "@/lib/mdxOptions";
 import { resolvePostRefs } from "@/lib/blog-format";
 
 export function generateStaticParams() {
@@ -60,6 +64,27 @@ export default async function StationPage({
     ? resolvePostRefs(getBlogPosts(), station.relatedPosts)
     : [];
 
+  // The long-form case study, when one exists on disk. Compiled with the same
+  // shared pipeline the blog uses so highlighting and GFM cannot drift apart.
+  const source = getStationBody(station.code);
+  let body: React.ReactNode = null;
+  if (source) {
+    try {
+      const { content } = await compileMDX({
+        source: source.content,
+        components: mdxComponents,
+        options: { mdxOptions },
+      });
+      body = content;
+    } catch {
+      body = (
+        <pre className="board-type whitespace-pre-wrap text-sm">
+          {source.content}
+        </pre>
+      );
+    }
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-2xl bg-[var(--metro-bg)] px-5 py-10 text-[var(--metro-ink)]">
       <Link href="/" className="text-sm underline underline-offset-2 hover:no-underline">
@@ -85,6 +110,12 @@ export default async function StationPage({
       </p>
 
       <p className="station-prose mt-4">{station.summary}</p>
+
+      {body && (
+        <div className="station-prose mt-6 border-t pt-6" style={{ borderColor: "var(--metro-border)" }}>
+          {body}
+        </div>
+      )}
 
       {station.stack && station.stack.length > 0 && (
         <p className="mt-4 text-sm">

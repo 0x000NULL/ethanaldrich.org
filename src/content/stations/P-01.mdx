@@ -1,0 +1,40 @@
+---
+title: Case study
+---
+
+## The proving ground
+
+A multi-node Proxmox VE cluster running dozens of self-hosted services, behind
+Nginx and reachable over Tailscale. It has been running since 2020.
+
+Its real function is not the services. It is that almost everything I have put
+into production at work was broken here first, on hardware I own, where the
+failure costs nothing but an evening.
+
+## What it runs
+
+- **Proxmox VE** across multiple nodes, mixing full VMs and LXC containers
+  depending on what the workload actually needs
+- **Docker** for the service tier
+- **Nginx** as reverse proxy
+- **Tailscale** for access, so nothing needs to be published to the open internet
+  to be reachable
+
+## Why it earns its keep
+
+Three specific things moved from here into production:
+
+**Container and VM boundaries.** Learning where LXC is sufficient and where a
+full VM is the honest answer is much cheaper to learn on your own cluster than
+during a migration.
+
+**Reverse proxy and TLS termination.** The Nginx patterns now in front of the
+Budget application stack were worked out here first.
+
+**Network segmentation.** Running genuinely untrusted workloads next to things I
+care about, on one set of hardware, is a useful forcing function. The same
+instinct shows up in the VLAN segmentation at work and on the yacht builds.
+
+It is also where the security tooling gets evaluated before it goes anywhere
+near a cardholder data environment. Reading a vendor comparison tells you what a
+tool claims. Running it for a month tells you what it costs to operate.
