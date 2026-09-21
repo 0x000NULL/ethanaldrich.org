@@ -46,7 +46,9 @@ describe("Station", () => {
   });
 
   it("dashes the ring for planned stations", () => {
-    const { container } = renderStation(getStation("E-09")!); // Project+ (planned)
+    // E-13 (the planned M.S.), not E-09: Project+ was earned in September 2026,
+    // and the CySA+/PenTest+ stations flip as soon as those results land.
+    const { container } = renderStation(getStation("E-13")!);
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("stroke-dasharray")).toBeTruthy();
   });

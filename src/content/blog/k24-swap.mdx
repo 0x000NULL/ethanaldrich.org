@@ -2,28 +2,80 @@
 id: "k24-swap"
 date: "11-10-2025"
 title: "Honda Beat K24 Swap Progress Log"
-description: "Documentation of K24 engine swap into Honda Beat"
+description: "Putting a K24 behind the seats of a 1991 Honda Beat: why the mid-engine layout makes this harder than a normal swap, what had to be fabricated, and where the build currently stands."
 author: "Ethan Aldrich"
 draft: true
-tags: ["cars", "honda-beat", "engine-swap"]
+tags: ["cars", "honda-beat", "engine-swap", "fabrication"]
 ---
 
-HONDA BEAT K24 SWAP PROJECT LOG
-===============================
+The Honda Beat is a mid-engine kei car: the engine sits behind the seats, ahead
+of the rear axle, and the whole car is built around a 656cc three-cylinder making
+63 horsepower. Putting a K24 in it is not a drop-in swap in any sense. It is a
+fabrication project that happens to end with an engine in it.
 
-Project: K24 Engine Swap into 1991 Honda Beat PP1
-Status: In Progress
+## Why mid-engine changes the problem
 
-OVERVIEW
---------
-The Honda Beat is a mid-engine kei car with the engine behind
-the seats. Swapping in a K24 requires significant modification
-to the rear subframe and custom fabrication.
+In a front-engine car, an engine swap is mostly mounts, wiring and plumbing
+within a bay that was designed to hold an engine of roughly that shape. Here the
+bay was designed around an engine less than a third of the K24's displacement,
+and everything structural in that area is load-bearing for a chassis that is
+about half the weight of the target power.
 
-CURRENT PROGRESS
-----------------
-- Engine and transmission sourced (K24A + 6-speed)
-- Rear subframe removal complete
+So the work splits into three, and only one of them is about the engine:
+
+1. **Structure** — making room without giving up chassis rigidity
+2. **Drivetrain** — getting drive to the wheels through a gearbox never intended
+   for this torque
+3. **Everything downstream** — cooling, fuel, exhaust routing, brakes, and the
+   fact that the weight distribution has changed substantially
+
+## Where it stands
+
+- Engine and transmission sourced: K24A with a 6-speed
+- Rear subframe removed
 - Custom engine mount design in progress
 
-[Content continues...]
+{/* TODO(ethan): update this list as it moves — it is the reason people read a
+     build log, and a stale progress list is worse than none. */}
+
+## Structure
+
+{/* TODO(ethan): the part that makes this post worth publishing —
+     - what had to be cut, and what you added back to compensate
+     - whether the subframe is modified or fully fabricated
+     - how you are handling the rigidity you lose by opening that area up
+     - CAD vs. measure-and-cut: you have CAD and welding on the resume, so say
+       which parts were designed and which were fitted in place */}
+
+## Drivetrain
+
+{/* TODO(ethan): axles, and the gearbox question —
+     - which axles, and whether they are adapted or custom
+     - what the K24's torque does to the Beat's original drivetrain geometry
+     - final drive choice and why */}
+
+## Cooling
+
+A mid-engine car with a front radiator means running coolant the length of the
+chassis, and the Beat's original cooling system was sized for 63 horsepower.
+
+{/* TODO(ethan): radiator, lines, and where the air actually goes. This is the
+     section most likely to be the one that bites, so it is worth the detail. */}
+
+## Weight and balance
+
+{/* TODO(ethan): the honest numbers if you have them — original kerb weight,
+     current estimate, and where the balance has moved. If you have not weighed
+     it, say so rather than estimating. */}
+
+## What this has to do with the day job
+
+More than it looks like. Both are the same discipline: work out what the
+constraint actually is before buying parts, and be honest about the failure mode
+you are designing for. The difference is that a bad decision here is visible in
+metal instead of a log file.
+
+---
+
+*Draft and an active build. The progress list and the fabrication sections need
+updating from the car before this goes out.*

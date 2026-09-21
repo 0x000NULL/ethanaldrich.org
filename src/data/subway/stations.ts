@@ -4,9 +4,9 @@ import type { Station } from "./types";
  * Hand-authored octolinear layout (validated by src/data/subway/index.test.ts).
  *
  * Grid bands: E (Education) gy=4 · P (Projects) gy=6 · C (Career) gy=10–12 ·
- * W (Weekend) gx=3 dashed downward. The E line starts at gx=-1 so the four
- * earned certifications fit to the left of the Security+ ↔ P-04 interchange,
- * which is pinned at gx=9 by the peanut spacing rule.
+ * W (Weekend) gx=3 dashed downward. The E line starts at gx=-1 so the earned
+ * certifications fit to the left of the Security+ ↔ P-04 interchange, which is
+ * pinned at gx=9 by the peanut spacing rule.
  *
  * Honesty rule: work that actually happened is "operational"; the remaining
  * cert path is "planned"; the degree in flight is "in-progress". A finished
@@ -21,8 +21,9 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: -1, gy: 4 },
     status: "operational",
-    dates: "2015 – 2020",
-    summary: "West Career & Technical Academy, Las Vegas — Graphic Design diploma.",
+    dates: "2015 to 2020",
+    summary:
+      "West Career & Technical Academy, Las Vegas: a Graphic Design diploma, which is where the visual side of this map comes from. The technical line starts after it.",
   },
   {
     code: "E-02",
@@ -31,7 +32,15 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 1, gy: 4 },
     status: "operational",
-    summary: "CompTIA A+ — hardware, OS and endpoint support fundamentals.",
+    dates: "Jun 2026",
+    summary:
+      "CompTIA A+ (220-1201 and 220-1202): hardware, operating systems, endpoint support and troubleshooting. The first rung of the stack that ends at CSIS.",
+    stack: [
+      "Hardware",
+      "Windows / Linux / macOS",
+      "Endpoint support",
+      "Troubleshooting",
+    ],
   },
   {
     code: "E-03",
@@ -40,7 +49,15 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 3, gy: 4 },
     status: "operational",
-    summary: "CompTIA Network+ — the credential under the SD-WAN and VLAN work.",
+    dates: "Jun 2026",
+    summary:
+      "CompTIA Network+: addressing, routing and switching, and network troubleshooting. The formal credential under the SD-WAN, VLAN segmentation and firewall work on the Career line.",
+    stack: [
+      "TCP/IP",
+      "Routing & switching",
+      "VLANs",
+      "Network troubleshooting",
+    ],
   },
   {
     code: "E-04",
@@ -49,7 +66,10 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 5, gy: 4 },
     status: "operational",
-    summary: "CompTIA IT Operations Specialist — the stackable A+ and Network+ credential.",
+    dates: "Jun 2026",
+    summary:
+      "CompTIA IT Operations Specialist (CIOS): the stackable credential awarded for holding A+ and Network+ together. Not a separate exam — it certifies the combination.",
+    stack: ["A+", "Network+", "Stackable"],
   },
   {
     code: "E-05",
@@ -58,7 +78,17 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 7, gy: 4 },
     status: "operational",
-    summary: "ITIL v4 Foundations — the service management behind the GLPI rollout.",
+    // Deliberately no `dates`: this one is asserted by the resume but no dated
+    // certificate was to hand, and an invented date on a verifiable credential
+    // is worse than none.
+    summary:
+      "ITIL v4 Foundations: the service-management vocabulary — incident, problem, change and service request — behind the GLPI ITSM practice run for both companies.",
+    stack: [
+      "Incident management",
+      "Problem management",
+      "Change enablement",
+      "Service desk",
+    ],
   },
   {
     code: "E-06",
@@ -68,8 +98,15 @@ export const STATIONS: Station[] = [
     grid: { gx: 9, gy: 4 },
     status: "operational",
     dates: "Sep 2026",
+    hasBody: true,
     summary:
-      "CompTIA Security+ — earned. Transfer to the Projects line at Security Observability.",
+      "CompTIA Security+ (SY0-701), earned September 2026: threats and attacks, security architecture, operations and incident response, and governance. The formal credential behind the detection stack it interchanges with.",
+    stack: [
+      "Threats & attacks",
+      "Security architecture",
+      "Operations & incident response",
+      "Governance & risk",
+    ],
   },
   {
     code: "E-07",
@@ -79,7 +116,13 @@ export const STATIONS: Station[] = [
     grid: { gx: 11, gy: 4 },
     status: "planned",
     summary:
-      "CompTIA CySA+: threat detection, incident response and behavioural analytics. Exam sat September 2026; result pending. Transfer to the Projects line at the Malware Analysis Lab.",
+      "CompTIA CySA+: threat detection, behavioural analytics and incident response — the analyst-side counterpart to the stack already running at P-04. Exam sat September 2026; result pending. Transfers to the Malware Analysis Lab.",
+    stack: [
+      "Threat detection",
+      "Behavioural analytics",
+      "Vulnerability management",
+      "Incident response",
+    ],
   },
   {
     code: "E-08",
@@ -89,7 +132,13 @@ export const STATIONS: Station[] = [
     grid: { gx: 13, gy: 4 },
     status: "planned",
     summary:
-      "CompTIA PenTest+: penetration testing, vulnerability scanning and reporting. Exam sat September 2026; result pending.",
+      "CompTIA PenTest+: scoping and planning, reconnaissance, exploitation, and — the part that matters most day to day — writing findings up so someone can act on them. Exam sat September 2026; result pending.",
+    stack: [
+      "Scoping & planning",
+      "Reconnaissance",
+      "Exploitation",
+      "Reporting",
+    ],
   },
   {
     code: "E-09",
@@ -97,9 +146,16 @@ export const STATIONS: Station[] = [
     nameJa: "プロジェクト＋",
     lineCodes: ["E"],
     grid: { gx: 15, gy: 4 },
-    status: "planned",
+    status: "operational",
+    dates: "Sep 2026",
     summary:
-      "CompTIA Project+: scoping, scheduling and delivery for IT projects. Planned; not yet sat.",
+      "CompTIA Project+ (PK0-005), earned September 2026: project scoping, scheduling, communication and delivery — the discipline behind running a $750K budget and multi-site rollouts.",
+    stack: [
+      "Project scoping",
+      "Scheduling",
+      "Stakeholder communication",
+      "Delivery",
+    ],
   },
   {
     code: "E-10",
@@ -110,7 +166,8 @@ export const STATIONS: Station[] = [
     status: "operational",
     dates: "Sep 2026",
     summary:
-      "CompTIA Secure Infrastructure Specialist — the stackable A+, Network+ and Security+ credential.",
+      "CompTIA Secure Infrastructure Specialist (CSIS): the stackable credential awarded for holding A+, Network+ and Security+ together — the terminus of the certification run, not a fifth exam.",
+    stack: ["A+", "Network+", "Security+", "Stackable"],
   },
   {
     code: "E-12",
@@ -123,8 +180,16 @@ export const STATIONS: Station[] = [
     labelSide: "below", // keep the upward master's spur clear of the label
     labelBand: "near", // pull the below-label up off the Projects trunk
     dates: "expected December 2026",
+    hasBody: true,
     summary:
-      "Western Governors University — B.S. Cybersecurity & Information Assurance, in progress.",
+      "Western Governors University: B.S. Cybersecurity & Information Assurance, approved for graduation and expected December 2026. Competency-based, so each course is a proctored assessment or a defended project rather than seat time.",
+    stack: [
+      "Security operations",
+      "Network security",
+      "Digital forensics",
+      "Secure software",
+      "Governance & compliance",
+    ],
   },
   {
     code: "E-13",
@@ -133,7 +198,8 @@ export const STATIONS: Station[] = [
     lineCodes: ["E"],
     grid: { gx: 19, gy: 2 },
     status: "planned",
-    summary: "M.S. Cybersecurity & Information Assurance — planned service beyond the degree.",
+    summary:
+      "M.S. Cybersecurity & Information Assurance: planned service beyond the bachelor's, on the same competency-based model. Not yet started — the branch is dashed for a reason.",
   },
 
   // ───────────────────────── P — Projects (magenta) ─────────────────────────
@@ -147,7 +213,7 @@ export const STATIONS: Station[] = [
     labelSide: "above", // keep the downward Weekend spur clear of the label
     hasBody: true,
     summary: "Proxmox VE cluster hosting dozens of self-hosted services.",
-    dates: "2020 – Present",
+    dates: "2020 to Present",
     stack: ["Proxmox VE", "Docker", "LXC", "Tailscale", "Nginx"],
   },
   {
@@ -181,6 +247,9 @@ export const STATIONS: Station[] = [
     grid: { gx: 9, gy: 6 },
     status: "operational",
     hasBody: true,
+    // No `dates` yet: the resume's "since 2023" refers to the uptime figure, not
+    // to when this stack went in, and nothing on hand dates the deployment. An
+    // inferred date on the marquee station is not worth the risk.
     summary:
       "Detection and monitoring in production across eight sites: Wazuh, Suricata and Zeek feeding Graylog, Elasticsearch and Grafana. Transfer from Security+.",
     stack: [
@@ -222,7 +291,7 @@ export const STATIONS: Station[] = [
     terminus: true,
     hasBody: true,
     summary: "Distributed digital signage — Rust client + Node/TS server, 25+ displays.",
-    dates: "2025 – Present",
+    dates: "2025 to Present",
     stack: ["Rust", "Node.js", "TypeScript", "WebSocket", "mpv"],
     links: [{ label: "github.com/0x000NULL", href: "https://github.com/0x000NULL" }],
     relatedPosts: ["montr-signage"],
@@ -238,7 +307,7 @@ export const STATIONS: Station[] = [
     status: "operational",
     summary:
       "Assistant Store Manager — the four years before the line turned technical.",
-    dates: "Jun 2017 – Sep 2021",
+    dates: "Jun 2017 to Sep 2021",
   },
   {
     code: "C-01",

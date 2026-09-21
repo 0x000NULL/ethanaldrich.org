@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildBreadcrumbJsonLd } from "@/lib/jsonLd";
 import { getBlogPosts } from "@/lib/blog";
+import { PROFILE } from "@/data/profile";
 import { groupPostsByYear } from "@/lib/blog-format";
 import PostList from "@/components/blog/PostList";
 
@@ -11,12 +12,12 @@ const BLOG_DESCRIPTION =
 export const metadata: Metadata = {
   title: "Writing | Ethan Aldrich",
   description: BLOG_DESCRIPTION,
-  alternates: { canonical: "https://ethanaldrich.org/blog" },
+  alternates: { canonical: `${PROFILE.site}/blog` },
   openGraph: {
     type: "website",
     title: "Writing | Ethan Aldrich",
     description: BLOG_DESCRIPTION,
-    url: "https://ethanaldrich.org/blog",
+    url: `${PROFILE.site}/blog`,
   },
   twitter: {
     card: "summary_large_image",

@@ -5,10 +5,11 @@ import matter from "gray-matter";
 /**
  * Reads the long-form station case studies that `Station.hasBody` advertises.
  *
- * The flag has existed since the subway rebuild, but `src/content/stations/` was
- * never created and nothing ever read it, so every station rendered a single
- * summary sentence and the four stations claiming a case study were indistinguishable
- * from the ones that were not.
+ * The flag long predated any content: `src/content/stations/` did not exist and
+ * nothing read it, so every station rendered a single summary sentence and the
+ * stations claiming a case study were indistinguishable from the ones that were
+ * not. The directory is real now, and `stations.test.ts` asserts the flag and
+ * the files on disk match in both directions, so they cannot drift apart again.
  *
  * Deliberately mirrors src/lib/blog.ts, including its slug sanitising: commit
  * 423f07f fixed a CWE-22 path traversal there, and a copy of that module without
