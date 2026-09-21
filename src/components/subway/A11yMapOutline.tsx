@@ -32,7 +32,16 @@ export default function A11yMapOutline({ onSelect, onHover }: A11yMapOutlineProp
   const { tabIndexFor, onKeyDown, register } = useRovingStations(groups);
 
   return (
-    <nav id="station-list" className="sr-only" aria-label="Subway map station index">
+    // tabIndex={-1} so the skip link can actually move focus here. Without it
+    // the browser only shifts the sequential-focus start point: :focus-visible
+    // never fires and the next Tab lands on a 1x1px clipped button, so a
+    // sighted keyboard user sees nothing happen.
+    <nav
+      id="station-list"
+      tabIndex={-1}
+      className="sr-only"
+      aria-label="Subway map station index"
+    >
       {groups.map((group, gi) => {
         const line = LINES.find((l) => l.code === group.lineCode)!;
         const stations = getStationsForLine(line.code);

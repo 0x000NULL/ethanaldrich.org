@@ -25,13 +25,16 @@ export default defineConfig({
         "src/app/**/page.tsx",
         "**/*.d.ts",
       ],
+      // Flat, NOT nested under `global:`. Vitest treats any key that isn't
+      // perFile/autoUpdate/100/statements/functions/branches/lines as a glob
+      // pattern matched against file paths, so a `global` key matched zero
+      // files and the real thresholds resolved to undefined — the gate this
+      // repo advertises silently never ran.
       thresholds: {
-        global: {
-          branches: 90,
-          functions: 90,
-          lines: 90,
-          statements: 90,
-        },
+        branches: 90,
+        functions: 90,
+        lines: 90,
+        statements: 90,
       },
     },
   },

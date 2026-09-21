@@ -44,7 +44,7 @@ The code is layered, lowest to highest:
 
 Every blog post and station also gets a statically generated, crawlable page for SEO and deep-linking (`/blog/<slug>`, `/station/<code>`, and `/?station=<code>` to open it on the map).
 
-The blog reads MDX from `src/content/blog/`. Station case studies read MDX from `src/content/stations/`. Visitor stats persist to a gitignored `data/stats.json`.
+The blog reads MDX from `src/content/blog/`. Station case studies read MDX from `src/content/stations/`.
 
 See [`CLAUDE.md`](./CLAUDE.md) for the full architecture, conventions, and testing/deployment details.
 

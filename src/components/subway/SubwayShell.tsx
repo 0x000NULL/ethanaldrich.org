@@ -48,17 +48,6 @@ export default function SubwayShell() {
     const param = new URLSearchParams(window.location.search).get("station");
     if (param && getStation(param)) selectStation(param);
 
-    // Track visitor stats once per session (carried over from the old app).
-    const hasTracked = sessionStorage.getItem("aldrich-stats-tracked");
-    if (!hasTracked) {
-      fetch("/api/stats", { method: "POST" }).catch((error: unknown) => {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Failed to track stats:", error);
-        }
-      });
-      sessionStorage.setItem("aldrich-stats-tracked", "true");
-    }
-
     return () => mq.removeEventListener("change", onChange);
   }, [
     initializeTheme,
@@ -93,7 +82,7 @@ export default function SubwayShell() {
   if (!mounted) return <StaticNetworkOutline />;
 
   return (
-    <main className="fixed inset-0 flex h-screen w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
+    <main className="fixed inset-0 flex h-dvh w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
       {/* Desktop tab order is legend → departure board → recenter → station list,
           so without this a keyboard user tabs through all the chrome every time.
           Focusing a station in that list also mirrors to the visual map. */}

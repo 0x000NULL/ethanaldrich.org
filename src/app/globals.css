@@ -6,7 +6,12 @@
   --metro-ink: #1a1a1a;
   --metro-ink-dim: #6b6b6b;
   --metro-panel: #ffffff;
-  --metro-border: #d8d2c4;
+  /* 3.07:1 on --metro-bg, 3.37:1 on --metro-panel. The previous #d8d2c4 was
+     1.37:1 — and since --metro-panel (#fff) is only 1.08:1 against the cream
+     page, this border is the ONLY thing delineating the legend, the station
+     panel and the alert rows. WCAG 1.4.11 wants 3:1 for that.
+     Keep in sync with themes.ts, which re-declares it at runtime. */
+  --metro-border: #948b78;
   --metro-roundel: #ffffff;
   --metro-accent: #1a1a1a;
 
@@ -154,13 +159,19 @@
   }
 }
 
-/* Respect reduced-motion: freeze trains and animated chrome. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+/* Respect reduced-motion: freeze trains and animated chrome.
+   Inside @layer base like everything else here — this file's own note above
+   and CLAUDE.md both forbid bare top-level rules, because unlayered CSS beats
+   layered CSS regardless of specificity. It survived only because !important
+   wins anyway; that is luck, not correctness. */
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
   }
 }

@@ -53,21 +53,4 @@ export const handlers = [
     });
   }),
 
-  // Stats GET endpoint
-  http.get("/api/stats", () => {
-    return HttpResponse.json({
-      visitors: 100,
-      pageViews: 500,
-      lastVisit: "2026-02-28T00:00:00Z",
-    });
-  }),
-
-  // Stats POST endpoint
-  http.post("/api/stats", () => {
-    return HttpResponse.json({
-      visitors: 101,
-      pageViews: 501,
-      lastVisit: new Date().toISOString(),
-    });
-  }),
 ];

@@ -73,7 +73,9 @@ export default function Station({
       data-status={station.status}
       data-line={lineCode}
       transform={`translate(${x} ${y})`}
-      role="button"
+      // Deliberately NOT a control. The roundel is decorative duplication of
+      // A11yMapOutline, which is the real keyboard/AT interface; `role="button"`
+      // on an `aria-hidden` node is contradictory and is what axe flags.
       aria-hidden="true"
       tabIndex={-1}
       onClick={() => onSelect?.(station.code)}

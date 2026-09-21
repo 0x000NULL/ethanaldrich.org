@@ -61,12 +61,27 @@ export function checkRateLimit(
 }
 
 /**
- * Get the client IP from request headers
+ * Get the client IP from request headers.
+ *
+ * `X-Forwarded-For` is `client, proxy1, proxy2, ...` where each hop appends the
+ * address it saw. Everything to the LEFT of the entry our own edge added is
+ * attacker-controlled: a client can send `X-Forwarded-For: 1.2.3.4` and the
+ * proxy simply appends to it. Reading `split(",")[0]` therefore hands the caller
+ * a free key per request, which made the rate limit decorative.
+ *
+ * We run behind exactly one trusted proxy (DigitalOcean App Platform), so the
+ * RIGHTMOST entry is the address that proxy observed, and is the only one a
+ * client cannot forge. If the trusted-hop count ever changes, this index must
+ * change with it.
  */
 export function getClientIp(headers: Headers): string {
-  return (
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    headers.get("x-real-ip") ||
-    "unknown"
-  );
+  const forwarded = headers.get("x-forwarded-for");
+  if (forwarded) {
+    const hops = forwarded
+      .split(",")
+      .map((hop) => hop.trim())
+      .filter(Boolean);
+    if (hops.length > 0) return hops[hops.length - 1];
+  }
+  return headers.get("x-real-ip") || "unknown";
 }
