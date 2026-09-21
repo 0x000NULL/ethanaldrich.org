@@ -2,6 +2,7 @@
 
 import { useNavStore } from "@/store/nav-store";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { PROFILE } from "@/data/profile";
 
 const ROUNDELS: [string, string][] = [
   ["E", "var(--line-e)"],
@@ -28,7 +29,7 @@ export default function IntroSplash() {
       ref={ref}
       role="dialog"
       aria-modal="true"
-      aria-label="Welcome to Aldrich Transit"
+      aria-label={`Welcome. ${PROFILE.name}, ${PROFILE.title}`}
       className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--metro-ink)]/85 p-6 backdrop-blur-sm"
     >
       <div
@@ -47,10 +48,17 @@ export default function IntroSplash() {
           ))}
         </div>
 
-        <h1 className="text-2xl font-bold">Aldrich Transit</h1>
-        <p className="mt-2 text-sm text-[var(--metro-ink-dim)]">
-          My career, projects, and learning as a subway map. Tap a station for the
-          story.
+        {/* Deliberately a <p>, not an <h1>: this dialog unmounts, and the
+            persistent identity card in StationIndex owns the page heading. */}
+        <p className="text-2xl font-bold">{PROFILE.name}</p>
+        <p className="mt-1 text-sm font-semibold text-[var(--metro-ink-dim)]">
+          {PROFILE.title}
+        </p>
+        <p className="mt-3 text-sm text-[var(--metro-ink-dim)]">
+          {PROFILE.blurb}
+        </p>
+        <p className="mt-3 text-sm text-[var(--metro-ink-dim)]">
+          The rest of it is drawn as a subway map. Tap a station for the story.
         </p>
 
         <button

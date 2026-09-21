@@ -18,10 +18,27 @@ export async function generateMetadata({
   const { code } = await params;
   const station = getStation(code);
   if (!station) return { title: "Station not found | Ethan Aldrich" };
+
+  const url = `https://ethanaldrich.org/station/${station.code}`;
+  const title = `${station.name} (${station.code}) | Ethan Aldrich`;
   return {
-    title: `${station.name} (${station.code}) | Ethan Aldrich`,
+    title,
     description: station.summary,
-    alternates: { canonical: `https://ethanaldrich.org/station/${station.code}` },
+    alternates: { canonical: url },
+    // Without these the page inherits the root card, whose og:url points at the
+    // homepage — share scrapers use og:url for object identity, so every station
+    // would unfurl as (and dedupe to) the site root.
+    openGraph: {
+      type: "article",
+      title,
+      description: station.summary,
+      url,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: station.summary,
+    },
   };
 }
 

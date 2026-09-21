@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 
 // Browser-only mocks are skipped under the `node` test environment (SSR tests).
 const hasWindow = typeof window !== "undefined";

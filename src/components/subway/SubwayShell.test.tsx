@@ -49,7 +49,7 @@ describe("SubwayShell", () => {
     sessionStorage.removeItem(INTRO_KEY);
     const { default: SubwayShell } = await import("./SubwayShell");
     const { findByRole } = render(<SubwayShell />);
-    expect(await findByRole("dialog", { name: /aldrich transit/i })).toBeTruthy();
+    expect(await findByRole("dialog", { name: /ethan aldrich/i })).toBeTruthy();
   });
 
   it("renders the strip map instead of the SVG on small screens", async () => {
@@ -57,8 +57,11 @@ describe("SubwayShell", () => {
     Object.defineProperty(window, "innerWidth", { value: 375, configurable: true });
     try {
       const { default: SubwayShell } = await import("./SubwayShell");
-      const { findByText, queryByRole } = render(<SubwayShell />);
-      expect(await findByText("Tap a station for the story.")).toBeTruthy();
+      const { findByRole, queryByRole } = render(<SubwayShell />);
+      // The strip view carries the identity heading; the SVG map does not render.
+      expect(
+        await findByRole("heading", { level: 1, name: /ethan aldrich/i })
+      ).toBeTruthy();
       expect(queryByRole("img")).toBeNull();
       await waitFor(() =>
         expect(useNavStore.getState().viewMode).toBe("strip")

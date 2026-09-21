@@ -84,16 +84,27 @@ export default function SubwayShell() {
     setViewMode(isMobile ? "strip" : "map");
   }, [isMobile, setViewMode]);
 
-  if (!mounted) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[var(--metro-bg)]">
-        <div className="text-[var(--metro-ink-dim)]">Loading map…</div>
-      </div>
-    );
-  }
+  // Hand over from the server-rendered outline only once the map can actually
+  // draw. Until then we render nothing and the outline stays visible, so the
+  // homepage never ships a "Loading map…" placeholder as its only content.
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.dataset.mapReady = "true";
+    return () => {
+      delete document.documentElement.dataset.mapReady;
+    };
+  }, [mounted]);
+
+  if (!mounted) return null;
 
   return (
-    <main className="flex h-screen w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
+    <main className="fixed inset-0 flex h-screen w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
+      {/* Desktop tab order is legend → departure board → recenter → station list,
+          so without this a keyboard user tabs through all the chrome every time.
+          Focusing a station in that list also mirrors to the visual map. */}
+      <a href={isMobile ? "#strip-list" : "#station-list"} className="skip-link">
+        Skip to station list
+      </a>
       {/* In flow, not floating: the banner reserves its own row so it can never
           cover the legend, the strip-view header, or the top of the map. */}
       <ServiceAlertBanner />

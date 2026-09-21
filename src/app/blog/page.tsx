@@ -4,11 +4,24 @@ import { getBlogPosts } from "@/lib/blog";
 import { groupPostsByYear } from "@/lib/blog-format";
 import PostList from "@/components/blog/PostList";
 
+const BLOG_DESCRIPTION =
+  "Field notes on infrastructure, homelab, distributed systems, security, and the occasional engine swap.";
+
 export const metadata: Metadata = {
   title: "Writing | Ethan Aldrich",
-  description:
-    "Field notes on infrastructure, homelab, distributed systems, security, and the occasional engine swap.",
+  description: BLOG_DESCRIPTION,
   alternates: { canonical: "https://ethanaldrich.org/blog" },
+  openGraph: {
+    type: "website",
+    title: "Writing | Ethan Aldrich",
+    description: BLOG_DESCRIPTION,
+    url: "https://ethanaldrich.org/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Writing | Ethan Aldrich",
+    description: BLOG_DESCRIPTION,
+  },
 };
 
 /** The blog index — every post strung along a line, grouped by year. */

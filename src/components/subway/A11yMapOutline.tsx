@@ -32,7 +32,7 @@ export default function A11yMapOutline({ onSelect, onHover }: A11yMapOutlineProp
   const { tabIndexFor, onKeyDown, register } = useRovingStations(groups);
 
   return (
-    <nav className="sr-only" aria-label="Subway map station index">
+    <nav id="station-list" className="sr-only" aria-label="Subway map station index">
       {groups.map((group, gi) => {
         const line = LINES.find((l) => l.code === group.lineCode)!;
         const stations = getStationsForLine(line.code);

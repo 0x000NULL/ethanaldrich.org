@@ -13,7 +13,7 @@ describe("IntroSplash", () => {
     render(<IntroSplash />);
 
     expect(
-      screen.getByRole("dialog", { name: /aldrich transit/i })
+      screen.getByRole("dialog", { name: /ethan aldrich/i })
     ).toBeInTheDocument();
     expect(screen.getByText("▸").className).toContain("animate-pulse");
 

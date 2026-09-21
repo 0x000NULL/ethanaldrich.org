@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { PROFILE, PROFILE_SAME_AS } from "@/data/profile";
 
-const TAGLINE = "Software, Infrastructure & Security Engineering";
-const TITLE = `Ethan Aldrich | ${TAGLINE}`;
+const TAGLINE = PROFILE.title;
+const TITLE = `${PROFILE.name} | ${TAGLINE}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ethanaldrich.org"),
@@ -24,8 +25,8 @@ export const metadata: Metadata = {
     "Full-Stack Development",
     "Las Vegas",
   ],
-  authors: [{ name: "Ethan Aldrich" }],
-  creator: "Ethan Aldrich",
+  authors: [{ name: PROFILE.name }],
+  creator: PROFILE.name,
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Ethan Aldrich",
+  name: PROFILE.name,
   jobTitle: "Chief Technology Officer",
   worksFor: [
     {
@@ -65,11 +66,9 @@ const jsonLd = {
       name: "Twelve Management",
     },
   ],
-  url: "https://ethanaldrich.org",
-  sameAs: [
-    "https://github.com/0x000NULL",
-    "https://www.linkedin.com/in/ethan-aldrich",
-  ],
+  url: PROFILE.site,
+  email: `mailto:${PROFILE.email}`,
+  sameAs: PROFILE_SAME_AS,
   knowsAbout: [
     "Software Engineering",
     "Cybersecurity",
