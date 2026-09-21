@@ -46,7 +46,7 @@ describe("Station", () => {
   });
 
   it("dashes the ring for planned stations", () => {
-    const { container } = renderStation(getStation("E-06")!); // Security+ (planned)
+    const { container } = renderStation(getStation("E-09")!); // Project+ (planned)
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("stroke-dasharray")).toBeTruthy();
   });

@@ -8,10 +8,10 @@ export const TRAINS: Train[] = [
   {
     id: "t-edu",
     lineCode: "E",
-    fromCode: "E-05",
-    toCode: "E-06",
-    nowServing: "WGU coursework — Security+ next",
-    eta: "degree expected 2029",
+    fromCode: "E-06",
+    toCode: "E-07",
+    nowServing: "WGU capstone — CySA+ and PenTest+ results pending",
+    eta: "degree expected December 2026",
   },
   {
     id: "t-career",
