@@ -18,9 +18,14 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = path.join(ROOT, "resume", "resume.html");
 const OUT = path.join(ROOT, "public", "resume.pdf");
 
-// Letter at 96 CSS px/in, minus the margins page.pdf() applies.
-const CONTENT_W_PX = Math.round((8.5 - 0.55 - 0.55) * 96);
-const USABLE_PAGE_PX = (11 - 0.5 - 0.5) * 96;
+// Page geometry lives in resume.html's @page rule, NOT here. Chromium lets an
+// in-document @page margin override the margin passed to page.pdf(), so the
+// two must agree or the PDF silently ignores this file. Keep in sync with
+// "@page { margin: PAGE_MARGIN_Y PAGE_MARGIN_X }".
+const PAGE_MARGIN_X = 0.65; // in
+const PAGE_MARGIN_Y = 0.55; // in
+const CONTENT_W_PX = Math.round((8.5 - PAGE_MARGIN_X * 2) * 96);
+const USABLE_PAGE_PX = (11 - PAGE_MARGIN_Y * 2) * 96;
 const MAX_PAGES = 2;
 
 const browser = await chromium.launch();
@@ -47,8 +52,14 @@ try {
     path: OUT,
     format: "Letter",
     printBackground: true,
-    // Applied by Chromium to every page, including any spillover page.
-    margin: { top: "0.5in", bottom: "0.5in", left: "0.55in", right: "0.55in" },
+    // Mirrors resume.html's @page rule so both agree; @page is the one that
+    // actually wins in Chromium.
+    margin: {
+      top: `${PAGE_MARGIN_Y}in`,
+      bottom: `${PAGE_MARGIN_Y}in`,
+      left: `${PAGE_MARGIN_X}in`,
+      right: `${PAGE_MARGIN_X}in`,
+    },
     displayHeaderFooter: false,
   });
 

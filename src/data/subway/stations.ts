@@ -67,8 +67,10 @@ export const STATIONS: Station[] = [
     nameJa: "セキュリティ＋",
     lineCodes: ["E"],
     grid: { gx: 9, gy: 4 },
-    status: "planned",
-    summary: "CompTIA Security+. Transfer to the Projects line at Security Observability.",
+    status: "operational",
+    dates: "Sep 2026",
+    summary:
+      "CompTIA Security+ — earned. Transfer to the Projects line at Security Observability.",
   },
   {
     code: "E-07",
@@ -98,6 +100,17 @@ export const STATIONS: Station[] = [
     summary: "CompTIA Project+.",
   },
   {
+    code: "E-10",
+    name: "CSIS",
+    nameJa: "CSIS",
+    lineCodes: ["E"],
+    grid: { gx: 17, gy: 4 },
+    status: "operational",
+    dates: "Sep 2026",
+    summary:
+      "CompTIA Secure Infrastructure Specialist — the stackable A+, Network+ and Security+ credential.",
+  },
+  {
     code: "E-12",
     name: "WGU — B.S. Cybersecurity",
     nameJa: "学士課程",
@@ -107,7 +120,7 @@ export const STATIONS: Station[] = [
     terminus: true,
     labelSide: "below", // keep the upward master's spur clear of the label
     labelBand: "near", // pull the below-label up off the Projects trunk
-    dates: "expected May 2029",
+    dates: "expected December 2026",
     summary:
       "Western Governors University — B.S. Cybersecurity & Information Assurance, in progress.",
   },
