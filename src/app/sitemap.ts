@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getBlogPosts, getAllTags } from "@/lib/blog";
 import { STATIONS } from "@/data/subway";
+import { getStationsWithBodies } from "@/lib/stations";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://ethanaldrich.org";
@@ -20,15 +21,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const posts = getBlogPosts();
+
+  // Newest post date, so /blog's lastModified reflects the content rather than
+  // the deploy.
+  const newestPost = posts[0]
+    ? new Date(posts[0].date.replace(/(\d{2})-(\d{2})-(\d{4})/, "$3-$1-$2"))
+    : new Date();
+
   const blogIndex: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/blog`,
+      lastModified: newestPost,
       changeFrequency: "weekly",
       priority: 0.7,
     },
   ];
-
-  const posts = getBlogPosts();
   const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(
@@ -40,15 +48,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const tagPages: MetadataRoute.Sitemap = getAllTags().map(({ tag }) => ({
     url: `${baseUrl}/blog/tag/${tag}`,
+    lastModified: newestPost,
     changeFrequency: "monthly" as const,
     priority: 0.4,
   }));
 
-  // Each station is an indexable page (the SSG /station/[code] route).
+  // Each station is an indexable page (the SSG /station/[code] route). The six
+  // carrying a case study are substantially richer than the nineteen that are a
+  // summary line, so they are not advertised at the same priority.
+  const withBodies = new Set(getStationsWithBodies());
   const stationPages: MetadataRoute.Sitemap = STATIONS.map((station) => ({
     url: `${baseUrl}/station/${station.code}`,
+    lastModified: newestPost,
     changeFrequency: "monthly" as const,
-    priority: 0.6,
+    priority: withBodies.has(station.code) ? 0.7 : 0.4,
   }));
 
   return [

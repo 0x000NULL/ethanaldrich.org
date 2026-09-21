@@ -1,4 +1,23 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { PROFILE } from "@/data/profile";
+
+/**
+ * Without its own metadata this page inherited the root canonical — an absolute
+ * URL to the homepage — so a 404 served under any arbitrary path presented
+ * itself to crawlers as the site root.
+ *
+ * `robots` must be set explicitly. Next emits its own `noindex` for not-found,
+ * but the root layout declares `index: true`, and without an override here that
+ * is inherited — producing a page that says both `noindex` and `index, follow`.
+ * Two agreeing tags are untidy; two contradicting ones are a real signal.
+ */
+export const metadata: Metadata = {
+  title: `Station not found | ${PROFILE.name}`,
+  description: "This stop isn't on the map.",
+  alternates: { canonical: undefined },
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

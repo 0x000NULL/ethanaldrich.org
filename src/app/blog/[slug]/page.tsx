@@ -13,6 +13,7 @@ import {
   getRelatedPosts,
 } from "@/lib/blog-format";
 import { buildBlogPostingJsonLd } from "@/lib/blogJsonLd";
+import { buildBreadcrumbJsonLd } from "@/lib/jsonLd";
 import PostList from "@/components/blog/PostList";
 
 const SITE = "https://ethanaldrich.org";
@@ -81,12 +82,21 @@ export default async function BlogPostPage({
   const { older, newer } = getAdjacentPosts(all, post.slug);
   const related = getRelatedPosts(all, post);
   const jsonLd = buildBlogPostingJsonLd(post);
+  const breadcrumbs = buildBreadcrumbJsonLd([
+    { name: "Map", path: "/" },
+    { name: "Writing", path: "/blog" },
+    { name: post.title },
+  ]);
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl bg-[var(--metro-bg)] px-5 py-10 text-[var(--metro-ink)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
 
       <nav className="flex flex-wrap items-center gap-4 text-sm">

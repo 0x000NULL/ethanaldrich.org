@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { buildBreadcrumbJsonLd } from "@/lib/jsonLd";
 import { getBlogPosts } from "@/lib/blog";
 import { groupPostsByYear } from "@/lib/blog-format";
 import PostList from "@/components/blog/PostList";
@@ -31,6 +32,17 @@ export default function BlogIndexPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl bg-[var(--metro-bg)] px-5 py-10 text-[var(--metro-ink)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            buildBreadcrumbJsonLd([
+              { name: "Map", path: "/" },
+              { name: "Writing" },
+            ])
+          ),
+        }}
+      />
       <Link
         href="/"
         className="text-sm underline underline-offset-2 hover:no-underline"
