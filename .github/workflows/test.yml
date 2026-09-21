@@ -110,3 +110,48 @@ jobs:
 
       - name: Build application
         run: npm run build
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `next build` type-checks too, but only after a full compile. This fails
+      # in seconds and reports every error rather than stopping at the build.
+      - name: Run tsc
+        run: npm run typecheck
+
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # A critical Next.js RCE shipped to production because nothing checked.
+      # Production deps must stay clean; dev-only findings are reported, not fatal.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Audit all dependencies (informational)
+        run: npm audit --audit-level=high || true

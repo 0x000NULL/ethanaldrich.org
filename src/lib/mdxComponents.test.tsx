@@ -60,9 +60,35 @@ describe("mdxComponents", () => {
   });
 
   it("renders GFM table cells", () => {
-    expect(r("table", {}, "t").container.querySelector("table")).toBeTruthy();
-    expect(r("th", {}, "H").container.querySelector("th")).toBeTruthy();
-    expect(r("td", {}, "D").container.querySelector("td")).toBeTruthy();
+    const Table = C.table as React.ElementType;
+    const tableOnly = render(
+      <Table>
+        <tbody>
+          <tr>
+            <td>t</td>
+          </tr>
+        </tbody>
+      </Table>
+    );
+    expect(tableOnly.container.querySelector("table")).toBeTruthy();
+
+    // Cells are rendered inside a real table: standalone <th>/<td> are invalid
+    // DOM nesting, and React logs a validateDOMNesting error that made an
+    // otherwise-passing suite read like a failing one.
+    const Th = C.th as React.ElementType;
+    const Td = C.td as React.ElementType;
+    const { container } = render(
+      <table>
+        <tbody>
+          <tr>
+            <Th>H</Th>
+            <Td>D</Td>
+          </tr>
+        </tbody>
+      </table>
+    );
+    expect(container.querySelector("th")).toBeTruthy();
+    expect(container.querySelector("td")).toBeTruthy();
   });
 
   it("renders images with an alt fallback and merged classes/styles", () => {

@@ -101,14 +101,6 @@
     border: 0;
   }
 
-  /* The server-rendered homepage outline. It is the real content until the
-     client map mounts and sets `data-map-ready`, at which point the interactive
-     map owns the screen and the outline steps aside. Without JS the attribute
-     is never set, so the outline simply stays — which is the point. */
-  :root[data-map-ready="true"] #static-outline {
-    display: none;
-  }
-
   /* Skip link: off-screen until focused, then pinned top-left. Desktop tab order
      runs legend → departure board → recenter → station list, so this is the only
      quick way into the content for a sighted keyboard user. */

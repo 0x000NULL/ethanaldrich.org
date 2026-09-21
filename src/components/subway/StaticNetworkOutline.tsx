@@ -18,13 +18,14 @@ const STATUS_LABEL: Record<StationStatus, string> = {
  * it in the initial payload; previously the homepage shipped the single string
  * "Loading map…" and nothing else until the client bundle hydrated.
  *
- * Once `SubwayShell` mounts it sets `data-map-ready` on <html>, and globals.css
- * hides this outline — so an ordinary visitor sees it only until the interactive
- * map takes over, instead of seeing a spinner.
+ * SubwayShell renders this as its pre-mount state, so it is both what the server
+ * emits and what the client's first render produces (hydration-safe), and it
+ * unmounts cleanly when the map takes over rather than lingering as a hidden
+ * duplicate of every station in the DOM.
  */
 export default function StaticNetworkOutline() {
   return (
-    <div
+    <main
       id="static-outline"
       className="mx-auto max-w-2xl px-5 py-10 text-[var(--metro-ink)]"
     >
@@ -108,6 +109,6 @@ export default function StaticNetworkOutline() {
           </section>
         );
       })}
-    </div>
+    </main>
   );
 }

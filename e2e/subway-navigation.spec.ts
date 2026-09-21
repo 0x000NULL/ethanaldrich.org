@@ -27,7 +27,10 @@ test.describe("subway navigation (desktop)", () => {
     test.skip(isMobileProject(testInfo.project.name), "desktop-only chrome");
     await enterMap(page);
 
-    await expect(page.getByText("Aldrich Transit")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Ethan Aldrich" })
+    ).toBeVisible();
+    await expect(page.getByRole("link", { name: /LinkedIn/i })).toBeVisible();
     await expect(page.getByRole("img", { name: /subway map/i })).toBeVisible();
   });
 });
