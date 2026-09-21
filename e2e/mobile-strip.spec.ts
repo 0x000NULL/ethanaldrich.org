@@ -10,7 +10,9 @@ test.describe("mobile strip map", () => {
     );
     await enterMap(page);
 
-    await expect(page.getByText("Tap a station for the story.")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Ethan Aldrich" })
+    ).toBeVisible();
     await expect(
       page.getByRole("region", { name: /Projects line/i })
     ).toBeVisible();

@@ -1,0 +1,21 @@
+version: 2
+
+# A critical Next.js RCE (GHSA-p293-qw3h-jr36) sat in package-lock.json until a
+# manual audit caught it. This is the thing that would have caught it first.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for the routine patch churn; anything major still lands alone.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

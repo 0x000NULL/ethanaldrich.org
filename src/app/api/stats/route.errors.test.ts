@@ -1,4 +1,16 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
+
+// The route logs the failure it is being asked to handle, so the expected
+// message is filtered to keep a passing run readable. Anything else still prints.
+let spy: ReturnType<typeof vi.spyOn>;
+beforeAll(() => {
+  const real = console.error;
+  spy = vi.spyOn(console, "error").mockImplementation((...args: unknown[]) => {
+    if (/^Failed to save stats after retries:/.test(String(args[0] ?? ""))) return;
+    real(...args);
+  });
+});
+afterAll(() => spy.mockRestore());
 
 // Force every fs operation to fail so the error/retry branches are exercised.
 vi.mock("fs", () => {

@@ -13,6 +13,7 @@ import ServiceAlertBanner from "./ServiceAlertBanner";
 import DepartureBoard from "./DepartureBoard";
 import A11yMapOutline from "./A11yMapOutline";
 import IntroSplash from "./IntroSplash";
+import StaticNetworkOutline from "./StaticNetworkOutline";
 
 /**
  * Top-level client shell. Owns the hydration gate, one-time initialization
@@ -84,18 +85,12 @@ export default function SubwayShell() {
     setViewMode(isMobile ? "strip" : "map");
   }, [isMobile, setViewMode]);
 
-  // Hand over from the server-rendered outline only once the map can actually
-  // draw. Until then we render nothing and the outline stays visible, so the
-  // homepage never ships a "Loading map…" placeholder as its only content.
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.dataset.mapReady = "true";
-    return () => {
-      delete document.documentElement.dataset.mapReady;
-    };
-  }, [mounted]);
-
-  if (!mounted) return null;
+  // Before mount, render the real content rather than a placeholder. This is what
+  // the server emits and what the client's first render must match, so hydration
+  // stays clean; the effect above then swaps in the interactive map. Rendering it
+  // here rather than as a sibling means it genuinely unmounts, instead of lingering
+  // in the DOM as a hidden duplicate of every station.
+  if (!mounted) return <StaticNetworkOutline />;
 
   return (
     <main className="fixed inset-0 flex h-screen w-screen flex-col overflow-hidden bg-[var(--metro-bg)]">
