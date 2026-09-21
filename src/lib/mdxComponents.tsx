@@ -62,10 +62,15 @@ export const mdxComponents = {
       />
     );
   },
+  // tabIndex={0}: a horizontally scrollable region that can't be focused can't
+  // be scrolled without a pointer. Long code lines overflow at phone widths, so
+  // axe flags this (scrollable-region-focusable) on mobile viewports only.
+  // Declared before the spread so an explicit tabIndex from the pipeline wins.
   pre: ({ style, ...props }: ComponentProps<"pre">) => (
     <pre
       className="board-type mb-3 overflow-x-auto rounded bg-[var(--metro-bg)] p-3 text-sm"
       style={{ border: "1px solid var(--metro-border)", ...style }}
+      tabIndex={0}
       {...props}
     />
   ),
@@ -77,7 +82,14 @@ export const mdxComponents = {
     />
   ),
   table: (props: ComponentProps<"table">) => (
-    <div className="mb-3 overflow-x-auto">
+    // Same reason as `pre`. Focusable, and labelled because a focusable region
+    // with no accessible name is its own violation.
+    <div
+      className="mb-3 overflow-x-auto"
+      tabIndex={0}
+      role="group"
+      aria-label="Table, scrollable"
+    >
       <table className="w-full border-collapse text-sm" {...props} />
     </div>
   ),

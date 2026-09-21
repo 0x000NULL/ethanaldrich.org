@@ -18,7 +18,16 @@ const remarkPlugins: PluggableList = [remarkGfm];
 
 const rehypePlugins: PluggableList = [
   rehypeSlug,
-  [rehypePrettyCode, { theme: "github-light", keepBackground: false }],
+  // github-light-high-contrast, not github-light. Six of github-light's twelve
+  // token colours fall below 4.5:1 against --metro-bg (#f7f4ec) — its red
+  // #d73a49 measures 4.16:1 — which axe flagged across every code block on the
+  // site. The high-contrast variant clears all of them; its only near-white
+  // foregrounds are the carriage-return and markup.ignored scopes, which do not
+  // occur in ordinary code.
+  [
+    rehypePrettyCode,
+    { theme: "github-light-high-contrast", keepBackground: false },
+  ],
   [rehypeAutolinkHeadings, { behavior: "wrap" }],
 ];
 
