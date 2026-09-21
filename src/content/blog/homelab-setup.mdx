@@ -2,36 +2,80 @@
 id: "homelab-setup"
 date: "01-15-2026"
 title: "Setting up Proxmox from Scratch"
-description: "Complete guide to Proxmox homelab setup"
+description: "How I built the multi-node Proxmox cluster that everything at work gets tested on first — node layout, storage, networking, and the access model that keeps it off the public internet."
 author: "Ethan Aldrich"
 draft: true
-tags: ["homelab", "proxmox", "self-hosting"]
+tags: ["homelab", "proxmox", "self-hosting", "infrastructure"]
 ---
 
-HOMELAB INFRASTRUCTURE SETUP GUIDE
-==================================
+The homelab has been running since 2020, and its real job is not the services on
+it. Almost everything I have put into production at work was broken here first,
+on hardware I own, where the failure costs nothing but an evening. That framing
+is worth stating up front, because it explains most of the choices below: this
+cluster is optimised for *being rebuilt*, not for uptime.
 
-This guide covers setting up a Proxmox-based homelab from scratch,
-including network configuration, storage setup, and container deployment.
+## What the cluster looks like
 
-Prerequisites:
-- Dedicated server or workstation hardware
-- Proxmox VE ISO
-- Network connectivity
+Proxmox VE across multiple nodes, mixing full VMs and LXC containers depending on
+what the workload actually needs, with Docker for the service tier, Nginx as
+reverse proxy, and Tailscale for access.
 
-Step 1: Install Proxmox VE
---------------------------
-Download the latest Proxmox VE ISO and create a bootable USB drive.
-Boot from the USB and follow the installation wizard.
+{/* TODO(ethan): the specifics only you have —
+     - how many nodes, and the hardware in each (CPU/RAM/disks)
+     - which are always-on vs. spun up on demand
+     - whether the nodes are clustered properly (corosync) or managed separately */}
 
-Step 2: Network Configuration
------------------------------
-Configure your network interfaces for VLAN support if needed.
-Set up bridge interfaces for VM connectivity.
+## Installation
 
-Step 3: Storage Configuration
------------------------------
-Set up ZFS pools for redundancy and performance.
-Configure local-lvm for container storage.
+Standard Proxmox VE installer from USB. The parts worth calling out are the ones
+where the default is wrong for a lab that gets rebuilt often.
 
-[Content continues...]
+{/* TODO(ethan): what you actually changed from defaults at install time —
+     filesystem choice on the boot disk, whether you removed the enterprise repo
+     and added no-subscription, and anything you now always do on a fresh node. */}
+
+## Networking
+
+Bridge interfaces for VM connectivity, with VLAN support where segments need to
+stay apart.
+
+{/* TODO(ethan): the concrete layout —
+     - which VLANs exist and what lives on each
+     - whether the lab is segmented from the rest of the house network, and how
+     - how DNS is handled internally */}
+
+## Storage
+
+ZFS for redundancy, with local-lvm for container storage.
+
+ZFS is the decision I would defend hardest. Snapshots make "try it and roll back"
+a thirty-second operation, which is the entire point of a lab, and checksumming
+means a failing disk announces itself rather than quietly corrupting things.
+
+{/* TODO(ethan): the real configuration —
+     - pool layout (mirror? raidz? how many disks, what size)
+     - ARC tuning, if you touched it, and how much RAM it is allowed
+     - snapshot/retention schedule and whether anything is replicated off-box */}
+
+## Access: no open ports
+
+Tailscale, so nothing has to be published to the open internet to be reachable.
+This is the single highest-value decision in the whole build. A homelab with
+forwarded ports is an internet-facing estate that nobody is paid to defend; a
+homelab on a mesh VPN is just a private network that happens to be at my house.
+
+{/* TODO(ethan): worth adding if you want —
+     - whether you run a Tailscale subnet router or install it per-host
+     - how you handle access for anything that genuinely must be public */}
+
+## What I would do differently
+
+{/* TODO(ethan): the most useful section for a reader, and the one only you can
+     write. Candidates from what you have said before: where LXC was not the
+     honest answer and you had to move to a full VM, and anything that bit you
+     in a way the docs did not warn about. */}
+
+---
+
+*Draft. The structure is settled; the sections marked above need the specifics
+from my own build before this goes out.*

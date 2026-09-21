@@ -14,9 +14,10 @@ import {
 } from "@/lib/blog-format";
 import { buildBlogPostingJsonLd } from "@/lib/blogJsonLd";
 import { buildBreadcrumbJsonLd } from "@/lib/jsonLd";
+import { PROFILE } from "@/data/profile";
 import PostList from "@/components/blog/PostList";
 
-const SITE = "https://ethanaldrich.org";
+const SITE = PROFILE.site;
 
 export function generateStaticParams() {
   return getAllBlogSlugs().map((slug) => ({ slug }));

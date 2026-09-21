@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PROFILE } from "@/data/profile";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllTags, getPostsByTag } from "@/lib/blog";
@@ -15,7 +16,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params;
   const label = decodeURIComponent(tag);
-  const url = `https://ethanaldrich.org/blog/tag/${tag}`;
+  const url = `${PROFILE.site}/blog/tag/${tag}`;
   const title = `#${label} | Ethan Aldrich`;
   const description = `Writing tagged “${label}”.`;
   return {

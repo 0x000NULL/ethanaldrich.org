@@ -2,25 +2,80 @@
 id: "glpi-deploy"
 date: "12-20-2025"
 title: "Deploying GLPI for IT Service Management"
-description: "Guide to deploying GLPI ITSM platform"
+description: "Standing up GLPI as the ITSM practice for two companies: why a ticket queue was the wrong goal, what the asset inventory actually changed, and where self-hosting it costs you."
 author: "Ethan Aldrich"
 draft: true
-tags: ["itsm", "glpi", "self-hosting"]
+tags: ["itsm", "glpi", "self-hosting", "itil"]
 ---
 
-GLPI DEPLOYMENT GUIDE
-=====================
+GLPI is the ITSM platform behind support and asset management for the two
+companies I run technology for. The useful thing to write about is not the
+install — that part is an afternoon — but what changed once there was a single
+place where requests and assets lived.
 
-GLPI (Gestionnaire Libre de Parc Informatique) is a powerful
-open-source IT service management platform.
+## Why not just a shared inbox
 
-This guide covers deployment on a Proxmox LXC container.
+Support had been arriving by phone, text, and by people finding me in a hallway.
+That works until it doesn't, and the failure is not that things get dropped. The
+failure is that you cannot answer basic questions: what breaks most often, which
+site consumes the most support, how long anything actually takes. None of that is
+recoverable from memory across eight locations.
 
-Requirements:
-- Proxmox VE host
-- Debian/Ubuntu container
-- MySQL/MariaDB database
-- Apache/Nginx web server
-- PHP 7.4+ with required extensions
+A ticket queue is the visible part. The asset inventory is the part that paid for
+itself.
 
-[Content continues...]
+## Requirements
+
+- A LAMP-ish stack: Apache or Nginx, PHP with the required extensions, MySQL or
+  MariaDB
+- Somewhere to run it that is backed up and not on someone's desk
+
+{/* TODO(ethan): the real deployment —
+     - what it runs on (VM? LXC on the Proxmox cluster? something at work?)
+     - PHP and GLPI versions you settled on
+     - database sizing, and whether it has needed attention since */}
+
+## Installation and first configuration
+
+{/* TODO(ethan): worth being specific, because the defaults are not great —
+     - what you changed immediately after the web installer
+     - authentication: is it local, or wired to Active Directory / M365? You run
+       AD for 314 users, so if it is LDAP-backed that is the most useful detail
+       in the whole post
+     - how you handled the post-install security steps GLPI prompts for */}
+
+## Asset inventory
+
+This is where it stopped being a ticket system and started being useful.
+
+{/* TODO(ethan): the specifics —
+     - roughly how many assets are tracked, and of what kinds
+     - whether discovery is automated (GLPI Agent / FusionInventory) or manual
+     - whether it reconciles against anything else you hold
+     - the OneDrive asset CSV was a stale 2023 snapshot; if GLPI replaced that as
+       the source of truth, say so, because that is the real win */}
+
+## Categories, SLAs and the ITIL part
+
+ITIL v4 gives this its vocabulary: incident versus problem versus change versus
+service request. The distinction sounds like bureaucracy until you have a
+recurring incident and no way to express that the *cause* is one open problem
+rather than fifteen separate tickets.
+
+{/* TODO(ethan): how much of this you actually implemented —
+     - which categories exist, and whether you use problem management in earnest
+     - any SLAs defined, and whether they are enforced or aspirational
+     - be honest if some of it is configured but unused; that is more useful to
+       a reader than implying full ITIL adoption */}
+
+## What self-hosting costs
+
+{/* TODO(ethan): the trade-off, from having lived with it —
+     - upgrade experience between GLPI majors
+     - backup and restore: has it been tested?
+     - what you would tell someone choosing between this and a SaaS desk */}
+
+---
+
+*Draft. The shape is right; the deployment specifics and the honest assessment of
+how much of the ITIL model is actually in use need filling in.*

@@ -1,8 +1,9 @@
 import type { BlogPostMeta } from "./blog";
 import { toISODate } from "./blog-format";
+import { PROFILE } from "@/data/profile";
 
-const SITE = "https://ethanaldrich.org";
-const DEFAULT_AUTHOR = "Ethan Aldrich";
+const SITE = PROFILE.site;
+const DEFAULT_AUTHOR = PROFILE.name;
 
 /**
  * Build the schema.org `BlogPosting` object for a post. Pure (no DOM) so it can be

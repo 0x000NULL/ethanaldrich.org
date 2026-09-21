@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
 import { getBlogPosts, getAllTags } from "@/lib/blog";
 import { STATIONS } from "@/data/subway";
+import { PROFILE } from "@/data/profile";
 import { getStationsWithBodies } from "@/lib/stations";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://ethanaldrich.org";
+  const baseUrl = PROFILE.site;
 
   const staticPages: MetadataRoute.Sitemap = [
     {

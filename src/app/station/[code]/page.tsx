@@ -10,6 +10,7 @@ import { mdxComponents } from "@/lib/mdxComponents";
 import { mdxOptions } from "@/lib/mdxOptions";
 import { resolvePostRefs } from "@/lib/blog-format";
 import { buildBreadcrumbJsonLd, buildStationJsonLd } from "@/lib/jsonLd";
+import { PROFILE } from "@/data/profile";
 
 export function generateStaticParams() {
   return STATIONS.map((s) => ({ code: s.code }));
@@ -24,7 +25,7 @@ export async function generateMetadata({
   const station = getStation(code);
   if (!station) return { title: "Station not found | Ethan Aldrich" };
 
-  const url = `https://ethanaldrich.org/station/${station.code}`;
+  const url = `${PROFILE.site}/station/${station.code}`;
   const title = `${station.name} (${station.code}) | Ethan Aldrich`;
   return {
     title,
