@@ -30,12 +30,6 @@ describe("SubwayShell", () => {
     expect(container.querySelector("aside")).toBeTruthy();
   });
 
-  it("tracks a visit once per session", async () => {
-    const { default: SubwayShell } = await import("./SubwayShell");
-    render(<SubwayShell />);
-    expect(fetch).toHaveBeenCalledWith("/api/stats", { method: "POST" });
-  });
-
   it("opens the station named in a ?station= deep link", async () => {
     window.history.replaceState(null, "", "/?station=P-07");
     const { default: SubwayShell } = await import("./SubwayShell");

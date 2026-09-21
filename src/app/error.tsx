@@ -20,7 +20,7 @@ export default function Error({ error, reset }: ErrorProps) {
       aria-live="assertive"
     >
       <div className="w-full max-w-md text-center">
-        <div className="board-type mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full border-[6px] border-[var(--line-s)] text-xl font-bold">
+        <div className="board-type mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full border-[6px] border-[var(--line-c)] text-xl font-bold">
           ⚠
         </div>
         <h1 className="mb-2 text-2xl font-bold">Service disruption</h1>

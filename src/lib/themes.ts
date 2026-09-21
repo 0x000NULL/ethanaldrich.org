@@ -29,7 +29,7 @@ export const themes: Record<ThemeVariant, ThemeColors> = {
     "metro-ink": "#1A1A1A",
     "metro-ink-dim": "#6B6B6B",
     "metro-panel": "#FFFFFF",
-    "metro-border": "#D8D2C4",
+    "metro-border": "#948B78",
     "metro-roundel": "#FFFFFF",
     "metro-accent": "#1A1A1A",
   },

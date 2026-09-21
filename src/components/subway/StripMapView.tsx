@@ -49,7 +49,9 @@ export default function StripMapView() {
         My career as a transit map. Tap a station for the story.
       </p>
 
-      <div id="strip-list">
+      {/* tabIndex={-1}: same reason as A11yMapOutline — the skip link must be
+          able to place focus here, not just move the tab start point. */}
+      <div id="strip-list" tabIndex={-1}>
       {LINES.map((line) => {
         const stations = getStationsForLine(line.code);
         if (stations.length === 0) return null;
