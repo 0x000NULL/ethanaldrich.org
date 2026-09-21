@@ -5,7 +5,7 @@ export const LINES: Line[] = [
     code: "E",
     name: "Education Line",
     nameJa: "教育線",
-    color: "#009BBF",
+    color: "#00829F",
     stationCodes: [
       "E-01",
       "E-02",

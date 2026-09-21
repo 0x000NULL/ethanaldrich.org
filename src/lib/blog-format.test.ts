@@ -13,7 +13,6 @@ import {
 function post(overrides: Partial<BlogPostMeta> & { slug: string }): BlogPostMeta {
   return {
     id: overrides.slug,
-    slug: overrides.slug,
     date: "01-01-2026",
     title: overrides.slug,
     description: "",

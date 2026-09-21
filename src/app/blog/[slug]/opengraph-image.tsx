@@ -10,7 +10,7 @@ export function generateStaticParams() {
 }
 
 const LINES: [string, string][] = [
-  ["E", "#009BBF"],
+  ["E", "#00829F"],
   ["C", "#E60012"],
   ["P", "#C9197F"],
   ["W", "#7A8B99"],

@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { PROFILE } from "@/data/profile";
 
-export const runtime = "edge";
-export const alt = "Ethan Aldrich — career rendered as a subway map";
+export const runtime = "nodejs";
+export const alt = `${PROFILE.name} — ${PROFILE.title}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -23,7 +24,7 @@ export default async function Image() {
       >
         <div style={{ display: "flex", gap: "16px", marginBottom: "48px" }}>
           {[
-            ["E", "#009BBF"],
+            ["E", "#00829F"],
             ["C", "#E60012"],
             ["P", "#C9197F"],
             ["W", "#7A8B99"],
@@ -48,10 +49,10 @@ export default async function Image() {
           ))}
         </div>
         <div style={{ fontSize: "76px", fontWeight: "bold", marginBottom: "16px" }}>
-          ETHAN ALDRICH
+          {PROFILE.name.toUpperCase()}
         </div>
         <div style={{ fontSize: "32px", color: "#6B6B6B" }}>
-          Software, Infrastructure &amp; Security Engineering
+          {PROFILE.title}
         </div>
         <div
           style={{

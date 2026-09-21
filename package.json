@@ -19,9 +19,9 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@next/mdx": "^16.1.6",
+    "@next/mdx": "^16.3.5",
     "gray-matter": "^4.0.3",
-    "next": "16.1.6",
+    "next": "^16.3.5",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -43,13 +43,19 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.4",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "4.0.18",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "^16.3.5",
     "jsdom": "^28.1.0",
     "msw": "^2.12.10",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.18"
+    "vitest": "4.0.18"
+  },
+  "overrides": {
+    "gray-matter": {
+      "js-yaml": "3.15.2"
+    },
+    "yaml": "2.9.1"
   }
 }

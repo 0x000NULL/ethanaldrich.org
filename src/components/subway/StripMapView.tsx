@@ -1,6 +1,7 @@
 "use client";
 
 import { LINES, getStationsForLine } from "@/data/subway";
+import { PROFILE, PROFILE_LINKS } from "@/data/profile";
 import { transfersForStation } from "@/lib/subway/selectors";
 import { useNavStore } from "@/store/nav-store";
 import type { StationStatus } from "@/data/subway/types";
@@ -23,19 +24,32 @@ export default function StripMapView() {
 
   return (
     <div className="h-full w-full overflow-y-auto bg-[var(--metro-bg)] px-4 pb-24 pt-6 text-[var(--metro-ink)]">
-      <h1 className="text-2xl font-bold">Aldrich Transit</h1>
-      <p className="mt-1 text-sm text-[var(--metro-ink-dim)]">
-        Tap a station for the story.
-      </p>
-      <a
-        href="/resume.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block text-sm text-[var(--metro-ink-dim)] underline"
-      >
-        Résumé (PDF) ↗
-      </a>
+      <h1 className="text-2xl font-bold">{PROFILE.name}</h1>
+      <p className="mt-1 text-sm text-[var(--metro-ink-dim)]">{PROFILE.title}</p>
+      <p className="text-sm text-[var(--metro-ink-dim)]">{PROFILE.location}</p>
 
+      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        {PROFILE_LINKS.map((l) => (
+          <li key={l.href}>
+            <a
+              href={l.href}
+              {...(l.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              className="font-semibold underline underline-offset-2"
+            >
+              {l.label}
+              {l.external ? " ↗" : ""}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-4 text-sm text-[var(--metro-ink-dim)]">
+        My career as a transit map. Tap a station for the story.
+      </p>
+
+      <div id="strip-list">
       {LINES.map((line) => {
         const stations = getStationsForLine(line.code);
         if (stations.length === 0) return null;
@@ -107,6 +121,7 @@ export default function StripMapView() {
           </section>
         );
       })}
+      </div>
     </div>
   );
 }

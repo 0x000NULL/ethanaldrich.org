@@ -4,13 +4,15 @@ import { useState } from "react";
 import { LINES } from "@/data/subway";
 import type { LineCode } from "@/data/subway/types";
 import { useNavStore } from "@/store/nav-store";
+import { PROFILE, PROFILE_LINKS } from "@/data/profile";
 import {
   getViewBox,
   lineBounds,
   transformForBounds,
 } from "@/lib/subway/selectors";
 
-/** Visible, collapsible legend: line key + status key. Clicking a line frames it. */
+/** Identity card + collapsible legend. Owns the page h1 and the contact links;
+ *  clicking a line frames it. */
 export default function StationIndex() {
   const [open, setOpen] = useState(true);
   const setTransform = useNavStore((s) => s.setTransform);
@@ -20,12 +22,20 @@ export default function StationIndex() {
 
   return (
     <aside
-      className="pointer-events-auto absolute left-5 top-5 z-10 w-fit max-w-[16rem] rounded-xl border bg-[var(--metro-panel)]/95 p-5 text-[var(--metro-ink)] shadow-lg backdrop-blur"
+      className="pointer-events-auto absolute left-5 top-5 z-10 w-fit max-w-[18rem] rounded-xl border bg-[var(--metro-panel)]/95 p-5 text-[var(--metro-ink)] shadow-lg backdrop-blur"
       style={{ borderColor: "var(--metro-border)" }}
       aria-label="Map legend"
     >
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-xl font-bold tracking-tight">Aldrich Transit</span>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          {/* The page's one persistent h1. The intro splash used to own it, and
+              took it with it when dismissed, leaving the homepage headingless. */}
+          <h1 className="text-xl font-bold tracking-tight">{PROFILE.name}</h1>
+          <p className="text-xs leading-snug text-[var(--metro-ink-dim)]">
+            {PROFILE.title}
+          </p>
+          <p className="text-xs text-[var(--metro-ink-dim)]">{PROFILE.location}</p>
+        </div>
         <button
           className="flex-none text-sm text-[var(--metro-ink-dim)] underline"
           onClick={() => setOpen((o) => !o)}
@@ -35,15 +45,23 @@ export default function StationIndex() {
         </button>
       </div>
 
-      {/* Outside the collapse so the résumé stays reachable when the legend is hidden. */}
-      <a
-        href="/resume.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block text-sm text-[var(--metro-ink-dim)] underline hover:text-[var(--metro-ink)]"
-      >
-        Résumé (PDF) ↗
-      </a>
+      {/* Outside the collapse so contact routes stay reachable when it's hidden. */}
+      <ul className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+        {PROFILE_LINKS.map((l) => (
+          <li key={l.href}>
+            <a
+              href={l.href}
+              {...(l.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              className="text-[var(--metro-ink-dim)] underline hover:text-[var(--metro-ink)]"
+            >
+              {l.label}
+              {l.external ? " ↗" : ""}
+            </a>
+          </li>
+        ))}
+      </ul>
 
       {open && (
         <>

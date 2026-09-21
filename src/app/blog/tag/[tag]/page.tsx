@@ -15,10 +15,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params;
   const label = decodeURIComponent(tag);
+  const url = `https://ethanaldrich.org/blog/tag/${tag}`;
+  const title = `#${label} | Ethan Aldrich`;
+  const description = `Writing tagged “${label}”.`;
   return {
-    title: `#${label} | Ethan Aldrich`,
-    description: `Writing tagged “${label}”.`,
-    alternates: { canonical: `https://ethanaldrich.org/blog/tag/${tag}` },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { type: "website", title, description, url },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
