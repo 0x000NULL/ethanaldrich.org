@@ -19,8 +19,8 @@ const STATUS_LABEL: Record<string, string> = {
 /**
  * Per-station social card.
  *
- * These pages declared `summary_large_image` but had no image route, so all 25
- * fell back to the generic site card — every station unfurled identically.
+ * These pages declared `summary_large_image` but had no image route, so every
+ * one fell back to the generic site card and unfurled identically.
  * Leads with the station's own roundel in its line colour.
  */
 export default async function Image({

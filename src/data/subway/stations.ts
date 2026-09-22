@@ -166,15 +166,33 @@ export const STATIONS: Station[] = [
     status: "operational",
     dates: "Sep 2026",
     summary:
-      "CompTIA Secure Infrastructure Specialist (CSIS): the stackable credential awarded for holding A+, Network+ and Security+ together — the terminus of the certification run, not a fifth exam.",
+      "CompTIA Secure Infrastructure Specialist (CSIS): the stackable credential awarded for holding A+, Network+ and Security+ together. Not a fourth exam — it certifies the combination.",
     stack: ["A+", "Network+", "Security+", "Stackable"],
+  },
+  {
+    code: "E-11",
+    name: "Data+",
+    nameJa: "データ＋",
+    lineCodes: ["E"],
+    grid: { gx: 19, gy: 4 },
+    status: "operational",
+    dates: "Sep 2026",
+    summary:
+      "CompTIA Data+ (DA0-002), earned September 2026: data concepts, mining, analysis, visualisation and governance — the formal counterpart to the SQL Server and Power BI reporting that the business actually runs on.",
+    stack: [
+      "Data concepts",
+      "Data mining",
+      "Analysis",
+      "Visualisation",
+      "Data governance",
+    ],
   },
   {
     code: "E-12",
     name: "WGU — B.S. Cybersecurity",
     nameJa: "学士課程",
     lineCodes: ["E"],
-    grid: { gx: 19, gy: 4 },
+    grid: { gx: 21, gy: 4 },
     status: "in-progress",
     terminus: true,
     labelSide: "below", // keep the upward master's spur clear of the label
@@ -196,7 +214,7 @@ export const STATIONS: Station[] = [
     name: "M.S. Cybersecurity",
     nameJa: "修士号予定",
     lineCodes: ["E"],
-    grid: { gx: 19, gy: 2 },
+    grid: { gx: 21, gy: 2 },
     status: "planned",
     summary:
       "M.S. Cybersecurity & Information Assurance: planned service beyond the bachelor's, on the same competency-based model. Not yet started — the branch is dashed for a reason.",
