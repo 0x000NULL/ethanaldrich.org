@@ -17,6 +17,7 @@ export const LINES: Line[] = [
       "E-08",
       "E-09",
       "E-10",
+      "E-11",
       "E-12",
     ],
     branches: [{ fromCode: "E-12", stationCodes: ["E-13"], dashed: true }],
