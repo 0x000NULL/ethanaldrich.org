@@ -72,6 +72,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Stop `next dev` from generating AGENTS.md.
+  agentRules: false,
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   async headers() {
     return [

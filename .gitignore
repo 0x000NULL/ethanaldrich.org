@@ -48,3 +48,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
+# AI agent files
+CLAUDE.md
+AGENTS.md
+.claude/
