@@ -10,8 +10,8 @@ export const TRAINS: Train[] = [
     lineCode: "E",
     fromCode: "E-06",
     toCode: "E-07",
-    nowServing: "WGU capstone — CySA+ and PenTest+ results pending",
-    eta: "degree expected December 2026",
+    nowServing: "WGU M.S. Cybersecurity — PenTest+ result pending",
+    eta: "M.S. expected April 2027",
   },
   {
     id: "t-career",

@@ -114,9 +114,10 @@ export const STATIONS: Station[] = [
     nameJa: "サイサ＋",
     lineCodes: ["E"],
     grid: { gx: 11, gy: 4 },
-    status: "planned",
+    status: "operational",
+    dates: "Sep 2026",
     summary:
-      "CompTIA CySA+: threat detection, behavioural analytics and incident response — the analyst-side counterpart to the stack already running at P-04. Exam sat September 2026; result pending. Transfers to the Malware Analysis Lab.",
+      "CompTIA CySA+, earned September 2026: threat detection, behavioural analytics and incident response — the analyst-side counterpart to the stack already running at P-04. Transfers to the Malware Analysis Lab.",
     stack: [
       "Threat detection",
       "Behavioural analytics",
@@ -193,14 +194,14 @@ export const STATIONS: Station[] = [
     nameJa: "学士課程",
     lineCodes: ["E"],
     grid: { gx: 21, gy: 4 },
-    status: "in-progress",
+    status: "operational",
     terminus: true,
     labelSide: "below", // keep the upward master's spur clear of the label
     labelBand: "near", // pull the below-label up off the Projects trunk
-    dates: "expected December 2026",
+    dates: "Sep 2026",
     hasBody: true,
     summary:
-      "Western Governors University: B.S. Cybersecurity & Information Assurance, approved for graduation and expected December 2026. Competency-based, so each course is a proctored assessment or a defended project rather than seat time.",
+      "Western Governors University: B.S. Cybersecurity & Information Assurance, graduated September 2026. Competency-based, so each course is a proctored assessment or a defended project rather than seat time.",
     stack: [
       "Security operations",
       "Network security",
@@ -212,12 +213,13 @@ export const STATIONS: Station[] = [
   {
     code: "E-13",
     name: "M.S. Cybersecurity",
-    nameJa: "修士号予定",
+    nameJa: "修士課程",
     lineCodes: ["E"],
     grid: { gx: 21, gy: 2 },
-    status: "planned",
+    status: "in-progress",
+    dates: "expected April 2027",
     summary:
-      "M.S. Cybersecurity & Information Assurance: planned service beyond the bachelor's, on the same competency-based model. Not yet started — the branch is dashed for a reason.",
+      "Western Governors University: M.S. Cybersecurity & Information Assurance, underway and expected April 2027, on the same competency-based model as the bachelor's.",
   },
 
   // ───────────────────────── P — Projects (magenta) ─────────────────────────

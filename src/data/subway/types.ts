@@ -46,7 +46,7 @@ export interface Via {
   points: GridPoint[];
 }
 
-/** A dashed offshoot from a trunk station (e.g. the MSCSIA spur off E-12). */
+/** An offshoot (optionally dashed) from a trunk station (e.g. the MSCSIA spur off E-12). */
 export interface Branch {
   fromCode: string;
   stationCodes: string[];

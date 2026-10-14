@@ -108,7 +108,7 @@ describe("adjacentStations", () => {
   });
 
   it("gives a branch station no neighbours instead of inventing them", () => {
-    // E-13 hangs off E-12 on a dashed branch, so it is not on the trunk.
+    // E-13 hangs off E-12 on a branch, so it is not on the trunk.
     const branch = adjacentStations("E-13");
     expect(branch.prev).toBeNull();
     expect(branch.next).toBeNull();
