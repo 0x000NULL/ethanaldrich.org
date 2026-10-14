@@ -95,7 +95,7 @@ describe("line geometry resolution", () => {
     const polys = resolveLinePolylines(getLine("E")!);
     const branch = polys.find((p) => p.kind === "branch");
     expect(branch).toBeDefined();
-    expect(branch!.dashed).toBe(true);
+    expect(branch!.dashed).toBeFalsy(); // solid now the M.S. is underway
     expect(branch!.stationVertex["E-13"]).toBeGreaterThanOrEqual(0);
   });
 

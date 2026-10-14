@@ -20,7 +20,7 @@ export const LINES: Line[] = [
       "E-11",
       "E-12",
     ],
-    branches: [{ fromCode: "E-12", stationCodes: ["E-13"], dashed: true }],
+    branches: [{ fromCode: "E-12", stationCodes: ["E-13"] }],
   },
   {
     code: "C",

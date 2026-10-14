@@ -46,15 +46,14 @@ describe("Station", () => {
   });
 
   it("dashes the ring for planned stations", () => {
-    // E-13 (the planned M.S.), not E-09: Project+ was earned in September 2026,
-    // and the CySA+/PenTest+ stations flip as soon as those results land.
-    const { container } = renderStation(getStation("E-13")!);
+    // E-08 (PenTest+, result pending) flips to operational when that result lands.
+    const { container } = renderStation(getStation("E-08")!);
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("stroke-dasharray")).toBeTruthy();
   });
 
   it("renders in-progress stations like normal stops (white fill, solid ring)", () => {
-    const { container } = renderStation(getStation("E-12")!); // WGU degree (in-progress)
+    const { container } = renderStation(getStation("E-13")!); // WGU M.S. (in-progress)
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("fill")).toBe("var(--metro-roundel)");
     expect(circle.getAttribute("stroke-dasharray")).toBeNull(); // solid, not dashed
