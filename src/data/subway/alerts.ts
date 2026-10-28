@@ -6,8 +6,8 @@ export const ALERTS: ServiceAlert[] = [
     lineCode: "E",
     severity: "info",
     message:
-      "Education Line: CySA+ now in service; B.S. complete, M.S. Cybersecurity underway.",
-    stationCode: "E-03",
+      "Education Line: M.S. Cybersecurity complete; CSAP now in service.",
+    stationCode: "E-13",
     dismissible: true,
   },
 ];

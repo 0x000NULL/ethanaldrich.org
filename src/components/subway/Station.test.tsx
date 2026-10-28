@@ -53,7 +53,8 @@ describe("Station", () => {
   });
 
   it("renders in-progress stations like normal stops (white fill, solid ring)", () => {
-    const { container } = renderStation(getStation("E-13")!); // WGU M.S. (in-progress)
+    // No station is in progress right now, so force one.
+    const { container } = renderStation({ ...getStation("E-13")!, status: "in-progress" });
     const circle = container.querySelector("circle")!;
     expect(circle.getAttribute("fill")).toBe("var(--metro-roundel)");
     expect(circle.getAttribute("stroke-dasharray")).toBeNull(); // solid, not dashed

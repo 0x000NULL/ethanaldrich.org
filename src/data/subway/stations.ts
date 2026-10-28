@@ -9,7 +9,7 @@ import type { Station } from "./types";
  * pinned at gx=9 by the peanut spacing rule.
  *
  * Honesty rule: work that actually happened is "operational"; the remaining
- * cert path is "planned"; the degree in flight is "in-progress". A finished
+ * cert path is "planned"; anything underway is "in-progress". A finished
  * role stays "operational" and carries its end date in `dates`.
  */
 export const STATIONS: Station[] = [
@@ -189,11 +189,23 @@ export const STATIONS: Station[] = [
     ],
   },
   {
+    code: "E-14",
+    name: "CSAP",
+    nameJa: "CSAP",
+    lineCodes: ["E"],
+    grid: { gx: 21, gy: 4 },
+    status: "operational",
+    dates: "Sep 2026",
+    summary:
+      "CompTIA Security Analytics Professional (CSAP): the stackable credential awarded for holding Security+ and CySA+ together. Not a separate exam — it certifies the combination.",
+    stack: ["Security+", "CySA+", "Stackable"],
+  },
+  {
     code: "E-12",
     name: "WGU — B.S. Cybersecurity",
     nameJa: "学士課程",
     lineCodes: ["E"],
-    grid: { gx: 21, gy: 4 },
+    grid: { gx: 23, gy: 4 },
     status: "operational",
     terminus: true,
     labelSide: "below", // keep the upward master's spur clear of the label
@@ -215,11 +227,11 @@ export const STATIONS: Station[] = [
     name: "M.S. Cybersecurity",
     nameJa: "修士課程",
     lineCodes: ["E"],
-    grid: { gx: 21, gy: 2 },
-    status: "in-progress",
-    dates: "expected April 2027",
+    grid: { gx: 23, gy: 2 },
+    status: "operational",
+    dates: "Oct 2026",
     summary:
-      "Western Governors University: M.S. Cybersecurity & Information Assurance, underway and expected April 2027, on the same competency-based model as the bachelor's.",
+      "Western Governors University: M.S. Cybersecurity & Information Assurance, completed October 2026, on the same competency-based model as the bachelor's.",
   },
 
   // ───────────────────────── P — Projects (magenta) ─────────────────────────

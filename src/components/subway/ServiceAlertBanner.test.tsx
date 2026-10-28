@@ -37,7 +37,7 @@ describe("ServiceAlertBanner", () => {
   it("clicking an alert frames and selects its station", () => {
     const { getByText } = render(<ServiceAlertBanner />);
     fireEvent.click(getByText(/now in service/i));
-    expect(useNavStore.getState().selectedStationCode).toBe("E-03");
+    expect(useNavStore.getState().selectedStationCode).toBe("E-13");
     expect(useNavStore.getState().transform).not.toEqual(IDENTITY);
   });
 });
